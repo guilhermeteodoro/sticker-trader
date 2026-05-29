@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   resource :registration, only: [:new, :create]
   resource :session, only: [:new, :create, :destroy]
 
-  resources :collections, path: "u", param: :slug, only: [:show, :edit, :update]
+  resources :users, path: "u", param: :slug, only: [:show, :edit, :update] do
+    resource :collection, only: [:edit, :update]
+  end
 
   get "up" => "rails/health#show", as: :rails_health_check
 end

@@ -1,31 +1,43 @@
 # frozen_string_literal: true
 
 class RegistrationsController < ApplicationController
+  before_action :redirect_if_logged_in
+
   def new
-    render Views::Registrations::New.new
+    render Views::Registrations::New.new(email: params[:email])
   end
 
   def create
+    # If email already exists, redirect to login
+    if User.exists?(email: params[:email]&.downcase&.strip)
+      redirect_to new_session_path(email: params[:email]&.strip), alert: "You already have an account. Log in instead!"
+      return
+    end
+
     user = User.new(name: params[:name], email: params[:email]&.downcase&.strip)
 
     parsed_data = parse_sticker_data
     unless parsed_data
       flash.now[:error] ||= "Could not parse sticker data. Please check your input."
-      render Views::Registrations::New.new, status: :unprocessable_entity
+      render Views::Registrations::New.new(email: params[:email]), status: :unprocessable_entity
       return
     end
 
     if user.save
       CollectionImporter.new(user, parsed_data).call
       session[:user_id] = user.id
-      redirect_to collection_path(user), notice: "Welcome, #{user.name}!"
+      redirect_to user_path(user), notice: "Welcome, #{user.name}!"
     else
       flash.now[:error] = user.errors.full_messages.join(", ")
-      render Views::Registrations::New.new, status: :unprocessable_entity
+      render Views::Registrations::New.new(email: params[:email]), status: :unprocessable_entity
     end
   end
 
   private
+
+  def redirect_if_logged_in
+    redirect_to user_path(current_user) if current_user
+  end
 
   def parse_sticker_data
     case params[:import_method]

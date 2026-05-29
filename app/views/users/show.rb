@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Views::Collections::Show < Views::Base
+class Views::Users::Show < Views::Base
   def initialize(user:, is_owner:, trade_result:, current_user:)
     @user = user
     @is_owner = is_owner
@@ -13,8 +13,11 @@ class Views::Collections::Show < Views::Base
       h1(class: "text-2xl font-bold text-gray-900 mb-2") { "#{@user.name}'s Collection" }
       render_stats
       if @is_owner
-        a(href: "/u/#{@user.slug}/edit", class: "inline-block mt-3 text-green-600 hover:text-green-700 font-medium") do
+        a(href: "/u/#{@user.slug}/collection/edit", class: "inline-block mt-3 text-green-600 hover:text-green-700 font-medium") do
           "Update collection"
+        end
+        a(href: "/u/#{@user.slug}/edit", class: "inline-block mt-3 ml-4 text-gray-500 hover:text-gray-700 font-medium") do
+          "Account settings"
         end
       elsif !@current_user
         div(class: "mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg") do

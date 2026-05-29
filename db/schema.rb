@@ -24,9 +24,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_29_205315) do
   create_table "user_stickers", force: :cascade do |t|
     t.integer "copies", default: 0, null: false
     t.datetime "created_at", null: false
-    t.bigint "sticker_id", null: false
+    t.integer "sticker_id", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
+    t.integer "user_id", null: false
     t.index ["sticker_id"], name: "index_user_stickers_on_sticker_id"
     t.index ["user_id", "sticker_id"], name: "index_user_stickers_on_user_id_and_sticker_id", unique: true
     t.index ["user_id"], name: "index_user_stickers_on_user_id"
@@ -34,9 +34,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_29_205315) do
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "email", null: false
     t.string "name", null: false
     t.string "slug", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["slug"], name: "index_users_on_slug", unique: true
   end
 

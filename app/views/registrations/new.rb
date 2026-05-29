@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class Views::Registrations::New < Views::Base
+  def initialize(email: nil)
+    @email = email
+  end
+
   def view_template
     h1(class: "text-2xl font-bold text-gray-900 mb-6") { "Register your collection" }
 
@@ -20,6 +24,7 @@ class Views::Registrations::New < Views::Base
         label(class: "block text-sm font-medium text-gray-700 mb-1") { "Your email" }
         input(
           type: "email", name: "email", required: true,
+          value: @email,
           class: "w-full border border-gray-300 rounded-lg p-3",
           placeholder: "e.g. gui@example.com"
         )

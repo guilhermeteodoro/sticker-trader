@@ -2,36 +2,13 @@
 
 class CollectionsController < ApplicationController
   before_action :set_user
-
-  def show
-    is_owner = current_user&.id == @user.id
-    trade_result = if current_user && !is_owner
-      TradeComparer.new(current_user, @user).call
-    end
-
-    render Views::Collections::Show.new(
-      user: @user,
-      is_owner: is_owner,
-      trade_result: trade_result,
-      current_user: current_user
-    )
-  end
+  before_action :require_owner
 
   def edit
-    unless current_user&.id == @user.id
-      redirect_to collection_path(@user)
-      return
-    end
-
     render Views::Collections::Edit.new(user: @user)
   end
 
   def update
-    unless current_user&.id == @user.id
-      redirect_to collection_path(@user)
-      return
-    end
-
     parsed_data = parse_sticker_data
     unless parsed_data
       flash.now[:error] ||= "Could not parse sticker data. Please check your input."
@@ -40,13 +17,17 @@ class CollectionsController < ApplicationController
     end
 
     CollectionImporter.new(@user, parsed_data).call
-    redirect_to collection_path(@user), notice: "Collection updated!"
+    redirect_to user_path(@user), notice: "Collection updated!"
   end
 
   private
 
   def set_user
-    @user = User.find_by!(slug: params[:slug])
+    @user = User.find_by!(slug: params[:user_slug])
+  end
+
+  def require_owner
+    redirect_to user_path(@user) unless current_user&.id == @user.id
   end
 
   def parse_sticker_data
