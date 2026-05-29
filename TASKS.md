@@ -1,5 +1,9 @@
 # Rails App — Task Plan
 
+> **Note to agents/bots:** Update this file as you complete tasks (check them off) or
+> change the plan (add/remove/reorder tasks). This is the living source of truth for
+> implementation progress.
+
 ## Phase 1: Project setup
 - [ ] Generate Rails 8 app (PostgreSQL, skip test for now, skip Action Mailer)
 - [ ] Install and configure Phlex
