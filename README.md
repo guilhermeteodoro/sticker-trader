@@ -124,4 +124,5 @@ bin/dev
 ## Related
 
 - [CONTEXT.md](CONTEXT.md) — domain language glossary
+- [TASKS.md](TASKS.md) — implementation task plan
 - Source app: [Sticker Album 2026](https://apps.apple.com/br/app/sticker-album-2026/id6761956390?l=en-GB) (MoovTech)
