@@ -16,6 +16,15 @@ class Views::Registrations::New < Views::Base
         )
       end
 
+      div(class: "mb-6") do
+        label(class: "block text-sm font-medium text-gray-700 mb-1") { "Your email" }
+        input(
+          type: "email", name: "email", required: true,
+          class: "w-full border border-gray-300 rounded-lg p-3",
+          placeholder: "e.g. gui@example.com"
+        )
+      end
+
       render_import_fields
 
       div(class: "mt-6") do

@@ -4,10 +4,9 @@ Rails.application.routes.draw do
   root "pages#home"
 
   resource :registration, only: [:new, :create]
+  resource :session, only: [:new, :create, :destroy]
 
-  get "/u/:slug", to: "collections#show", as: :collection
-  get "/u/:slug/edit", to: "collections#edit", as: :edit_collection
-  patch "/u/:slug", to: "collections#update", as: :update_collection
+  resources :collections, path: "u", param: :slug, only: [:show, :edit, :update]
 
   get "up" => "rails/health#show", as: :rails_health_check
 end

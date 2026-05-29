@@ -6,7 +6,7 @@ class RegistrationsController < ApplicationController
   end
 
   def create
-    user = User.new(name: params[:name])
+    user = User.new(name: params[:name], email: params[:email]&.downcase&.strip)
 
     parsed_data = parse_sticker_data
     unless parsed_data

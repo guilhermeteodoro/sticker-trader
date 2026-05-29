@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class Components::Layout < Components::Base
-  def initialize(title: "Figurinhas 2026")
+  def initialize(title: "Figurinhas 2026", current_user: nil)
     @title = title
+    @current_user = current_user
   end
 
   def view_template
@@ -19,7 +20,7 @@ class Components::Layout < Components::Base
         javascript_importmap_tags
       end
       body(class: "min-h-screen bg-gray-50") do
-        render Components::Nav
+        render Components::Nav.new(current_user: @current_user)
         main(class: "max-w-4xl mx-auto px-4 py-8") do
           render_flash
           yield
