@@ -10,6 +10,8 @@ class Components::Base < Phlex::HTML
   include Phlex::Rails::Helpers::FormAuthenticityToken
   include RubyUI
 
+  register_value_helper :current_user
+
   if Rails.env.development?
     def before_template
       comment { "Before #{self.class.name}" }

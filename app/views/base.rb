@@ -10,10 +10,4 @@ class Views::Base < Components::Base
   def page_title
     "Figurinhas 2026"
   end
-
-  private
-
-  def current_user
-    helpers.current_user
-  end
 end
