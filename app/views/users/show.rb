@@ -29,8 +29,8 @@ class Views::Users::Show < Views::Base
       end
     end
 
-    render_duplicates
     render_trade if @trade_result
+    render_duplicates
   end
 
   private
