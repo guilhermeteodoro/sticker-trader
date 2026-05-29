@@ -111,11 +111,11 @@ class Views::Users::Show < Views::Base
           h4(class: "font-semibold text-green-700 mb-2", data: copy_line) { "#{cat.to_s.upcase} (#{count} for #{count})" }
           div(class: "grid grid-cols-2 gap-4") do
             div do
-              p(class: "text-xs text-gray-500 mb-1", data: copy_line) { "#{@current_user.name} gives:" }
+              p(class: "text-xs text-gray-500 mb-1", data: copy_line) { "  #{@current_user.name} gives:" }
               render_sticker_list_by_team(pair.a_gives, copyable: true)
             end
             div do
-              p(class: "text-xs text-gray-500 mb-1", data: copy_line) { "#{@user.name} gives:" }
+              p(class: "text-xs text-gray-500 mb-1", data: copy_line) { "  #{@user.name} gives:" }
               render_sticker_list_by_team(pair.b_gives, copyable: true)
             end
           end
@@ -133,14 +133,14 @@ class Views::Users::Show < Views::Base
 
       if leftovers.a_has.any?
         div(class: "mb-3") do
-          p(class: "text-sm font-medium text-gray-600 mb-1", data: copy_line) { "#{@current_user.name} still has to offer (#{leftovers.a_has.size}):" }
+          p(class: "text-sm font-medium text-gray-600 mb-1", data: copy_line) { "  #{@current_user.name} still has to offer (#{leftovers.a_has.size}):" }
           render_sticker_list_by_team(leftovers.a_has, copyable: true)
         end
       end
 
       if leftovers.b_has.any?
         div do
-          p(class: "text-sm font-medium text-gray-600 mb-1", data: copy_line) { "#{@user.name} still has to offer (#{leftovers.b_has.size}):" }
+          p(class: "text-sm font-medium text-gray-600 mb-1", data: copy_line) { "  #{@user.name} still has to offer (#{leftovers.b_has.size}):" }
           render_sticker_list_by_team(leftovers.b_has, copyable: true)
         end
       end
@@ -152,7 +152,7 @@ class Views::Users::Show < Views::Base
     div(class: "text-sm font-mono") do
       grouped.each do |country, country_stickers|
         p(data: copyable ? copy_line : {}) do
-          span(class: "font-semibold") { "#{country.emoji} #{country.code}: " }
+          span(class: "font-semibold") { "  #{country.emoji} #{country.code}: " }
           plain country_stickers.map(&:number).join(", ")
         end
       end
