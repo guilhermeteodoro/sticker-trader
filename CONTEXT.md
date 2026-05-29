@@ -19,7 +19,7 @@ A classification of stickers that determines trade fairness. Three values: shiny
 _Avoid_: Type, tier, rarity
 
 **Shiny**:
-A category: all FWC stickers (00–19) plus sticker 1 of every other team. 69 total.
+A category: all FWC stickers (00–19) plus sticker 1 of every team except CC. 68 total.
 _Avoid_: Holographic, special
 
 **Coke**:
@@ -27,7 +27,7 @@ A category: all CC stickers (1–14). 14 total.
 _Avoid_: Promo, sponsor
 
 **Normal**:
-A category: all stickers that are not shiny or coke — stickers 2–20 of every team except FWC and CC. 911 total.
+A category: all stickers that are not shiny or coke — stickers 2–20 of every team except FWC and CC. 912 total.
 _Avoid_: Regular, common
 
 **Collection**:
