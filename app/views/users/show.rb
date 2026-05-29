@@ -147,7 +147,7 @@ class Views::Users::Show < Views::Base
     div(class: "text-sm font-mono") do
       grouped.each do |country, country_stickers|
         p do
-          span(class: "font-semibold") { "#{country.code}: " }
+          span(class: "font-semibold") { "#{country.emoji} #{country.code}: " }
           plain country_stickers.map(&:number).join(", ")
         end
       end
