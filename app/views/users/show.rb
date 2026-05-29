@@ -46,11 +46,16 @@ class Views::Users::Show < Views::Base
   end
 
   def render_duplicates
-    div(class: "py-4") do
-      h2(class: "text-lg font-semibold text-gray-800 mb-3") { "Available for trade" }
+    div(class: "py-4", data: { controller: "clipboard" }) do
+      div(class: "flex items-center justify-between mb-3") do
+        h2(class: "text-lg font-semibold text-gray-800") { "Available for trade" }
+        copy_button
+      end
       duplicates = @user.duplicate_stickers
       if duplicates.any?
-        render_sticker_list_by_team(duplicates)
+        div(data: { clipboard_target: "content" }) do
+          render_sticker_list_by_team(duplicates)
+        end
       else
         p(class: "text-gray-500 italic") { "No duplicates available." }
       end
@@ -58,22 +63,27 @@ class Views::Users::Show < Views::Base
   end
 
   def render_trade
-    div(class: "py-4") do
-      h2(class: "text-xl font-bold text-gray-900 mb-6") { "🔄 Trade with #{@user.name}" }
+    div(class: "py-4", data: { controller: "clipboard" }) do
+      div(class: "flex items-center justify-between mb-6") do
+        h2(class: "text-xl font-bold text-gray-900") { "🔄 Trade with #{@user.name}" }
+        copy_button
+      end
 
-      render_diff_section(
-        "#{@current_user.name} → #{@user.name}",
-        "Duplicates you have that #{@user.name} is missing",
-        @trade_result.a_gives_b
-      )
-      render_diff_section(
-        "#{@user.name} → #{@current_user.name}",
-        "Duplicates #{@user.name} has that you are missing",
-        @trade_result.b_gives_a
-      )
+      div(data: { clipboard_target: "content" }) do
+        render_diff_section(
+          "#{@current_user.name} → #{@user.name}",
+          "Duplicates you have that #{@user.name} is missing",
+          @trade_result.a_gives_b
+        )
+        render_diff_section(
+          "#{@user.name} → #{@current_user.name}",
+          "Duplicates #{@user.name} has that you are missing",
+          @trade_result.b_gives_a
+        )
 
-      render_balanced_trade
-      render_leftovers
+        render_balanced_trade
+        render_leftovers
+      end
     end
   end
 
@@ -152,5 +162,13 @@ class Views::Users::Show < Views::Base
         end
       end
     end
+  end
+
+  def copy_button
+    button(
+      type: "button",
+      data: { action: "clipboard#copy", copy_button: "" },
+      class: "text-sm text-gray-500 hover:text-gray-700 border border-gray-300 rounded px-2 py-1"
+    ) { "📋 Copy" }
   end
 end
