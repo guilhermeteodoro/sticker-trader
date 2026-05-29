@@ -4,8 +4,11 @@ export default class extends Controller {
   static targets = ["line"]
 
   copy() {
-    const lines = this.lineTargets.map(el => el.innerText)
-    const text = lines.join("\n")
+    const text = this.lineTargets
+      .map(el => el.innerText)
+      .join("\n")
+      .trim()
+
     navigator.clipboard.writeText(text).then(() => {
       const button = this.element.querySelector("[data-copy-button]")
       const original = button.textContent
