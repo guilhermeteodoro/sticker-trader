@@ -8,7 +8,7 @@ class Views::Collections::Edit < Views::Base
   def view_template
     h1(class: "text-2xl font-bold text-gray-900 mb-6") { "Update your collection" }
 
-    form(action: "/u/#{@user.slug}/collection", method: "post", data: { controller: "import-form" }) do
+    form(action: "/u/#{@user.slug}/c", method: "post", data: { controller: "import-form" }) do
       input(type: "hidden", name: "_method", value: "patch")
       authenticity_token_tag
 

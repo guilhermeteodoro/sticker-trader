@@ -13,7 +13,7 @@ class Views::Users::Show < Views::Base
       h1(class: "text-2xl font-bold text-gray-900 mb-2") { "#{@user.name}'s Collection" }
       render_stats
       if @is_owner
-        a(href: "/u/#{@user.slug}/collection/edit", class: "inline-block mt-3 text-green-600 hover:text-green-700 font-medium") do
+        a(href: "/u/#{@user.slug}/c/edit", class: "inline-block mt-3 text-green-600 hover:text-green-700 font-medium") do
           "Update collection"
         end
         a(href: "/u/#{@user.slug}/edit", class: "inline-block mt-3 ml-4 text-gray-500 hover:text-gray-700 font-medium") do

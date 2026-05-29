@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resource :session, only: [:new, :create, :destroy]
 
   resources :users, path: "u", param: :slug, only: [:show, :edit, :update] do
-    resource :collection, only: [:edit, :update]
+    resource :collection, path: "c", only: [:edit, :update]
   end
 
   get "up" => "rails/health#show", as: :rails_health_check
