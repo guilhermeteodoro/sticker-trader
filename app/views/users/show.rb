@@ -9,13 +9,28 @@ class Views::Users::Show < Views::Base
   end
 
   def view_template
-    div(class: "mb-8") do
+    render_user_info
+    render_trade if @trade_result
+    render_duplicates
+  end
+
+  private
+
+  def render_user_info
+    div(class: "mb-4") do
       h1(class: "text-2xl font-bold text-gray-900 mb-2") { "#{@user.name}'s Collection" }
-      render_stats
+
+      div(class: "flex gap-6 text-sm text-gray-600") do
+        span { "#{@user.owned_count}/994 owned" }
+        span { "#{@user.missing_count} missing" }
+        span { "#{@user.duplicates_count} duplicates" }
+      end
+
       if @is_owner
         a(href: edit_user_collection_path(@user), class: "inline-block mt-3 text-green-600 hover:text-green-700 font-medium") do
           "Update collection"
         end
+
         a(href: edit_user_path(@user), class: "inline-block mt-3 ml-4 text-gray-500 hover:text-gray-700 font-medium") do
           "Account settings"
         end
@@ -28,23 +43,10 @@ class Views::Users::Show < Views::Base
         end
       end
     end
-
-    render_trade if @trade_result
-    render_duplicates
-  end
-
-  private
-
-  def render_stats
-    div(class: "flex gap-6 text-sm text-gray-600") do
-      span { "#{@user.owned_count}/994 owned" }
-      span { "#{@user.missing_count} missing" }
-      span { "#{@user.duplicates_count} duplicates" }
-    end
   end
 
   def render_duplicates
-    div(class: "mb-8") do
+    div(class: "py-4") do
       h2(class: "text-lg font-semibold text-gray-800 mb-3") { "Available for trade" }
       duplicates = @user.duplicate_stickers
       if duplicates.any?
@@ -56,7 +58,7 @@ class Views::Users::Show < Views::Base
   end
 
   def render_trade
-    div(class: "border-t pt-8") do
+    div(class: "py-4") do
       h2(class: "text-xl font-bold text-gray-900 mb-6") { "🔄 Trade with #{@user.name}" }
 
       render_diff_section(
@@ -89,13 +91,13 @@ class Views::Users::Show < Views::Base
 
   def render_balanced_trade
     balanced = @trade_result.balanced
-    has_any = [:shiny, :coke, :normal].any? { |cat| balanced.send(cat).a_gives.any? }
+    has_any = [ :shiny, :coke, :normal ].any? { |cat| balanced.send(cat).a_gives.any? }
     return unless has_any
 
     div(class: "mt-8 p-6 bg-green-50 border border-green-200 rounded-lg") do
       h3(class: "text-lg font-bold text-green-800 mb-4") { "✅ Suggested Balanced Trade" }
 
-      [:shiny, :coke, :normal].each do |cat|
+      [ :shiny, :coke, :normal ].each do |cat|
         pair = balanced.send(cat)
         next if pair.a_gives.empty?
 
