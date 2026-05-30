@@ -45,8 +45,10 @@ class FullFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "BRA:"
 
     # Owner actions visible
-    assert_includes response.body, I18n.t("users.show.update_collection")
-    assert_includes response.body, I18n.t("users.show.account_settings")
+    # Owner edit link (pencil emoji)
+    assert_includes response.body, edit_user_collection_path(user)
+    # Account settings in popover menu
+    assert_includes response.body, edit_user_path(user)
 
     # Clipboard data attribute present
     assert_includes response.body, "data-clipboard-text-value"

@@ -18,19 +18,19 @@ class Views::Users::Show < Views::Base
 
   def render_user_info
     div(class: "mb-6") do
-      Heading(level: 2, class: "mb-2") { @is_owner ? t("users.show.own_collection_title") : t("users.show.collection_title", name: @user.name) }
+      div(class: "flex items-center gap-2 mb-2") do
+        Heading(level: 2) { @is_owner ? t("users.show.own_collection_title") : t("users.show.collection_title", name: @user.name) }
+        if @is_owner
+          Link(href: edit_user_collection_path(@user), variant: :ghost, icon: true, class: "text-muted-foreground") { "✏️" }
+        end
+      end
 
       div(class: "flex flex-wrap gap-3 text-sm") do
         Badge(variant: :outline) { t("users.show.owned", count: @user.owned_count) }
         Badge(variant: :outline) { t("users.show.missing", count: @user.missing_count) }
       end
 
-      if @is_owner
-        div(class: "mt-4 flex gap-3") do
-          Link(variant: :primary, href: edit_user_collection_path(@user)) { t("users.show.update_collection") }
-          Link(variant: :outline, href: edit_user_path(@user)) { t("users.show.account_settings") }
-        end
-      elsif !@current_user
+      if !@is_owner && !@current_user
         Alert(class: "mt-4") do
           AlertDescription do
             plain "#{t("users.show.register_prompt")} "
