@@ -47,17 +47,26 @@ class Views::Users::Show < Views::Base
     text = format_stickers_as_text(duplicates)
 
     div(data: { controller: "clipboard", clipboard_text_value: text }) do
-      div(class: "flex items-center justify-between mb-2") do
-        Heading(level: 3) { t("users.show.available_for_trade") }
-        copy_button
-      end
+      Collapsible(open: true) do
+        div(class: "flex items-center justify-between mb-2") do
+          div(class: "flex items-center gap-2") do
+            Heading(level: 3) { t("users.show.available_for_trade") }
+            Button(variant: :outline, size: :sm, icon: true, type: "button", data: { action: "clipboard#copy", copy_button: "" }) { "📋" }
+          end
+          CollapsibleTrigger do
+            Button(variant: :ghost, size: :sm, icon: true) { "▾" }
+          end
+        end
 
-      Card(class: "pt-6 bg-card") do
-        CardContent do
-          if duplicates.any?
-            render_sticker_list_by_team(duplicates)
-          else
-            p(class: "text-muted-foreground italic") { t("users.show.no_duplicates") }
+        CollapsibleContent do
+          Card(class: "pt-6 bg-card") do
+            CardContent do
+              if duplicates.any?
+                render_sticker_list_by_team(duplicates)
+              else
+                p(class: "text-muted-foreground italic") { t("users.show.no_duplicates") }
+              end
+            end
           end
         end
       end
@@ -91,8 +100,9 @@ class Views::Users::Show < Views::Base
 
   def render_diff_section(title, subtitle, stickers)
     div(class: "mb-6") do
-      h3(class: "font-semibold text-gray-800") { title }
+      Heading(level: 3) { title }
       p(class: "text-sm text-gray-500 mb-2") { subtitle }
+
       if stickers.any?
         render_sticker_list_by_team(stickers)
       else
@@ -109,6 +119,7 @@ class Views::Users::Show < Views::Base
       CardHeader do
         CardTitle { t("users.show.balanced_title") }
       end
+
       CardContent do
         [ :shiny, :coke, :normal ].each do |cat|
           pair = balanced.send(cat)
@@ -141,6 +152,7 @@ class Views::Users::Show < Views::Base
       CardHeader do
         CardTitle { t("users.show.leftovers_title") }
       end
+
       CardContent do
         if leftovers.a_has.any?
           div(class: "mb-3") do
@@ -226,10 +238,6 @@ class Views::Users::Show < Views::Base
   end
 
   def copy_button
-    a(
-      href: "#",
-      class: "text-muted-foreground hover:text-foreground cursor-pointer transition-colors",
-      data: { action: "clipboard#copy", copy_button: "" }
-    ) { "📋" }
+    Button(variant: :outline, size: :sm, icon: true, type: "button", data: { action: "clipboard#copy", copy_button: "" }) { "📋" }
   end
 end
