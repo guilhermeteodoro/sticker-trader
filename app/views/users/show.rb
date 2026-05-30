@@ -20,23 +20,20 @@ class Views::Users::Show < Views::Base
     div(class: "mb-4") do
       h1(class: "text-2xl font-bold text-gray-900 mb-2") { t("users.show.collection_title", name: @user.name) }
 
-      div(class: "flex gap-6 text-sm text-gray-600") do
-        span { t("users.show.owned", count: @user.owned_count) }
-        span { t("users.show.missing", count: @user.missing_count) }
-        span { t("users.show.duplicates", count: @user.duplicates_count) }
+      div(class: "flex gap-3 text-sm") do
+        Badge(variant: :secondary) { t("users.show.owned", count: @user.owned_count) }
+        Badge(variant: :secondary) { t("users.show.missing", count: @user.missing_count) }
+        Badge(variant: :secondary) { t("users.show.duplicates", count: @user.duplicates_count) }
       end
 
       if @is_owner
-        a(href: edit_user_collection_path(@user), class: "inline-block mt-3 text-green-600 hover:text-green-700 font-medium") do
-          t("users.show.update_collection")
-        end
-
-        a(href: edit_user_path(@user), class: "inline-block mt-3 ml-4 text-gray-500 hover:text-gray-700 font-medium") do
-          t("users.show.account_settings")
+        div(class: "mt-3 flex gap-3") do
+          Button(variant: :outline, href: edit_user_collection_path(@user)) { t("users.show.update_collection") }
+          Button(variant: :ghost, href: edit_user_path(@user)) { t("users.show.account_settings") }
         end
       elsif !@current_user
-        div(class: "mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg") do
-          p(class: "text-sm text-yellow-800") do
+        Alert(class: "mt-4") do
+          AlertDescription do
             plain "#{t("users.show.register_prompt")} "
             a(href: new_registration_path, class: "font-medium underline") { t("users.show.register_link") }
           end
@@ -103,24 +100,27 @@ class Views::Users::Show < Views::Base
     balanced = @trade_result.balanced
     return unless [ :shiny, :coke, :normal ].any? { balanced.send(it).a_gives.any? }
 
-    div(class: "mt-8 p-6 bg-green-50 border border-green-200 rounded-lg") do
-      h3(class: "text-lg font-bold text-green-800 mb-4") { t("users.show.balanced_title") }
+    Card(class: "mt-8 border-green-200 bg-green-50") do
+      CardHeader do
+        CardTitle { t("users.show.balanced_title") }
+      end
+      CardContent do
+        [ :shiny, :coke, :normal ].each do |cat|
+          pair = balanced.send(cat)
+          next if pair.a_gives.empty?
 
-      [ :shiny, :coke, :normal ].each do |cat|
-        pair = balanced.send(cat)
-        next if pair.a_gives.empty?
-
-        count = pair.a_gives.size
-        div(class: "mb-4") do
-          h4(class: "font-semibold text-green-700 mb-2") { t("users.show.category_trade", category: t("categories.#{cat}"), count: count) }
-          div(class: "grid grid-cols-2 gap-4") do
-            div do
-              p(class: "text-xs text-gray-500 mb-1") { t("users.show.gives", name: @current_user.name) }
-              render_sticker_list_by_team(pair.a_gives)
-            end
-            div do
-              p(class: "text-xs text-gray-500 mb-1") { t("users.show.gives", name: @user.name) }
-              render_sticker_list_by_team(pair.b_gives)
+          count = pair.a_gives.size
+          div(class: "mb-4") do
+            h4(class: "font-semibold text-green-700 mb-2") { t("users.show.category_trade", category: t("categories.#{cat}"), count: count) }
+            div(class: "grid grid-cols-2 gap-4") do
+              div do
+                p(class: "text-xs text-muted-foreground mb-1") { t("users.show.gives", name: @current_user.name) }
+                render_sticker_list_by_team(pair.a_gives)
+              end
+              div do
+                p(class: "text-xs text-muted-foreground mb-1") { t("users.show.gives", name: @user.name) }
+                render_sticker_list_by_team(pair.b_gives)
+              end
             end
           end
         end
@@ -132,20 +132,23 @@ class Views::Users::Show < Views::Base
     leftovers = @trade_result.leftovers
     return if leftovers.a_has.empty? && leftovers.b_has.empty?
 
-    div(class: "mt-6 p-6 bg-gray-50 border border-gray-200 rounded-lg") do
-      h3(class: "text-lg font-semibold text-gray-700 mb-4") { t("users.show.leftovers_title") }
-
-      if leftovers.a_has.any?
-        div(class: "mb-3") do
-          p(class: "text-sm font-medium text-gray-600 mb-1") { t("users.show.still_has", name: @current_user.name, count: leftovers.a_has.size) }
-          render_sticker_list_by_team(leftovers.a_has)
-        end
+    Card(class: "mt-6") do
+      CardHeader do
+        CardTitle { t("users.show.leftovers_title") }
       end
+      CardContent do
+        if leftovers.a_has.any?
+          div(class: "mb-3") do
+            p(class: "text-sm font-medium text-muted-foreground mb-1") { t("users.show.still_has", name: @current_user.name, count: leftovers.a_has.size) }
+            render_sticker_list_by_team(leftovers.a_has)
+          end
+        end
 
-      if leftovers.b_has.any?
-        div do
-          p(class: "text-sm font-medium text-gray-600 mb-1") { t("users.show.still_has", name: @user.name, count: leftovers.b_has.size) }
-          render_sticker_list_by_team(leftovers.b_has)
+        if leftovers.b_has.any?
+          div do
+            p(class: "text-sm font-medium text-muted-foreground mb-1") { t("users.show.still_has", name: @user.name, count: leftovers.b_has.size) }
+            render_sticker_list_by_team(leftovers.b_has)
+          end
         end
       end
     end
@@ -218,10 +221,6 @@ class Views::Users::Show < Views::Base
   end
 
   def copy_button
-    button(
-      type: "button",
-      data: { action: "clipboard#copy", copy_button: "" },
-      class: "text-sm text-gray-500 hover:text-gray-700 border border-gray-300 rounded px-2 py-1"
-    ) { t("users.show.copy") }
+    Button(variant: :outline, type: "button", data: { action: "clipboard#copy", copy_button: "" }) { t("users.show.copy") }
   end
 end

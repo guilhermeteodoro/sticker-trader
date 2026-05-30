@@ -33,13 +33,13 @@ class Components::Layout < Components::Base
 
   def render_flash
     if flash[:notice]
-      div(class: "mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm") do
-        plain flash[:notice]
+      Alert(class: "mb-4") do
+        AlertDescription { flash[:notice] }
       end
     end
     if flash[:error]
-      div(class: "mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm") do
-        plain flash[:error]
+      Alert(class: "mb-4 border-destructive") do
+        AlertDescription { flash[:error] }
       end
     end
   end
