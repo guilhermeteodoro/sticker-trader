@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class Components::Layout < Components::Base
-  def initialize(title: I18n.t("app_name"))
+  def initialize(title: I18n.t("app_name"), current_user: nil)
     @title = title
+    @current_user = current_user
   end
 
   def view_template
@@ -19,6 +20,7 @@ class Components::Layout < Components::Base
         javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
       end
       body(class: "min-h-screen bg-background") do
+        render Components::UserMenu.new(user: @current_user) if @current_user
         main(class: "max-w-4xl mx-auto px-4 py-8") do
           yield
         end

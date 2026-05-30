@@ -2,7 +2,7 @@
 
 class Views::Base < Components::Base
   def around_template
-    render Components::Layout.new(title: page_title) do
+    render Components::Layout.new(title: page_title, current_user: current_user) do
       super
     end
   end

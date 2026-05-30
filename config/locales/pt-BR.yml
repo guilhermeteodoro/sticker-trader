@@ -5,6 +5,8 @@ pt-BR:
     login: "Entrar"
     register: "Cadastrar"
     logout: "Sair"
+    my_collection: "Minha coleção"
+    settings: "Configurações"
 
   pages:
     home:

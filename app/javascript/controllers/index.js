@@ -22,6 +22,9 @@ application.register("ruby-ui--dropdown-menu", RubyUi__DropdownMenuController)
 import RubyUi__FormFieldController from "./ruby_ui/form_field_controller"
 application.register("ruby-ui--form-field", RubyUi__FormFieldController)
 
+import RubyUi__PopoverController from "./ruby_ui/popover_controller"
+application.register("ruby-ui--popover", RubyUi__PopoverController)
+
 import RubyUi__ToastController from "./ruby_ui/toast_controller"
 application.register("ruby-ui--toast", RubyUi__ToastController)
 
