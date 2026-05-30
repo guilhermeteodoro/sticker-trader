@@ -59,4 +59,42 @@ class ManualParserTest < ActiveSupport::TestCase
       ManualParser.new(missing_text: missing_text, duplicates_text: duplicates_text).call
     end
   end
+
+  test "parses emoji after country code" do
+    missing_text = "FWC \u{1F3C6}: 00, 3, 4\nMEX \u{1F1F2}\u{1F1FD}: 5, 8"
+    duplicates_text = ""
+
+    result = ManualParser.new(missing_text: missing_text, duplicates_text: duplicates_text).call
+
+    assert_equal 989, result[:owned].size
+  end
+
+  test "parses emoji before country code (our copy output format)" do
+    missing_text = "\u{1F3C6} FWC: 00, 3, 4\n\u{1F1F2}\u{1F1FD} MEX: 5, 8"
+    duplicates_text = ""
+
+    result = ManualParser.new(missing_text: missing_text, duplicates_text: duplicates_text).call
+
+    assert_equal 989, result[:owned].size
+  end
+
+  test "parses subdivision flags (Scotland, England)" do
+    missing_text = "SCO \u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}: 1, 2\nENG \u{1F3F4}\u{E0067}\u{E0062}\u{E0065}\u{E006E}\u{E0067}\u{E007F}: 3, 4"
+    duplicates_text = ""
+
+    result = ManualParser.new(missing_text: missing_text, duplicates_text: duplicates_text).call
+
+    assert_equal 990, result[:owned].size
+  end
+
+  test "parses duplicates with emoji prefix" do
+    duplicates_text = "\u{1F3C6} FWC: 9(1x), 10(1x)\n\u{1F1F2}\u{1F1FD} MEX: 4(3x)"
+    missing_text = ""
+
+    result = ManualParser.new(missing_text: missing_text, duplicates_text: duplicates_text).call
+
+    assert_equal 3, result[:duplicates].size
+    assert_equal 1, result[:duplicates][10]
+    assert_equal 3, result[:duplicates][38]
+  end
 end

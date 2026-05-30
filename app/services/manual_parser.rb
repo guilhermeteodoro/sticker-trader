@@ -69,7 +69,7 @@ class ManualParser
       line = line.strip
       next if line.empty? || line.start_with?("Hey") || line.start_with?("Download")
 
-      match = line.match(/^([A-Z]{2,3}):\s*(.+)$/)
+      match = line.match(/^[^A-Z]*([A-Z]{2,3})\s*[^:]*:\s*(.+)$/)
       next unless match
 
       team = match[1]
@@ -85,7 +85,7 @@ class ManualParser
       line = line.strip
       next if line.empty? || line.start_with?("Hey") || line.start_with?("Download")
 
-      match = line.match(/^([A-Z]{2,3}):\s*(.+)$/)
+      match = line.match(/^[^A-Z]*([A-Z]{2,3})\s*[^:]*:\s*(.+)$/)
       next unless match
 
       team = match[1]
