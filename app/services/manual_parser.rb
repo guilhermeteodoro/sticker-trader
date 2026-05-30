@@ -89,7 +89,16 @@ class ManualParser
       next unless match
 
       team = match[1]
-      entries = match[2].scan(/(\d+)\((\d+)x\)/).map { |n, c| [n, c.to_i] }
+      numbers_str = match[2]
+
+      # Try format with counts: 4(3x), 12(1x)
+      entries_with_counts = numbers_str.scan(/(\d+)\((\d+)x\)/)
+      entries = if entries_with_counts.any?
+        entries_with_counts.map { |n, c| [n, c.to_i] }
+      else
+        # Plain numbers without counts: 4, 12, 17 — assume 1 copy each
+        numbers_str.split(",").map { |n| [n.strip, 1] }
+      end
       results << [team, entries]
     end
     results

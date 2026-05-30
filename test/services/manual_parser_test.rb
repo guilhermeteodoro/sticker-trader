@@ -97,4 +97,15 @@ class ManualParserTest < ActiveSupport::TestCase
     assert_equal 1, result[:duplicates][10]
     assert_equal 3, result[:duplicates][38]
   end
+
+  test "parses duplicates as plain numbers without counts" do
+    duplicates_text = "MEX \u{1F1F2}\u{1F1FD}: 4, 12, 17\nRSA \u{1F1FF}\u{1F1E6}: 12, 15"
+    missing_text = ""
+
+    result = ManualParser.new(missing_text: missing_text, duplicates_text: duplicates_text).call
+
+    assert_equal 5, result[:duplicates].size
+    # All plain numbers default to 1 copy
+    assert result[:duplicates].values.all? { |v| v == 1 }
+  end
 end
