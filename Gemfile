@@ -64,6 +64,6 @@ end
 
 gem "phlex-rails", "~> 2.4"
 
-gem "ruby_ui", "~> 1.2"
+gem "ruby_ui", github: "ruby-ui/ruby_ui", glob: "gem/ruby_ui.gemspec"
 
 gem "tailwind_merge", "~> 1.5"
