@@ -12,6 +12,7 @@ class Views::Users::Show < Views::Base
     render_user_info
     render_trade if @trade_result
     render_duplicates
+    render_trade_history if @is_owner
   end
 
   private
@@ -255,6 +256,42 @@ class Views::Users::Show < Views::Base
 
   def indent(text, spaces = 2)
     text.lines.map { |l| "#{" " * spaces}#{l}" }.join
+  end
+
+  def render_trade_history
+    trades = Trade.where(user_a_id: @user.id).or(Trade.where(user_b_id: @user.id)).order(confirmed_at: :desc)
+    return if trades.empty?
+
+    div(class: "mt-8") do
+      Heading(level: 3, class: "mb-4") { t("trades.history_title") }
+
+      trades.each do |trade|
+        other = trade.user_a_id == @user.id ? trade.user_b : trade.user_a
+        my_gives = trade.user_a_id == @user.id ? trade.a_gives_labels : trade.b_gives_labels
+        they_give = trade.user_a_id == @user.id ? trade.b_gives_labels : trade.a_gives_labels
+
+        Card(class: "mb-4") do
+          CardHeader do
+            div(class: "flex items-center justify-between") do
+              CardTitle(class: "text-base") { t("trades.history_with", name: other.name) }
+              span(class: "text-xs text-muted-foreground") { I18n.l(trade.confirmed_at, format: :short) }
+            end
+          end
+          CardContent do
+            div(class: "grid grid-cols-2 gap-4 text-sm") do
+              div do
+                p(class: "font-medium text-muted-foreground mb-1") { t("trades.i_gave") }
+                p(class: "font-mono text-xs") { my_gives.join(", ") }
+              end
+              div do
+                p(class: "font-medium text-muted-foreground mb-1") { t("trades.i_received") }
+                p(class: "font-mono text-xs") { they_give.join(", ") }
+              end
+            end
+          end
+        end
+      end
+    end
   end
 
   def copy_button

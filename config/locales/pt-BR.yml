@@ -1,6 +1,10 @@
 pt-BR:
   app_name: "⚽ Sticker Trader"
 
+  time:
+    formats:
+      short: "%d/%m/%Y %H:%M"
+
   nav:
     login: "Entrar"
     register: "Cadastrar"
@@ -160,3 +164,7 @@ pt-BR:
     create:
       success: "Troca registrada! ✅"
     consolidate: "Consolidar troca"
+    history_title: "Histórico de trocas"
+    history_with: "Troca com %{name}"
+    i_gave: "Dei:"
+    i_received: "Recebi:"

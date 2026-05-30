@@ -160,3 +160,7 @@ en:
     create:
       success: "Trade recorded! ✅"
     consolidate: "Consolidate trade"
+    history_title: "Trade history"
+    history_with: "Trade with %{name}"
+    i_gave: "I gave:"
+    i_received: "I received:"
