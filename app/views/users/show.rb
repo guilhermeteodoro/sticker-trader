@@ -17,28 +17,25 @@ class Views::Users::Show < Views::Base
   private
 
   def render_user_info
-    Card(class: "mb-6") do
-      CardHeader do
-        CardTitle { t("users.show.collection_title", name: @user.name) }
-      end
-      CardContent do
-        div(class: "flex flex-wrap gap-3 text-sm") do
-          Badge(variant: :secondary) { t("users.show.owned", count: @user.owned_count) }
-          Badge(variant: :secondary) { t("users.show.missing", count: @user.missing_count) }
-          Badge(variant: :secondary) { t("users.show.duplicates", count: @user.duplicates_count) }
-        end
+    div(class: "mb-6") do
+      h1(class: "text-2xl font-bold text-foreground mb-2") { t("users.show.collection_title", name: @user.name) }
 
-        if @is_owner
-          div(class: "mt-4 flex gap-3") do
-            Link(variant: :outline, href: edit_user_collection_path(@user)) { t("users.show.update_collection") }
-            Link(variant: :ghost, href: edit_user_path(@user)) { t("users.show.account_settings") }
-          end
-        elsif !@current_user
-          Alert(class: "mt-4") do
-            AlertDescription do
-              plain "#{t("users.show.register_prompt")} "
-              a(href: new_registration_path, class: "font-medium underline") { t("users.show.register_link") }
-            end
+      div(class: "flex flex-wrap gap-3 text-sm") do
+        Badge(variant: :secondary) { t("users.show.owned", count: @user.owned_count) }
+        Badge(variant: :secondary) { t("users.show.missing", count: @user.missing_count) }
+        Badge(variant: :secondary) { t("users.show.duplicates", count: @user.duplicates_count) }
+      end
+
+      if @is_owner
+        div(class: "mt-4 flex gap-3") do
+          Link(variant: :outline, href: edit_user_collection_path(@user)) { t("users.show.update_collection") }
+          Link(variant: :ghost, href: edit_user_path(@user)) { t("users.show.account_settings") }
+        end
+      elsif !@current_user
+        Alert(class: "mt-4") do
+          AlertDescription do
+            plain "#{t("users.show.register_prompt")} "
+            a(href: new_registration_path, class: "font-medium underline") { t("users.show.register_link") }
           end
         end
       end
@@ -49,15 +46,19 @@ class Views::Users::Show < Views::Base
     duplicates = @user.duplicate_stickers
     text = format_stickers_as_text(duplicates)
 
-    div(class: "py-4", data: { controller: "clipboard", clipboard_text_value: text }) do
-      div(class: "flex items-center justify-between mb-3") do
-        h2(class: "text-lg font-semibold text-gray-800") { t("users.show.available_for_trade") }
-        copy_button
+    Card(class: "mb-6", data: { controller: "clipboard", clipboard_text_value: text }) do
+      CardHeader do
+        div(class: "flex items-center justify-between") do
+          CardTitle { t("users.show.available_for_trade") }
+          copy_button
+        end
       end
-      if duplicates.any?
-        render_sticker_list_by_team(duplicates)
-      else
-        p(class: "text-gray-500 italic") { t("users.show.no_duplicates") }
+      CardContent do
+        if duplicates.any?
+          render_sticker_list_by_team(duplicates)
+        else
+          p(class: "text-muted-foreground italic") { t("users.show.no_duplicates") }
+        end
       end
     end
   end
