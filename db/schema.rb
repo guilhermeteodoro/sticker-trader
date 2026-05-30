@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_29_205315) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_30_182219) do
   create_table "countries", force: :cascade do |t|
     t.string "code", null: false
     t.string "emoji", null: false
@@ -26,6 +26,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_29_205315) do
     t.index ["country_id", "number"], name: "index_stickers_on_country_id_and_number", unique: true
     t.index ["country_id"], name: "index_stickers_on_country_id"
     t.index ["position"], name: "index_stickers_on_position", unique: true
+  end
+
+  create_table "trades", force: :cascade do |t|
+    t.json "balanced_data", null: false
+    t.datetime "confirmed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_a_id", null: false
+    t.integer "user_b_id", null: false
+    t.index ["user_a_id"], name: "index_trades_on_user_a_id"
+    t.index ["user_b_id"], name: "index_trades_on_user_b_id"
   end
 
   create_table "user_stickers", force: :cascade do |t|
@@ -50,6 +61,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_29_205315) do
   end
 
   add_foreign_key "stickers", "countries"
+  add_foreign_key "trades", "users", column: "user_a_id"
+  add_foreign_key "trades", "users", column: "user_b_id"
   add_foreign_key "user_stickers", "stickers"
   add_foreign_key "user_stickers", "users"
 end

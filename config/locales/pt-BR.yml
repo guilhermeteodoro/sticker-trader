@@ -155,3 +155,8 @@ pt-BR:
     CRO: "Croácia"
     GHA: "Gana"
     PAN: "Panamá"
+
+  trades:
+    create:
+      success: "Troca registrada! ✅"
+    consolidate: "Consolidar troca"

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   resources :users, path: "u", param: :slug, only: [:show, :edit, :update] do
     resource :collection, path: "c", only: [:edit, :update]
+    resources :trades, only: [:create]
   end
 
   get "up" => "rails/health#show", as: :rails_health_check

@@ -100,6 +100,7 @@ class Views::Users::Show < Views::Base
       )
 
       render_balanced_trade
+      render_consolidate_button
       render_leftovers
     end
   end
@@ -146,6 +147,19 @@ class Views::Users::Show < Views::Base
             end
           end
         end
+      end
+    end
+  end
+
+  def render_consolidate_button
+    balanced = @trade_result.balanced
+    has_any = [ :shiny, :coke, :normal ].any? { balanced.send(it).a_gives.any? }
+    return unless has_any
+
+    div(class: "mt-4 flex justify-end") do
+      form(action: user_trades_path(@user), method: "post") do
+        input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+        Button(type: :submit, variant: :primary) { t("trades.consolidate") }
       end
     end
   end

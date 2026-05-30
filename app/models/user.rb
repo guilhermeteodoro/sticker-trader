@@ -3,6 +3,8 @@
 class User < ApplicationRecord
   has_many :user_stickers, dependent: :delete_all
   has_many :stickers, through: :user_stickers
+  has_many :trades_as_a, class_name: "Trade", foreign_key: :user_a_id, dependent: :destroy
+  has_many :trades_as_b, class_name: "Trade", foreign_key: :user_b_id, dependent: :destroy
 
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true
