@@ -9,8 +9,6 @@ gem "sqlite3", ">= 2.1"
 gem "pg", "~> 1.1", group: :production
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
-# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem "importmap-rails"
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "turbo-rails"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
@@ -64,6 +62,8 @@ end
 
 gem "phlex-rails", "~> 2.4"
 
-gem "ruby_ui", github: "ruby-ui/ruby_ui", glob: "gem/ruby_ui.gemspec"
+gem "ruby_ui", group: :development, require: false
 
 gem "tailwind_merge", "~> 1.5"
+
+gem "jsbundling-rails", "~> 1.3"

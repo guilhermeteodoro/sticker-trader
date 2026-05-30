@@ -16,7 +16,7 @@ class Components::Layout < Components::Base
         csrf_meta_tags
         stylesheet_link_tag "tailwind", "data-turbo-track": "reload"
         stylesheet_link_tag :app, "data-turbo-track": "reload"
-        javascript_importmap_tags
+        javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
       end
       body(class: "min-h-screen bg-background") do
         main(class: "max-w-4xl mx-auto px-4 py-8") do
