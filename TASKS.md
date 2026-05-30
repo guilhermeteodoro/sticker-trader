@@ -58,7 +58,7 @@
 - [x] TradeComparer unit tests
 - [x] View tests (clipboard text assertions via rendered Phlex + Nokogiri)
 - [x] Integration smoke tests (routes, registration, login)
-- [ ] E2E test: navigate home → register with collection → assert sees own info and collection
+- [x] E2E test: navigate home → register with collection → assert sees own info and collection
 
 ## Phase 9: Deploy
 - [ ] Configure Render deployment (render.yaml, Dockerfile or buildpack)
