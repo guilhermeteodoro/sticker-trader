@@ -11,6 +11,8 @@ class Components::Nav < Components::Base
         a(href: root_path, class: "text-xl font-bold text-green-700") { t("app_name") }
 
         div(class: "flex items-center gap-4 text-sm") do
+          render_locale_switcher
+
           if @current_user
             a(href: user_path(@current_user), class: "text-gray-600 hover:text-gray-900") { @current_user.name }
             button(form: "logout-form", type: "submit", class: "text-gray-500 hover:text-gray-700") { t("nav.logout") }
@@ -30,4 +32,13 @@ class Components::Nav < Components::Base
     end
   end
 
+  private
+
+  def render_locale_switcher
+    current = I18n.locale.to_s
+    other_locale = current == "pt-BR" ? "en" : "pt-BR"
+    other_flag = current == "pt-BR" ? "🇬🇧" : "🇧🇷"
+
+    a(href: "?locale=#{other_locale}", class: "text-lg hover:opacity-75", title: other_locale) { other_flag }
+  end
 end
