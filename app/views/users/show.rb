@@ -46,7 +46,7 @@ class Views::Users::Show < Views::Base
     duplicates = @user.duplicate_stickers
     text = format_stickers_as_text(duplicates)
 
-    Card(class: "mb-6", data: { controller: "clipboard", clipboard_text_value: text }) do
+    Card(class: "mb-6 bg-card", data: { controller: "clipboard", clipboard_text_value: text }) do
       CardHeader do
         div(class: "flex items-center justify-between") do
           CardTitle { t("users.show.available_for_trade") }
