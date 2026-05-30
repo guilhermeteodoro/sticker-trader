@@ -226,6 +226,6 @@ class Views::Users::Show < Views::Base
   end
 
   def copy_button
-    Button(variant: :outline, type: "button", data: { action: "clipboard#copy", copy_button: "" }) { t("users.show.copy") }
+    Button(variant: :outline, size: :sm, type: "button", data: { action: "clipboard#copy", copy_button: "" }) { t("users.show.copy") }
   end
 end
