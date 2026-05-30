@@ -1,8 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="accordion"
 export default class extends Controller {
-  static targets = ['content']
+  static targets = ['content', 'icon']
   static values = {
     open: {
       type: Boolean,
@@ -11,37 +10,67 @@ export default class extends Controller {
   }
 
   connect() {
-    // Set the initial state of the accordion
-    this.openValue ? this.open() : this.close()
+    this.openValue ? this.open(false) : this.close(false)
   }
 
-  // Toggle the 'open' value
   toggle() {
     this.openValue = !this.openValue
   }
 
-  // Handle changes in the 'open' value
   openValueChanged(isOpen, wasOpen) {
-    if (isOpen) {
-      this.open()
+    if (wasOpen === undefined) return
+    isOpen ? this.open(true) : this.close(true)
+  }
+
+  open(animate = true) {
+    if (!this.hasContentTarget) return
+    const el = this.contentTarget
+    el.classList.remove('hidden')
+
+    if (animate) {
+      el.style.height = '0px'
+      el.style.overflow = 'hidden'
+      requestAnimationFrame(() => {
+        el.style.transition = 'height 200ms ease-out'
+        el.style.height = el.scrollHeight + 'px'
+        el.addEventListener('transitionend', () => {
+          el.style.height = ''
+          el.style.overflow = ''
+          el.style.transition = ''
+        }, { once: true })
+      })
+    }
+
+    if (this.hasIconTarget) {
+      this.iconTarget.style.transform = 'rotate(0deg)'
+    }
+    this.openValue = true
+  }
+
+  close(animate = true) {
+    if (!this.hasContentTarget) return
+    const el = this.contentTarget
+
+    if (animate) {
+      el.style.height = el.scrollHeight + 'px'
+      el.style.overflow = 'hidden'
+      requestAnimationFrame(() => {
+        el.style.transition = 'height 200ms ease-out'
+        el.style.height = '0px'
+        el.addEventListener('transitionend', () => {
+          el.classList.add('hidden')
+          el.style.height = ''
+          el.style.overflow = ''
+          el.style.transition = ''
+        }, { once: true })
+      })
     } else {
-      this.close()
+      el.classList.add('hidden')
     }
-  }
 
-  // Open the accordion content
-  open() {
-    if (this.hasContentTarget) {
-      this.contentTarget.classList.remove('hidden')
-      this.openValue = true
+    if (this.hasIconTarget) {
+      this.iconTarget.style.transform = 'rotate(-90deg)'
     }
-  }
-
-  // Close the accordion content
-  close() {
-    if (this.hasContentTarget) {
-      this.contentTarget.classList.add('hidden')
-      this.openValue = false
-    }
+    this.openValue = false
   }
 }

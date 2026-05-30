@@ -54,7 +54,9 @@ class Views::Users::Show < Views::Base
             Button(variant: :outline, size: :sm, icon: true, type: "button", data: { action: "clipboard#copy", copy_button: "" }) { "📋" }
           end
           CollapsibleTrigger do
-            Button(variant: :ghost, size: :sm, icon: true) { "▾" }
+            Button(variant: :ghost, icon: true) do
+              span(class: "text-lg transition-transform duration-200", data: { ruby_ui__collapsible_target: "icon" }) { "▾" }
+            end
           end
         end
 
