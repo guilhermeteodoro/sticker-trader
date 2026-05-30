@@ -36,18 +36,27 @@ class Components::Nav < Components::Base
 
   def render_locale_switcher
     current = I18n.locale.to_s
+    current_flag = current == "pt-BR" ? "🇧🇷" : "🇬🇧"
 
-    div(class: "flex items-center gap-1") do
-      a(
-        href: "?locale=pt-BR",
-        class: "text-lg #{current == "pt-BR" ? "opacity-100" : "opacity-40 hover:opacity-75"}",
-        title: "Português"
-      ) { "🇧🇷" }
-      a(
-        href: "?locale=en",
-        class: "text-lg #{current == "en" ? "opacity-100" : "opacity-40 hover:opacity-75"}",
-        title: "English"
-      ) { "🇬🇧" }
+    DropdownMenu do
+      DropdownMenuTrigger do
+        button(
+          type: "button",
+          class: "flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 rounded px-2 py-1"
+        ) do
+          span { current_flag }
+          span(class: "text-xs") { "▾" }
+        end
+      end
+
+      DropdownMenuContent do
+        DropdownMenuItem(href: "?locale=pt-BR") do
+          span { "🇧🇷 Português" }
+        end
+        DropdownMenuItem(href: "?locale=en") do
+          span { "🇬🇧 English" }
+        end
+      end
     end
   end
 end
