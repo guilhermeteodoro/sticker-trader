@@ -23,7 +23,6 @@ class Views::Users::Show < Views::Base
       div(class: "flex flex-wrap gap-3 text-sm") do
         Badge(variant: :outline) { t("users.show.owned", count: @user.owned_count) }
         Badge(variant: :outline) { t("users.show.missing", count: @user.missing_count) }
-        Badge(variant: :outline) { t("users.show.duplicates", count: @user.duplicates_count) }
       end
 
       if @is_owner
@@ -50,13 +49,18 @@ class Views::Users::Show < Views::Base
       Collapsible(open: true) do
         div(class: "flex items-center justify-between mb-2") do
           div(class: "flex items-center gap-2") do
-            Heading(level: 3) { t("users.show.available_for_trade") }
-            Button(variant: :outline, size: :sm, icon: true, type: "button", data: { action: "clipboard#copy", copy_button: "" }) { "📋" }
-          end
-          CollapsibleTrigger do
-            Button(variant: :ghost, icon: true) do
-              span(class: "text-lg transition-transform duration-200", data: { ruby_ui__collapsible_target: "icon" }) { "▾" }
+            CollapsibleTrigger do
+              Button(variant: :ghost, icon: true) do
+                span(class: "transition-transform duration-200", data: { ruby_ui__collapsible_target: "icon" }) { "⬇️" }
+              end
             end
+
+            Heading(level: 3) { t("users.show.available_for_trade") }
+            Badge(variant: :outline) { t("users.show.duplicates", count: @user.duplicates_count) }
+          end
+
+          div(class: "flex items-center") do
+            Button(variant: :ghost, size: :sm, type: "button", data: { action: "clipboard#copy", copy_button: "" }) { t("users.show.copy") }
           end
         end
 

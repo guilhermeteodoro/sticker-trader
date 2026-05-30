@@ -71,7 +71,7 @@ pt-BR:
       gives: "%{name} dá:"
       leftovers_title: "🤝 Sobras"
       still_has: "%{name} ainda pode oferecer (%{count}):"
-      copy: "📋"
+      copy: "📋 Copiar"
       copied: "Copiado!"
     edit:
       title: "Configurações da conta"
