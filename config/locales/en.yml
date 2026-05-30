@@ -71,7 +71,7 @@ en:
       gives: "%{name} gives:"
       leftovers_title: "🤝 Leftovers"
       still_has: "%{name} still has to offer (%{count}):"
-      copy: "📋 Copy"
+      copy: "📋"
       copied: "Copied!"
     edit:
       title: "Account settings"
