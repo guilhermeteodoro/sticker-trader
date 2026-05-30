@@ -27,3 +27,26 @@ module ActiveSupport
     end
   end
 end
+
+module ComponentTestHelper
+  def render(component)
+    view_context.render(component)
+  end
+
+  def render_document(component)
+    html = render(component)
+    Nokogiri::HTML5(html)
+  end
+
+  private
+
+  def view_context
+    @view_context ||= test_controller.view_context
+  end
+
+  def test_controller
+    ctrl = ApplicationController.new
+    ctrl.request = ActionDispatch::TestRequest.create
+    ctrl
+  end
+end
