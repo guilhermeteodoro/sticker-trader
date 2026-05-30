@@ -13,7 +13,7 @@ module RubyUI
         data: {
           controller: "ruby-ui--form-field"
         },
-        class: "flex flex-col gap-2"
+        class: "flex flex-col gap-2 mb-4"
       }
     end
   end
