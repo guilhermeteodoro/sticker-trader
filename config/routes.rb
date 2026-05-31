@@ -1,0 +1,15 @@
+# frozen_string_literal: true
+
+Rails.application.routes.draw do
+  root "pages#home"
+
+  resource :registration, only: [ :new, :create ]
+  resource :session, only: [ :new, :create, :destroy ]
+
+  resources :users, path: "u", param: :slug, only: [ :show, :edit, :update ] do
+    resource :collection, path: "c", only: [ :edit, :update ]
+    resources :trades, only: [ :create ]
+  end
+
+  get "up" => "rails/health#show", as: :rails_health_check
+end
