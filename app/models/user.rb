@@ -1,5 +1,21 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: users
+#
+#  id         :integer          not null, primary key
+#  email      :string           not null
+#  name       :string           not null
+#  slug       :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_users_on_email  (email) UNIQUE
+#  index_users_on_slug   (slug) UNIQUE
+#
 class User < ApplicationRecord
   has_many :user_stickers, dependent: :delete_all
   has_many :stickers, through: :user_stickers

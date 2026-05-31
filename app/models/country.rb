@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: countries
+#
+#  id    :integer          not null, primary key
+#  code  :string           not null
+#  emoji :string           not null
+#
+# Indexes
+#
+#  index_countries_on_code  (code) UNIQUE
+#
 class Country < ApplicationRecord
   has_many :stickers, dependent: :restrict_with_error
 

@@ -280,12 +280,18 @@ class Views::Users::Show < Views::Base
           CardContent do
             div(class: "grid grid-cols-2 gap-4 text-sm") do
               div do
-                p(class: "font-medium text-muted-foreground mb-1") { t("trades.i_gave") }
-                p(class: "font-mono text-xs") { my_gives.map(&:label).join(", ") }
+                p(class: "font-medium text-muted-foreground mb-1") do
+                  "#{t("trades.i_gave")} (#{my_gives.count})"
+                end
+
+                render_sticker_list_by_team(my_gives)
               end
               div do
-                p(class: "font-medium text-muted-foreground mb-1") { t("trades.i_received") }
-                p(class: "font-mono text-xs") { they_give.map(&:label).join(", ") }
+                p(class: "font-medium text-muted-foreground mb-1") do
+                  "#{t("trades.i_received")} (#{they_give.count})"
+                end
+
+                render_sticker_list_by_team(they_give)
               end
             end
           end
