@@ -11,17 +11,17 @@
 require "set"
 
 TEAMS = [
-  ["FWC", 20], ["CC", 14],
-  ["MEX", 20], ["RSA", 20], ["KOR", 20], ["CZE", 20], ["CAN", 20],
-  ["BIH", 20], ["QAT", 20], ["SUI", 20], ["BRA", 20], ["MAR", 20],
-  ["HAI", 20], ["SCO", 20], ["USA", 20], ["PAR", 20], ["AUS", 20],
-  ["TUR", 20], ["GER", 20], ["CUW", 20], ["CIV", 20], ["ECU", 20],
-  ["NED", 20], ["JPN", 20], ["SWE", 20], ["TUN", 20], ["BEL", 20],
-  ["EGY", 20], ["IRN", 20], ["NZL", 20], ["ESP", 20], ["CPV", 20],
-  ["KSA", 20], ["URU", 20], ["FRA", 20], ["SEN", 20], ["IRQ", 20],
-  ["NOR", 20], ["ARG", 20], ["ALG", 20], ["AUT", 20], ["JOR", 20],
-  ["POR", 20], ["COD", 20], ["UZB", 20], ["COL", 20], ["ENG", 20],
-  ["CRO", 20], ["GHA", 20], ["PAN", 20],
+  [ "FWC", 20 ], [ "CC", 14 ],
+  [ "MEX", 20 ], [ "RSA", 20 ], [ "KOR", 20 ], [ "CZE", 20 ], [ "CAN", 20 ],
+  [ "BIH", 20 ], [ "QAT", 20 ], [ "SUI", 20 ], [ "BRA", 20 ], [ "MAR", 20 ],
+  [ "HAI", 20 ], [ "SCO", 20 ], [ "USA", 20 ], [ "PAR", 20 ], [ "AUS", 20 ],
+  [ "TUR", 20 ], [ "GER", 20 ], [ "CUW", 20 ], [ "CIV", 20 ], [ "ECU", 20 ],
+  [ "NED", 20 ], [ "JPN", 20 ], [ "SWE", 20 ], [ "TUN", 20 ], [ "BEL", 20 ],
+  [ "EGY", 20 ], [ "IRN", 20 ], [ "NZL", 20 ], [ "ESP", 20 ], [ "CPV", 20 ],
+  [ "KSA", 20 ], [ "URU", 20 ], [ "FRA", 20 ], [ "SEN", 20 ], [ "IRQ", 20 ],
+  [ "NOR", 20 ], [ "ARG", 20 ], [ "ALG", 20 ], [ "AUT", 20 ], [ "JOR", 20 ],
+  [ "POR", 20 ], [ "COD", 20 ], [ "UZB", 20 ], [ "COL", 20 ], [ "ENG", 20 ],
+  [ "CRO", 20 ], [ "GHA", 20 ], [ "PAN", 20 ]
 ].freeze
 
 # Build bidirectional mappings between sequential IDs and team+number labels
@@ -30,7 +30,7 @@ LABEL_TO_ID = {}
 
 seq = 1
 TEAMS.each do |team, size|
-  sticker_numbers = team == "FWC" ? ["00"] + (1..19).map(&:to_s) : (1..size).map(&:to_s)
+  sticker_numbers = team == "FWC" ? [ "00" ] + (1..19).map(&:to_s) : (1..size).map(&:to_s)
   sticker_numbers.each do |n|
     label = "#{team} #{n}"
     ID_TO_LABEL[seq] = label
@@ -186,10 +186,10 @@ def compare(a, b)
   leftovers_a = { shiny: [], coke: [], normal: [] }
   leftovers_b = { shiny: [], coke: [], normal: [] }
 
-  [:shiny, :coke, :normal].each do |cat|
+  [ :shiny, :coke, :normal ].each do |cat|
     a_pool = a_by_cat[cat]
     b_pool = b_by_cat[cat]
-    trade_count = [a_pool.size, b_pool.size].min
+    trade_count = [ a_pool.size, b_pool.size ].min
 
     if trade_count > 0
       a_selected = a_pool.first(trade_count)
@@ -205,8 +205,8 @@ def compare(a, b)
     end
 
     # Leftovers
-    leftovers_a[cat] = a_pool.drop([a_pool.size, b_pool.size].min)
-    leftovers_b[cat] = b_pool.drop([b_pool.size, a_pool.size].min)
+    leftovers_a[cat] = a_pool.drop([ a_pool.size, b_pool.size ].min)
+    leftovers_b[cat] = b_pool.drop([ b_pool.size, a_pool.size ].min)
   end
 
   # --- Leftovers ---
@@ -222,7 +222,7 @@ def compare(a, b)
     if total_leftovers_a.any?
       puts
       puts "   #{a[:name]} still has to offer (#{total_leftovers_a.size}):"
-      [:shiny, :coke, :normal].each do |cat|
+      [ :shiny, :coke, :normal ].each do |cat|
         next if leftovers_a[cat].empty?
         puts "   [#{cat}]"
         print_grouped(leftovers_a[cat], indent: "      ")
@@ -232,7 +232,7 @@ def compare(a, b)
     if total_leftovers_b.any?
       puts
       puts "   #{b[:name]} still has to offer (#{total_leftovers_b.size}):"
-      [:shiny, :coke, :normal].each do |cat|
+      [ :shiny, :coke, :normal ].each do |cat|
         next if leftovers_b[cat].empty?
         puts "   [#{cat}]"
         print_grouped(leftovers_b[cat], indent: "      ")

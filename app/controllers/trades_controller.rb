@@ -16,7 +16,7 @@ class TradesController < ApplicationController
     )
 
     # Insert trade_stickers for each direction
-    [:shiny, :coke, :normal].each do |cat|
+    [ :shiny, :coke, :normal ].each do |cat|
       pair = balanced.send(cat)
 
       pair.a_gives.each do |sticker|

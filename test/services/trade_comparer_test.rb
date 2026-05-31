@@ -24,7 +24,7 @@ class TradeComparerTest < ActiveSupport::TestCase
 
     # A has dupes at 1,2,3 — B is missing 1,2,3,4 — overlap is 1,2,3
     positions = result.a_gives_b.map(&:position)
-    assert_equal [1, 2, 3], positions
+    assert_equal [ 1, 2, 3 ], positions
   end
 
   test "b_gives_a are B's duplicates that A is missing" do
@@ -32,7 +32,7 @@ class TradeComparerTest < ActiveSupport::TestCase
 
     # B has dupes at 11,12,13 — A is missing 11-994 — overlap is 11,12,13
     positions = result.b_gives_a.map(&:position)
-    assert_equal [11, 12, 13], positions
+    assert_equal [ 11, 12, 13 ], positions
   end
 
   test "balanced trade matches within categories" do
@@ -41,7 +41,7 @@ class TradeComparerTest < ActiveSupport::TestCase
     # Positions 1-3 are FWC (shiny), positions 11-13 are CC (11=coke) + MEX 1 (12? no)
     # Let's just verify balanced counts match
     balanced = result.balanced
-    [:shiny, :coke, :normal].each do |cat|
+    [ :shiny, :coke, :normal ].each do |cat|
       assert_equal balanced.send(cat).a_gives.size, balanced.send(cat).b_gives.size,
         "Balanced #{cat} should have equal sides"
     end
@@ -52,7 +52,7 @@ class TradeComparerTest < ActiveSupport::TestCase
     leftovers = result.leftovers
 
     total_a = result.a_gives_b.size
-    balanced_a = [:shiny, :coke, :normal].sum { |c| result.balanced.send(c).a_gives.size }
+    balanced_a = [ :shiny, :coke, :normal ].sum { |c| result.balanced.send(c).a_gives.size }
     assert_equal total_a - balanced_a, leftovers.a_has.size
   end
 

@@ -8,7 +8,7 @@ class CreateStickers < ActiveRecord::Migration[8.1]
     end
 
     add_index :stickers, :position, unique: true
-    add_index :stickers, [:country_id, :number], unique: true
+    add_index :stickers, [ :country_id, :number ], unique: true
     add_index :stickers, :category
   end
 end

@@ -32,10 +32,10 @@ class TradeComparer
     leftovers_a = {}
     leftovers_b = {}
 
-    [:shiny, :coke, :normal].each do |cat|
+    [ :shiny, :coke, :normal ].each do |cat|
       a_pool = a_by_cat[cat]
       b_pool = b_by_cat[cat]
-      trade_count = [a_pool.size, b_pool.size].min
+      trade_count = [ a_pool.size, b_pool.size ].min
 
       balanced[cat] = TradePair.new(
         a_gives: a_pool.first(trade_count),

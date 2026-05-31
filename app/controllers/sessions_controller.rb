@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
-  before_action :redirect_if_logged_in, only: [:new]
+  before_action :redirect_if_logged_in, only: [ :new ]
 
   def new
     render Views::Sessions::New.new

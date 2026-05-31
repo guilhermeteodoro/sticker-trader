@@ -74,7 +74,7 @@ class ManualParser
 
       team = match[1]
       numbers = match[2].split(",").map(&:strip)
-      results << [team, numbers]
+      results << [ team, numbers ]
     end
     results
   end
@@ -94,12 +94,12 @@ class ManualParser
       # Try format with counts: 4(3x), 12(1x)
       entries_with_counts = numbers_str.scan(/(\d+)\((\d+)x\)/)
       entries = if entries_with_counts.any?
-        entries_with_counts.map { |n, c| [n, c.to_i] }
+        entries_with_counts.map { |n, c| [ n, c.to_i ] }
       else
         # Plain numbers without counts: 4, 12, 17 — assume 1 copy each
-        numbers_str.split(",").map { |n| [n.strip, 1] }
+        numbers_str.split(",").map { |n| [ n.strip, 1 ] }
       end
-      results << [team, entries]
+      results << [ team, entries ]
     end
     results
   end

@@ -52,7 +52,7 @@ COUNTRIES_DATA = [
   { code: "ENG", emoji: "🏴\u200d☠️", size: 20 },
   { code: "CRO", emoji: "🇭🇷", size: 20 },
   { code: "GHA", emoji: "🇬🇭", size: 20 },
-  { code: "PAN", emoji: "🇵🇦", size: 20 },
+  { code: "PAN", emoji: "🇵🇦", size: 20 }
 ].freeze
 
 def category_for(code, number)
@@ -79,7 +79,7 @@ position = 1
 COUNTRIES_DATA.each do |data|
   country = countries[data[:code]]
   numbers = if data[:code] == "FWC"
-    ["00"] + (1..19).map(&:to_s)
+    [ "00" ] + (1..19).map(&:to_s)
   else
     (1..data[:size]).map(&:to_s)
   end
