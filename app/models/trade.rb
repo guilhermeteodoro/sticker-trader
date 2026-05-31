@@ -4,17 +4,17 @@ class Trade < ApplicationRecord
   belongs_to :user_a, class_name: "User"
   belongs_to :user_b, class_name: "User"
 
-  validates :balanced_data, presence: true
+  has_many :trade_stickers, dependent: :destroy
 
   def confirmed?
     confirmed_at.present?
   end
 
-  def a_gives_labels
-    balanced_data.dig("a_gives") || []
+  def stickers_given_by(user)
+    trade_stickers.includes(sticker: :country).where(giver: user).map(&:sticker)
   end
 
-  def b_gives_labels
-    balanced_data.dig("b_gives") || []
+  def stickers_received_by(user)
+    trade_stickers.includes(sticker: :country).where(receiver: user).map(&:sticker)
   end
 end

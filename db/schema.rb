@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_30_182219) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_31_124455) do
   create_table "countries", force: :cascade do |t|
     t.string "code", null: false
     t.string "emoji", null: false
@@ -28,8 +28,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_30_182219) do
     t.index ["position"], name: "index_stickers_on_position", unique: true
   end
 
+  create_table "trade_stickers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "giver_id", null: false
+    t.integer "receiver_id", null: false
+    t.integer "sticker_id", null: false
+    t.integer "trade_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["giver_id"], name: "index_trade_stickers_on_giver_id"
+    t.index ["receiver_id"], name: "index_trade_stickers_on_receiver_id"
+    t.index ["sticker_id"], name: "index_trade_stickers_on_sticker_id"
+    t.index ["trade_id", "sticker_id"], name: "index_trade_stickers_on_trade_id_and_sticker_id", unique: true
+    t.index ["trade_id"], name: "index_trade_stickers_on_trade_id"
+  end
+
   create_table "trades", force: :cascade do |t|
-    t.json "balanced_data", null: false
     t.datetime "confirmed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -61,6 +74,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_30_182219) do
   end
 
   add_foreign_key "stickers", "countries"
+  add_foreign_key "trade_stickers", "stickers"
+  add_foreign_key "trade_stickers", "trades"
+  add_foreign_key "trade_stickers", "users", column: "giver_id"
+  add_foreign_key "trade_stickers", "users", column: "receiver_id"
   add_foreign_key "trades", "users", column: "user_a_id"
   add_foreign_key "trades", "users", column: "user_b_id"
   add_foreign_key "user_stickers", "stickers"

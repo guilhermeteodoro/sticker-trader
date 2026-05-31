@@ -267,8 +267,8 @@ class Views::Users::Show < Views::Base
 
       trades.each do |trade|
         other = trade.user_a_id == @user.id ? trade.user_b : trade.user_a
-        my_gives = trade.user_a_id == @user.id ? trade.a_gives_labels : trade.b_gives_labels
-        they_give = trade.user_a_id == @user.id ? trade.b_gives_labels : trade.a_gives_labels
+        my_gives = trade.stickers_given_by(@user)
+        they_give = trade.stickers_received_by(@user)
 
         Card(class: "mb-4") do
           CardHeader do
@@ -281,11 +281,11 @@ class Views::Users::Show < Views::Base
             div(class: "grid grid-cols-2 gap-4 text-sm") do
               div do
                 p(class: "font-medium text-muted-foreground mb-1") { t("trades.i_gave") }
-                p(class: "font-mono text-xs") { my_gives.join(", ") }
+                p(class: "font-mono text-xs") { my_gives.map(&:label).join(", ") }
               end
               div do
                 p(class: "font-medium text-muted-foreground mb-1") { t("trades.i_received") }
-                p(class: "font-mono text-xs") { they_give.join(", ") }
+                p(class: "font-mono text-xs") { they_give.map(&:label).join(", ") }
               end
             end
           end
