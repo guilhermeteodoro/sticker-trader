@@ -1,5 +1,5 @@
 pt-BR:
-  app_name: "⚽ Sticker Trader"
+  app_name: "StickerTrader"
 
   time:
     formats:
@@ -14,7 +14,7 @@ pt-BR:
 
   pages:
     home:
-      title: "Sticker Trader"
+      title: "StickerTrader"
       subtitle: "Compare sua coleção de figurinhas da Copa 2026 com amigos e encontre trocas."
       cta: "Cadastre sua coleção"
 

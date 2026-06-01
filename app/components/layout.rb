@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Components::Layout < Components::Base
-  def initialize(title: I18n.t("app_name"), current_user: nil)
+  def initialize(title: "StickTrader", current_user: nil)
     @title = title
     @current_user = current_user
   end
@@ -18,6 +18,7 @@ class Components::Layout < Components::Base
         stylesheet_link_tag "tailwind", "data-turbo-track": "reload"
         stylesheet_link_tag :app, "data-turbo-track": "reload"
         javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
+        link(rel: :icon, type: "image/x-icon", href: "/favicon.png")
       end
       body(class: "min-h-screen bg-background") do
         div(class: "max-w-4xl mx-auto px-4 py-8 relative") do

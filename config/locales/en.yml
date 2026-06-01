@@ -1,5 +1,5 @@
 en:
-  app_name: "⚽ Sticker Trader"
+  app_name: "StickerTrader"
 
   nav:
     login: "Log in"
@@ -10,7 +10,7 @@ en:
 
   pages:
     home:
-      title: "Sticker Trader"
+      title: "StickerTrader"
       subtitle: "Compare your World Cup 2026 sticker collection with friends and find trades."
       cta: "Register your collection"
 
