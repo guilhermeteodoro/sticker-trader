@@ -1,20 +1,19 @@
 en:
   app_name: "StickerTrader"
 
-  views:
-    components:
-      import_fields:
-        method_label: "Import method"
-        dump: "Sticker Album 2026 app export"
-        manual: "Manual (missing + duplicates)"
-        dump_label: "Paste your dump"
-        dump_placeholder: "SA26|1|2-3,6,9-13,...|10:1,38:3,..."
-        missing_label: "Paste your missing stickers"
-        missing_placeholder: "FWC: 00, 3, 4, 6, 7\nBRA: 2, 3, 4, 6, 7, 8..."
-        duplicates_label: "Paste your duplicates"
-        duplicates_placeholder: "FWC: 9(1x), 10(1x)\nMEX: 4(3x), 5(1x)..."
-        how_to_export: "How to export?"
-        tutorial_title: "How to export from Sticker Album 2026"
+  components:
+    collection_importer:
+      method_label: "Import method"
+      dump: "Sticker Album 2026 app export"
+      manual: "Manual (missing + duplicates)"
+      dump_label: "Paste your dump"
+      dump_placeholder: "SA26|1|2-3,6,9-13,...|10:1,38:3,..."
+      missing_label: "Paste your missing stickers"
+      missing_placeholder: "FWC: 00, 3, 4, 6, 7\nBRA: 2, 3, 4, 6, 7, 8..."
+      duplicates_label: "Paste your duplicates"
+      duplicates_placeholder: "FWC: 9(1x), 10(1x)\nMEX: 4(3x), 5(1x)..."
+      how_to_export: "How to export?"
+      tutorial_title: "How to export from Sticker Album 2026"
 
   nav:
     login: "Log in"

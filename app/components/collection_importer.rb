@@ -3,19 +3,19 @@
 class Components::CollectionImporter < Components::Base
   def view_template
     FormField do
-      FormFieldLabel { t("views.components.import_fields.method_label") }
+      FormFieldLabel { t(".method_label") }
       Combobox do
-        ComboboxTrigger(placeholder: t("views.components.import_fields.dump"))
+        ComboboxTrigger(placeholder: t(".dump"))
 
         ComboboxPopover do
           ComboboxList do
             ComboboxItem do
               ComboboxRadio(name: "import_method", value: "dump", checked: true, data: { action: "change->import-form#toggle" })
-              span { t("views.components.import_fields.dump") }
+              span { t(".dump") }
             end
             ComboboxItem do
               ComboboxRadio(name: "import_method", value: "manual", data: { action: "change->import-form#toggle" })
-              span { t("views.components.import_fields.manual") }
+              span { t(".manual") }
             end
           end
         end
@@ -25,23 +25,23 @@ class Components::CollectionImporter < Components::Base
     div(data: { import_form_target: "dump" }) do
       FormField do
         div(class: "grid grid-flow-col items-center") do
-          FormFieldLabel { t("views.components.import_fields.dump_label") }
+          FormFieldLabel { t(".dump_label") }
           div(class: "justify-self-end") do
             render tutorial_dialog
           end
         end
-        Textarea(name: "dump", rows: 4, placeholder: t("views.components.import_fields.dump_placeholder"), class: "font-mono text-sm")
+        Textarea(name: "dump", rows: 4, placeholder: t(".dump_placeholder"), class: "font-mono text-sm")
       end
     end
 
     div(class: "hidden", data: { import_form_target: "manual" }) do
       FormField do
-        FormFieldLabel { t("views.components.import_fields.missing_label") }
-        Textarea(name: "missing_text", rows: 6, placeholder: t("views.components.import_fields.missing_placeholder"), class: "font-mono text-sm")
+        FormFieldLabel { t(".missing_label") }
+        Textarea(name: "missing_text", rows: 6, placeholder: t(".missing_placeholder"), class: "font-mono text-sm")
       end
       FormField do
-        FormFieldLabel { t("views.components.import_fields.duplicates_label") }
-        Textarea(name: "duplicates_text", rows: 6, placeholder: t("views.components.import_fields.duplicates_placeholder"), class: "font-mono text-sm")
+        FormFieldLabel { t(".duplicates_label") }
+        Textarea(name: "duplicates_text", rows: 6, placeholder: t(".duplicates_placeholder"), class: "font-mono text-sm")
       end
     end
   end
@@ -52,13 +52,13 @@ class Components::CollectionImporter < Components::Base
     Dialog do
       DialogTrigger do
         Text(size: "1", class: "italic text-muted-foreground hover:underline cursor-pointer") do
-          t("views.components.import_fields.how_to_export")
+          t(".how_to_export")
         end
       end
 
       DialogContent(class: "bg-white") do
         DialogHeader do
-          DialogTitle { t("views.components.import_fields.tutorial_title") }
+          DialogTitle { t(".tutorial_title") }
           DialogDescription { "Settings > Backup/Restore collection > Create backup" }
         end
 
