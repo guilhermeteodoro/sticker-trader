@@ -187,5 +187,6 @@ pt-BR:
     consolidate: "Consolidar troca"
     history_title: "Histórico de trocas"
     history_with: "Troca com %{name}"
+    sticker_count: "%{given} ↔ %{received}"
     i_gave: "Dei:"
     i_received: "Recebi:"

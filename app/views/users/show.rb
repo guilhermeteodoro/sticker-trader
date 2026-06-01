@@ -200,26 +200,41 @@ class Views::Users::Show < Views::LoggedIn
       Heading(level: 3, class: "mb-4") { t("trades.history_title") }
 
       participations.each do |participation|
-        Card(class: "mb-4") do
-          CardHeader do
-            div(class: "flex items-center justify-between") do
-              CardTitle(class: "text-base") { t("trades.history_with", name: participation.other_user.name) }
+        div(class: "mb-4") do
+          Collapsible do
+            div(class: "flex items-center justify-between mb-2") do
+              div(class: "flex items-center gap-2") do
+                CollapsibleTrigger do
+                  Button(variant: :ghost, icon: true) do
+                    span(class: "transition-transform duration-200", data: { ruby_ui__collapsible_target: "icon" }) { "⬇️" }
+                  end
+                end
+
+                Heading(level: 4) { t("trades.history_with", name: participation.other_user.name) }
+                Badge(variant: :outline) { t("trades.sticker_count", given: participation.given.count, received: participation.received.count) }
+              end
+
               span(class: "text-xs text-muted-foreground") { I18n.l(participation.confirmed_at, format: :short) }
             end
-          end
-          CardContent do
-            div(class: "grid grid-cols-2 gap-4 text-sm") do
-              div do
-                p(class: "font-medium text-muted-foreground mb-1") do
-                  "#{t("trades.i_gave")} (#{participation.given.count})"
+
+            CollapsibleContent do
+              Card(class: "pt-6 bg-card") do
+                CardContent do
+                  div(class: "grid grid-cols-2 gap-4 text-sm") do
+                    div do
+                      p(class: "font-medium text-muted-foreground mb-1") do
+                        "#{t("trades.i_gave")} (#{participation.given.count})"
+                      end
+                      render Components::StickerList.new(stickers: participation.given)
+                    end
+                    div do
+                      p(class: "font-medium text-muted-foreground mb-1") do
+                        "#{t("trades.i_received")} (#{participation.received.count})"
+                      end
+                      render Components::StickerList.new(stickers: participation.received)
+                    end
+                  end
                 end
-                render Components::StickerList.new(stickers: participation.given)
-              end
-              div do
-                p(class: "font-medium text-muted-foreground mb-1") do
-                  "#{t("trades.i_received")} (#{participation.received.count})"
-                end
-                render Components::StickerList.new(stickers: participation.received)
               end
             end
           end
