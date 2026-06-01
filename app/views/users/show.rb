@@ -201,7 +201,7 @@ class Views::Users::Show < Views::LoggedIn
 
       participations.each do |participation|
         div(class: "mb-4") do
-          Collapsible do
+          Collapsible(open: true) do
             div(class: "flex items-center justify-between mb-2") do
               div(class: "flex items-center gap-2") do
                 CollapsibleTrigger do
