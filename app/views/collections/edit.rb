@@ -49,16 +49,20 @@ class Views::Collections::Edit < Views::LoggedIn
   def render_import_fields
     FormField do
       FormFieldLabel { t("collections.edit.import_method_label") }
-      div(class: "flex gap-4") do
-        label(class: "flex items-center gap-2 cursor-pointer") do
-          input(type: "radio", name: "import_method", value: "dump",
-                checked: true, data: { action: "import-form#toggle" })
-          span(class: "text-sm") { t("collections.edit.import_dump") }
-        end
-        label(class: "flex items-center gap-2 cursor-pointer") do
-          input(type: "radio", name: "import_method", value: "manual",
-                data: { action: "import-form#toggle" })
-          span(class: "text-sm") { t("collections.edit.import_manual") }
+      Combobox do
+        ComboboxTrigger(placeholder: t("collections.edit.import_dump"))
+
+        ComboboxPopover do
+          ComboboxList do
+            ComboboxItem do
+              ComboboxRadio(name: "import_method", value: "dump", checked: true, data: { action: "change->import-form#toggle" })
+              span { t("collections.edit.import_dump") }
+            end
+            ComboboxItem do
+              ComboboxRadio(name: "import_method", value: "manual", data: { action: "change->import-form#toggle" })
+              span { t("collections.edit.import_manual") }
+            end
+          end
         end
       end
     end
