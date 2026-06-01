@@ -93,6 +93,8 @@ pt-BR:
   collections:
     edit:
       title: "Atualizar sua coleção"
+      breadcrumb: "Minha coleção"
+      form_title: "Importação"
       import_method_label: "Método de importação"
       import_dump: "Exportação do app Sticker Album 2026"
       import_manual: "Manual (faltantes + repetidas)"

@@ -89,6 +89,8 @@ en:
   collections:
     edit:
       title: "Update your collection"
+      breadcrumb: "My collection"
+      form_title: "Import"
       import_method_label: "Import method"
       import_dump: "Sticker Album 2026 app export"
       import_manual: "Manual (missing + duplicates)"

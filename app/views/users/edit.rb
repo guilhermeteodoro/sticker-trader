@@ -3,12 +3,18 @@
 class Views::Users::Edit < Views::LoggedIn
   def render_title
     div(class: "grid") do
-      div(class: "grid-row") do
-        Heading(level: 2) { t("users.edit.title") }
+      div(class: "grid-row pt-1") do
+        Breadcrumb do
+          BreadcrumbList do
+            BreadcrumbItem do
+              BreadcrumbLink(href: user_path(@current_user)) { "Minha coleção" }
+            end
+          end
+        end
       end
 
       div(class: "grid-row") do
-        Link(href: user_path(@current_user), class: "p-0") { Text(size: "1") {  "< Minha coleção" } }
+        Heading(level: 2) { t("users.edit.title") }
       end
     end
   end
