@@ -407,37 +407,37 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  bootsnap
-  brakeman
-  bundler-audit
-  debug
-  image_processing (~> 1.2)
-  jbuilder
+  bootsnap (~> 1.24)
+  brakeman (~> 8.0)
+  bundler-audit (~> 0.9)
+  debug (~> 1.11)
+  image_processing (~> 1.14)
+  jbuilder (~> 2.15)
   jsbundling-rails (~> 1.3)
-  kamal
+  kamal (~> 2.11)
   pg (~> 1.1)
   phlex-rails (~> 2.4)
   propshaft
-  puma (>= 5.0)
+  puma (~> 8.0)
   rails (~> 8.1.3)
-  rubocop-rails-omakase
-  ruby-lsp
+  rubocop-rails-omakase (~> 1.1)
+  ruby-lsp (~> 0.26)
   ruby-lsp-factory_bot (~> 0.6.0)
   ruby-lsp-i18n (~> 0.4.2)
   ruby-lsp-rails (~> 0.4.8)
   ruby-lsp-rspec (~> 0.1.28)
   ruby_ui
-  solid_cable
-  solid_cache
-  solid_queue
-  sqlite3 (>= 2.1)
-  stimulus-rails
+  solid_cable (~> 4.0)
+  solid_cache (~> 1.0)
+  solid_queue (~> 1.4)
+  sqlite3 (~> 2.9)
+  stimulus-rails (~> 1.3)
   tailwind_merge (~> 1.5)
-  tailwindcss-rails
-  thruster
-  turbo-rails
+  tailwindcss-rails (~> 4.4)
+  thruster (~> 0.1)
+  turbo-rails (~> 2.0)
   tzinfo-data
-  web-console
+  web-console (~> 4.3)
 
 CHECKSUMS
   action_text-trix (2.1.19) sha256=7012f59421009cf284aa651294896414d653a61a2417c9b8714c8476d2f74009
