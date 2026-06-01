@@ -27,7 +27,7 @@ class Views::Registrations::New < Views::Base
                 Input(type: :email, name: "email", required: true, value: @email, placeholder: t("registrations.new.email_placeholder"))
               end
 
-              render_import_fields
+              render Components::ImportFields.new
 
               div(class: "mt-6") do
                 Button(type: :submit) { t("registrations.new.submit") }
@@ -40,48 +40,6 @@ class Views::Registrations::New < Views::Base
             end
           end
         end
-      end
-    end
-  end
-
-  private
-
-  def render_import_fields
-    FormField do
-      FormFieldLabel { t("registrations.new.import_method_label") }
-      Combobox do
-        ComboboxTrigger(placeholder: t("registrations.new.import_dump"))
-
-        ComboboxPopover do
-          ComboboxList do
-            ComboboxItem do
-              ComboboxRadio(name: "import_method", value: "dump", checked: true, data: { action: "change->import-form#toggle" })
-              span { t("registrations.new.import_dump") }
-            end
-            ComboboxItem do
-              ComboboxRadio(name: "import_method", value: "manual", data: { action: "change->import-form#toggle" })
-              span { t("registrations.new.import_manual") }
-            end
-          end
-        end
-      end
-    end
-
-    div(data: { import_form_target: "dump" }) do
-      FormField do
-        FormFieldLabel { t("registrations.new.dump_label") }
-        Textarea(name: "dump", rows: 4, placeholder: t("registrations.new.dump_placeholder"), class: "font-mono text-sm")
-      end
-    end
-
-    div(class: "hidden", data: { import_form_target: "manual" }) do
-      FormField do
-        FormFieldLabel { t("registrations.new.missing_label") }
-        Textarea(name: "missing_text", rows: 6, placeholder: t("registrations.new.missing_placeholder"), class: "font-mono text-sm")
-      end
-      FormField do
-        FormFieldLabel { t("registrations.new.duplicates_label") }
-        Textarea(name: "duplicates_text", rows: 6, placeholder: t("registrations.new.duplicates_placeholder"), class: "font-mono text-sm")
       end
     end
   end
