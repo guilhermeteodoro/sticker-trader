@@ -5,8 +5,8 @@ gem "rails", "~> 8.1.3"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use postgresql as the database for Active Record
-gem "sqlite3", "~> 2.9"
-gem "pg", "~> 1.1", group: :production
+gem "sqlite3", "~> 2.9", group: [ :development, :test ]
+gem "pg", "~> 1.1", group: [ :production, :development ]
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 8.0"
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
@@ -69,6 +69,7 @@ end
 gem "phlex-rails", "~> 2.4"
 
 gem "ruby_ui", group: :development, require: false
+gem "dotenv"
 
 gem "tailwind_merge", "~> 1.5"
 

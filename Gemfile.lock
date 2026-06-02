@@ -411,6 +411,7 @@ DEPENDENCIES
   brakeman (~> 8.0)
   bundler-audit (~> 0.9)
   debug (~> 1.11)
+  dotenv
   image_processing (~> 1.14)
   jbuilder (~> 2.15)
   jsbundling-rails (~> 1.3)
