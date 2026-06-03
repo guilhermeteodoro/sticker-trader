@@ -132,11 +132,11 @@ class Views::Users::Show < Views::LoggedIn
             div(class: "grid grid-cols-2 gap-4") do
               div do
                 p(class: "text-xs text-muted-foreground mb-1") { t(".gives", name: @current_user.name) }
-                render Components::StickerList.new(stickers: pair.a_gives)
+                render Components::StickerList.new(stickers: pair.a_gives, copyable: true)
               end
               div do
                 p(class: "text-xs text-muted-foreground mb-1") { t(".gives", name: @user.name) }
-                render Components::StickerList.new(stickers: pair.b_gives)
+                render Components::StickerList.new(stickers: pair.b_gives, copyable: true)
               end
             end
           end
@@ -171,14 +171,14 @@ class Views::Users::Show < Views::LoggedIn
         if leftovers.a_has.any?
           div(class: "mb-3") do
             p(class: "text-sm font-medium text-muted-foreground mb-1") { t(".still_has", name: @current_user.name, count: leftovers.a_has.size) }
-            render Components::StickerList.new(stickers: leftovers.a_has)
+            render Components::StickerList.new(stickers: leftovers.a_has, copyable: true)
           end
         end
 
         if leftovers.b_has.any?
           div do
             p(class: "text-sm font-medium text-muted-foreground mb-1") { t(".still_has", name: @user.name, count: leftovers.b_has.size) }
-            render Components::StickerList.new(stickers: leftovers.b_has)
+            render Components::StickerList.new(stickers: leftovers.b_has, copyable: true)
           end
         end
       end
@@ -221,13 +221,13 @@ class Views::Users::Show < Views::LoggedIn
                       p(class: "font-medium text-muted-foreground mb-1") do
                         "#{t(".i_gave")} (#{participation.given.count})"
                       end
-                      render Components::StickerList.new(stickers: participation.given)
+                      render Components::StickerList.new(stickers: participation.given, copyable: true)
                     end
                     div do
                       p(class: "font-medium text-muted-foreground mb-1") do
                         "#{t(".i_received")} (#{participation.received.count})"
                       end
-                      render Components::StickerList.new(stickers: participation.received)
+                      render Components::StickerList.new(stickers: participation.received, copyable: true)
                     end
                   end
                 end
