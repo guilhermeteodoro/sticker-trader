@@ -11,12 +11,20 @@ bundle exec rubocop -A
 bin/rails test
 ```
 
-When checks fail on CI, fetch the failure logs:
+### CI
+
+CI runs on GitHub Actions (`.github/workflows/ci.yml`). To check status and fetch failures:
 
 ```bash
-gh run list --limit 1          # find the run ID
-gh run view <run_id> --log-failed
+gh run list --limit 1                    # check latest run status
+gh run view <run_id> --log-failed        # fetch failure logs
+gh pr checks                             # check status of current PR's checks
 ```
+
+Common CI failures:
+- **Stale branch** — rebase on main when tests pass locally but fail on CI due to missing changes from other merged PRs
+- **Rubocop offenses** — always run `rubocop -A` before pushing
+- **Missing keyword args** — view signatures may change after merging other PRs; rebase fixes this
 
 When amending commits on an open PR, review whether the PR title and description still reflect the actual changes. Update them if the scope shifted.
 
@@ -46,6 +54,17 @@ When amending commits on an open PR, review whether the PR title and description
 
 [CONTEXT.md](CONTEXT.md) is the glossary for this project. When introducing a new domain concept, update CONTEXT.md inline — don't batch. When the user uses a term that conflicts with the glossary, call it out. Keep CONTEXT.md free of implementation details — it's a glossary, not a spec.
 
+## Architecture Decision Records (ADRs)
+
+ADRs live in `docs/adr/`, managed by [adr-tools](https://github.com/npryce/adr-tools).
+
+- Before implementing, check existing ADRs: `adr list`
+- Read relevant ADRs to understand rationale and constraints
+- Suggest an ADR when a decision is hard to reverse, surprising without context, and the result of a real trade-off
+- ADR format is lightweight — a title and one to three sentences is enough
+- Load the `adr-workflow` skill for the full workflow
+- If `adr` is not installed, create the file manually (next sequential number in `docs/adr/`) and suggest the user installs adr-tools
+
 ## Emerging skills
 
 If you notice a multi-step workflow being repeated across sessions (complex enough to have decision trees, loops, or conditional behavior), suggest extracting it as a project skill in `.agents/skills/`. Don't force it — skills emerge from pain, not pre-planning. A one-liner doesn't need a skill.
@@ -55,3 +74,12 @@ If you notice a multi-step workflow being repeated across sessions (complex enou
 - [CONTEXT.md](CONTEXT.md) — domain language glossary
 - [README.md](README.md) — project overview for humans
 - [docs/adr/](docs/adr/) — architecture decision records
+- [.agents/skills/](.agents/skills/) — reusable workflow skills
+
+## Contributing to AGENTS.md
+
+- Let rules emerge from practice — add guidelines after encountering real problems, not preemptively
+- Keep it concise — bullet points over verbose explanations
+- Don't repeat general knowledge — only document what's specific to this project
+- Prefer soft language — "prefer", "when possible" over strict mandates
+- Review the full file when making changes to spot redundancies and maintain consistency
