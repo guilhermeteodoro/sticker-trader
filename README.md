@@ -57,6 +57,13 @@ bin/setup
 bin/dev
 ```
 
+### Recommended tools
+
+```bash
+brew install adr-tools   # Architecture Decision Records
+brew install gh          # GitHub CLI (PRs, CI checks)
+```
+
 ## Checks
 
 ```bash
