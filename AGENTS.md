@@ -34,6 +34,26 @@ When amending commits on an open PR, review whether the PR title and description
 - Force-push only when explicitly asked
 - When a PR is merged and new work is requested, always pull the target branch (usually main) and create a new branch from it before starting. If the target might be a feature branch, confirm before branching.
 
+### Commit messages and PR titles
+
+Follow [Karma commit message format](https://karma-runner.github.io/0.13/dev/git-commit-msg.html). PR titles use the same format (they become the merge commit in history).
+
+```
+<type>(<scope>): <subject>
+```
+
+Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+
+Scope is optional — use when the change is clearly scoped to one area (e.g., `feat(diff): add copy buttons`). Omit when global or hard to assign.
+
+Subject: imperative, present tense, lowercase, no period at end.
+
+Examples:
+- `feat(diff): add sticker list diff tool`
+- `fix: resolve turbo frame rendering on diff page`
+- `refactor(tests): move content assertions to view tests`
+- `docs: add AGENTS.md and adr-workflow skill`
+
 ## Tests
 
 ### Guidelines
