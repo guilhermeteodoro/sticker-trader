@@ -9,8 +9,11 @@ class Components::StickerList < Components::Base
   def view_template
     if @copyable
       div(data: { controller: "clipboard", clipboard_text_value: clipboard_text }) do
-        render_grouped_stickers do
-          Button(variant: :ghost, size: :sm, type: "button", class: "float-right", data: { action: "clipboard#copy", copy_button: "" }) { t(".copy") }
+        div(class: "flex items-start gap-2") do
+          div(class: "flex-1") do
+            render_grouped_stickers
+          end
+          Button(variant: :ghost, size: :sm, type: "button", data: { action: "clipboard#copy", copy_button: "" }) { t(".copy") }
         end
       end
     else
@@ -23,7 +26,6 @@ class Components::StickerList < Components::Base
   def render_grouped_stickers
     grouped = @stickers.group_by(&:country)
     div(class: "text-sm font-mono") do
-      yield if block_given?
       grouped.each do |country, country_stickers|
         p do
           span(class: "font-semibold") { "#{country.emoji} #{country.code}: " }
