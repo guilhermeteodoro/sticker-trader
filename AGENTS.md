@@ -28,6 +28,11 @@ Common CI failures:
 
 When amending commits on an open PR, review whether the PR title and description still reflect the actual changes. Update them if the scope shifted.
 
+### Git
+
+- Prefer normal commits over amending — keep history navigable so we can easily go back
+- Force-push only when explicitly asked
+
 ## Tests
 
 ### Guidelines
