@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class Views::Diffs::Show < Views::Base
-  def initialize(current_user: nil, list_a: nil, list_b: nil, only_in_a: nil, only_in_b: nil, errors: nil)
+  def initialize(current_user: nil, results_frame_id:, list_a: nil, list_b: nil, only_in_a: nil, only_in_b: nil, errors: nil)
     @current_user = current_user
+    @results_frame_id = results_frame_id
     @list_a = list_a || ""
     @list_b = list_b || ""
     @only_in_a = only_in_a
@@ -28,15 +29,18 @@ class Views::Diffs::Show < Views::Base
       end
 
       render_form
-      render_errors if @errors.any?
-      render_results if @only_in_a || @only_in_b
+
+      turbo_frame(id: @results_frame_id) do
+        render_errors if @errors.any?
+        render_results if @only_in_a || @only_in_b
+      end
     end
   end
 
   private
 
   def render_form
-    form(action: diff_path, method: "post", class: "space-y-4") do
+    form(action: diff_path, method: "post", class: "space-y-4", data: { turbo_frame: @results_frame_id }) do
       input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
 
       div(class: "grid grid-cols-1 md:grid-cols-2 gap-4") do

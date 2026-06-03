@@ -2,7 +2,7 @@
 
 class DiffsController < ApplicationController
   def show
-    render Views::Diffs::Show.new(current_user: current_user)
+    render Views::Diffs::Show.new(current_user: current_user, results_frame_id: results_frame_id)
   end
 
   def create
@@ -21,11 +21,18 @@ class DiffsController < ApplicationController
 
     render Views::Diffs::Show.new(
       current_user: current_user,
+      results_frame_id: results_frame_id,
       list_a: params[:list_a],
       list_b: params[:list_b],
       only_in_a: only_in_a,
       only_in_b: only_in_b,
       errors: errors
     )
+  end
+
+  private
+
+  def results_frame_id
+    "diff_results"
   end
 end
