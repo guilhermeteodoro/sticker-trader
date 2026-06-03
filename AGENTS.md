@@ -32,6 +32,7 @@ When amending commits on an open PR, review whether the PR title and description
 
 - Prefer normal commits over amending — keep history navigable so we can easily go back
 - Force-push only when explicitly asked
+- When a PR is merged and new work is requested, always pull the target branch (usually main) and create a new branch from it before starting. If the target might be a feature branch, confirm before branching.
 
 ## Tests
 
