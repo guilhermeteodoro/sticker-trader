@@ -1,5 +1,5 @@
 {
-  "name": "world_cup_2026",
+  "name": "sticker-trader",
   "version": "1.0.0",
   "description": "This README would normally document whatever steps are necessary to get the application up and running.",
   "main": "index.js",
@@ -13,16 +13,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/guilhermeteodoro/world_cup_2026.git"
+    "url": "git+https://github.com/guilhermeteodoro/sticker-trader.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/guilhermeteodoro/world_cup_2026/issues"
+    "url": "https://github.com/guilhermeteodoro/sticker-trader/issues"
   },
-  "homepage": "https://github.com/guilhermeteodoro/world_cup_2026#readme",
+  "homepage": "https://github.com/guilhermeteodoro/sticker-trader#readme",
   "dependencies": {
     "@floating-ui/dom": "^1.7.6",
     "@hotwired/stimulus": "^3.2.2",
