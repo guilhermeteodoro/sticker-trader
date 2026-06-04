@@ -51,7 +51,7 @@ class UI::Fragments::AlbumGrid < UI::Base
     base_url = user_user_stickers_path(@user)
 
     div(
-      class: "relative rounded-lg border p-2 text-center text-xs cursor-pointer select-none transition-all #{glued ? "ring-2 ring-primary" : "opacity-40"}",
+      class: "relative rounded-lg border p-2 text-center text-xs cursor-pointer select-none #{glued ? "ring-2 ring-primary" : "opacity-40"}",
       data: {
         controller: "album-card",
         album_card_sticker_id_value: sticker.id,
