@@ -10,7 +10,7 @@ export default class extends Controller {
   }
 
   connect() {
-    this.openValue ? this.open(false) : this.close(false)
+    this.openValue ? this.#show() : this.#hide()
   }
 
   toggle() {
@@ -19,65 +19,24 @@ export default class extends Controller {
 
   openValueChanged(isOpen, wasOpen) {
     if (wasOpen === undefined) return
-    isOpen ? this.open(true) : this.close(true)
+    isOpen ? this.#show() : this.#hide()
   }
 
-  open(animate = true) {
-    if (!this.hasContentTarget) return
-    const el = this.contentTarget
-    el.classList.remove('hidden')
-
-    if (animate) {
-      el.style.height = '0px'
-      el.style.overflow = 'hidden'
-      void el.offsetHeight
-      requestAnimationFrame(() => {
-        el.style.transition = 'height 200ms ease-out'
-        el.style.height = el.scrollHeight + 'px'
-        const handler = (e) => {
-          if (e.target !== el) return
-          el.removeEventListener('transitionend', handler)
-          el.style.height = ''
-          el.style.overflow = ''
-          el.style.transition = ''
-        }
-        el.addEventListener('transitionend', handler)
-      })
+  #show() {
+    if (this.hasContentTarget) {
+      this.contentTarget.classList.remove('hidden')
     }
-
     if (this.hasIconTarget) {
       this.iconTarget.style.transform = 'rotate(0deg)'
     }
-    this.openValue = true
   }
 
-  close(animate = true) {
-    if (!this.hasContentTarget) return
-    const el = this.contentTarget
-
-    if (animate) {
-      el.style.height = el.scrollHeight + 'px'
-      el.style.overflow = 'hidden'
-      requestAnimationFrame(() => {
-        el.style.transition = 'height 200ms ease-out'
-        el.style.height = '0px'
-        const handler = (e) => {
-          if (e.target !== el) return
-          el.removeEventListener('transitionend', handler)
-          el.classList.add('hidden')
-          el.style.height = ''
-          el.style.overflow = ''
-          el.style.transition = ''
-        }
-        el.addEventListener('transitionend', handler)
-      })
-    } else {
-      el.classList.add('hidden')
+  #hide() {
+    if (this.hasContentTarget) {
+      this.contentTarget.classList.add('hidden')
     }
-
     if (this.hasIconTarget) {
       this.iconTarget.style.transform = 'rotate(-90deg)'
     }
-    this.openValue = false
   }
 }
