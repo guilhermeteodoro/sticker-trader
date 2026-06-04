@@ -10,7 +10,7 @@ export default class extends Controller {
   }
 
   connect() {
-    this.openValue ? this.#show() : this.#hide()
+    this.openValue ? this.#show(false) : this.#hide(false)
   }
 
   toggle() {
@@ -27,24 +27,65 @@ export default class extends Controller {
 
   openValueChanged(isOpen, wasOpen) {
     if (wasOpen === undefined) return
-    isOpen ? this.#show() : this.#hide()
+    isOpen ? this.#show(true) : this.#hide(true)
   }
 
-  #show() {
-    if (this.hasContentTarget) {
-      this.contentTarget.classList.remove('hidden')
+  #show(animate) {
+    if (!this.hasContentTarget) return
+    const el = this.contentTarget
+
+    if (animate) {
+      el.classList.remove('hidden')
+      el.style.height = '0px'
+      el.style.overflow = 'hidden'
+      void el.offsetHeight
+      el.style.transition = 'height 150ms ease-out'
+      el.style.height = el.scrollHeight + 'px'
+      this.#onTransitionEnd(el, () => {
+        el.style.height = ''
+        el.style.overflow = ''
+        el.style.transition = ''
+      })
+    } else {
+      el.classList.remove('hidden')
     }
+
     if (this.hasIconTarget) {
       this.iconTarget.style.transform = 'rotate(0deg)'
     }
   }
 
-  #hide() {
-    if (this.hasContentTarget) {
-      this.contentTarget.classList.add('hidden')
+  #hide(animate) {
+    if (!this.hasContentTarget) return
+    const el = this.contentTarget
+
+    if (animate) {
+      el.style.height = el.scrollHeight + 'px'
+      el.style.overflow = 'hidden'
+      void el.offsetHeight
+      el.style.transition = 'height 150ms ease-out'
+      el.style.height = '0px'
+      this.#onTransitionEnd(el, () => {
+        el.classList.add('hidden')
+        el.style.height = ''
+        el.style.overflow = ''
+        el.style.transition = ''
+      })
+    } else {
+      el.classList.add('hidden')
     }
+
     if (this.hasIconTarget) {
       this.iconTarget.style.transform = 'rotate(-90deg)'
     }
+  }
+
+  #onTransitionEnd(el, callback) {
+    const handler = (e) => {
+      if (e.target !== el || e.propertyName !== 'height') return
+      el.removeEventListener('transitionend', handler)
+      callback()
+    }
+    el.addEventListener('transitionend', handler)
   }
 }
