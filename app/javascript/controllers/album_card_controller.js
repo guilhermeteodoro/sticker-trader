@@ -7,6 +7,7 @@ export default class extends Controller {
     userStickerId: Number,
     copies: Number,
     glued: Boolean,
+    color: String,
     createUrl: String,
     updateUrl: String,
     destroyUrl: String
@@ -100,10 +101,12 @@ export default class extends Controller {
 
     if (this.gluedValue) {
       card.classList.remove("opacity-40")
-      card.classList.add("ring-2", "ring-primary")
+      card.classList.add("text-white")
+      card.style.backgroundColor = this.colorValue
     } else {
       card.classList.add("opacity-40")
-      card.classList.remove("ring-2", "ring-primary")
+      card.classList.remove("text-white")
+      card.style.backgroundColor = ""
     }
 
     if (this.hasBadgeTarget) {

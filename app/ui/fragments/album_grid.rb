@@ -8,7 +8,7 @@ class UI::Fragments::AlbumGrid < UI::Base
   end
 
   def view_template
-    div(class: "space-y-2") do
+    div(class: "space-y-2 px-2") do
       @stickers_by_country.each do |country, stickers|
         render_country_section(country, stickers)
       end
@@ -49,15 +49,18 @@ class UI::Fragments::AlbumGrid < UI::Base
     user_sticker_id = us&.dig(:id) || 0
 
     base_url = user_user_stickers_path(@user)
+    color = country.color || "#6B7280"
 
     div(
-      class: "relative rounded-lg border p-2 text-center text-xs cursor-pointer select-none #{glued ? "ring-2 ring-primary" : "opacity-40"}",
+      class: "relative rounded-lg border p-2 text-center text-xs cursor-pointer select-none #{glued ? "text-white" : "opacity-40"}",
+      style: glued ? "background-color: #{color}" : "",
       data: {
         controller: "album-card",
         album_card_sticker_id_value: sticker.id,
         album_card_user_sticker_id_value: user_sticker_id,
         album_card_copies_value: copies,
         album_card_glued_value: glued,
+        album_card_color_value: color,
         album_card_create_url_value: base_url,
         album_card_update_url_value: glued ? "#{base_url}/#{user_sticker_id}" : "",
         album_card_destroy_url_value: glued ? "#{base_url}/#{user_sticker_id}" : "",
