@@ -70,7 +70,7 @@ COUNTRIES_DATA.each do |data|
   country = Country.find_or_initialize_by(code: data[:code])
   country.emoji = data[:emoji]
   country.color = data[:color]
-  country.save!
+  country.save! if country.new_record? || country.changed?
   countries[data[:code]] = country
 end
 
