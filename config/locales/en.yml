@@ -27,6 +27,7 @@ en:
       sticker_list:
         copy: "📋 Copy"
       album_grid:
+        title: "Album"
         expand_all: "Expand all"
         collapse_all: "Collapse all"
 

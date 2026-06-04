@@ -27,6 +27,7 @@ pt-BR:
       sticker_list:
         copy: "📋 Copiar"
       album_grid:
+        title: "Álbum"
         expand_all: "Expandir tudo"
         collapse_all: "Recolher tudo"
 

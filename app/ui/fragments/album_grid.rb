@@ -9,7 +9,8 @@ class UI::Fragments::AlbumGrid < UI::Base
 
   def view_template
     div(class: "space-y-2 px-2", data: { controller: "album-toggle" }) do
-      div(class: "flex justify-end mb-2") do
+      div(class: "flex items-center justify-between mb-2") do
+        Heading(level: 3) { t(".title") }
         button(
           type: "button",
           class: "text-xs text-muted-foreground hover:text-foreground px-2 py-1 rounded border",

@@ -17,6 +17,14 @@ export default class extends Controller {
     this.openValue = !this.openValue
   }
 
+  open() {
+    this.openValue = true
+  }
+
+  close() {
+    this.openValue = false
+  }
+
   openValueChanged(isOpen, wasOpen) {
     if (wasOpen === undefined) return
     isOpen ? this.#show() : this.#hide()

@@ -12,7 +12,7 @@ export default class extends Controller {
     collapsibles.forEach(el => {
       const controller = this.application.getControllerForElementAndIdentifier(el, "ruby-ui--collapsible")
       if (controller) {
-        this.#expanded ? controller.open(false) : controller.close(false)
+        this.#expanded ? controller.open() : controller.close()
       }
     })
 
