@@ -34,12 +34,14 @@ export default class extends Controller {
       requestAnimationFrame(() => {
         el.style.transition = 'height 200ms ease-out'
         el.style.height = el.scrollHeight + 'px'
-        el.addEventListener('transitionend', (e) => {
+        const handler = (e) => {
           if (e.target !== el) return
+          el.removeEventListener('transitionend', handler)
           el.style.height = ''
           el.style.overflow = ''
           el.style.transition = ''
-        }, { once: true })
+        }
+        el.addEventListener('transitionend', handler)
       })
     }
 
@@ -59,13 +61,15 @@ export default class extends Controller {
       requestAnimationFrame(() => {
         el.style.transition = 'height 200ms ease-out'
         el.style.height = '0px'
-        el.addEventListener('transitionend', (e) => {
+        const handler = (e) => {
           if (e.target !== el) return
+          el.removeEventListener('transitionend', handler)
           el.classList.add('hidden')
           el.style.height = ''
           el.style.overflow = ''
           el.style.transition = ''
-        }, { once: true })
+        }
+        el.addEventListener('transitionend', handler)
       })
     } else {
       el.classList.add('hidden')
