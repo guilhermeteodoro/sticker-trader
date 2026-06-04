@@ -23,19 +23,16 @@ class UI::Fragments::AlbumGrid < UI::Base
     dups = stickers.sum { |s| @user_stickers_index.dig(s.id, :copies) || 0 }
 
     Collapsible do
-      div(class: "flex items-center gap-2 py-2") do
-        CollapsibleTrigger do
-          Button(variant: :ghost, icon: true, size: :sm) do
-            span(class: "transition-transform duration-200", data: { ruby_ui__collapsible_target: "icon" }) { "▶" }
-          end
+      CollapsibleTrigger do
+        div(class: "flex items-center gap-2 py-2 cursor-pointer") do
+          span(class: "transition-transform duration-200 text-sm", data: { ruby_ui__collapsible_target: "icon" }) { "▼" }
+          span(class: "font-semibold text-sm") { "#{country.emoji} #{country.code}" }
+          span(class: "text-xs text-muted-foreground") { "#{owned}/#{total}" }
+          span(class: "text-xs text-muted-foreground") { "(#{dups} dups)" } if dups > 0
         end
-
-        span(class: "font-semibold text-sm") { "#{country.emoji} #{country.code}" }
-        span(class: "text-xs text-muted-foreground") { "#{owned}/#{total}" }
-        span(class: "text-xs text-muted-foreground") { "(#{dups} dups)" } if dups > 0
       end
 
-      CollapsibleContent do
+      CollapsibleContent(class: "hidden") do
         div(class: "grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2 pb-4") do
           stickers.each do |sticker|
             render_card(sticker, country)
