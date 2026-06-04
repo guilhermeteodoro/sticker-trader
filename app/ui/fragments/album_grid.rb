@@ -1,0 +1,97 @@
+# frozen_string_literal: true
+
+class UI::Fragments::AlbumGrid < UI::Base
+  def initialize(user:, stickers_by_country:, user_stickers_index:)
+    @user = user
+    @stickers_by_country = stickers_by_country
+    @user_stickers_index = user_stickers_index
+  end
+
+  def view_template
+    div(class: "space-y-2") do
+      @stickers_by_country.each do |country, stickers|
+        render_country_section(country, stickers)
+      end
+    end
+  end
+
+  private
+
+  def render_country_section(country, stickers)
+    owned = stickers.count { |s| @user_stickers_index.key?(s.id) }
+    total = stickers.size
+    dups = stickers.sum { |s| @user_stickers_index.dig(s.id, :copies) || 0 }
+
+    Collapsible do
+      div(class: "flex items-center gap-2 py-2") do
+        CollapsibleTrigger do
+          Button(variant: :ghost, icon: true, size: :sm) do
+            span(class: "transition-transform duration-200", data: { ruby_ui__collapsible_target: "icon" }) { "▶" }
+          end
+        end
+
+        span(class: "font-semibold text-sm") { "#{country.emoji} #{country.code}" }
+        span(class: "text-xs text-muted-foreground") { "#{owned}/#{total}" }
+        span(class: "text-xs text-muted-foreground") { "(#{dups} dups)" } if dups > 0
+      end
+
+      CollapsibleContent do
+        div(class: "grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2 pb-4") do
+          stickers.each do |sticker|
+            render_card(sticker, country)
+          end
+        end
+      end
+    end
+  end
+
+  def render_card(sticker, country)
+    us = @user_stickers_index[sticker.id]
+    glued = us.present?
+    copies = us&.dig(:copies) || 0
+    user_sticker_id = us&.dig(:id) || 0
+
+    base_url = user_user_stickers_path(@user)
+
+    div(
+      class: "relative rounded-lg border p-2 text-center text-xs cursor-pointer select-none transition-all #{glued ? "ring-2 ring-primary" : "opacity-40"}",
+      data: {
+        controller: "album-card",
+        album_card_sticker_id_value: sticker.id,
+        album_card_user_sticker_id_value: user_sticker_id,
+        album_card_copies_value: copies,
+        album_card_glued_value: glued,
+        album_card_create_url_value: base_url,
+        album_card_update_url_value: glued ? "#{base_url}/#{user_sticker_id}" : "",
+        album_card_destroy_url_value: glued ? "#{base_url}/#{user_sticker_id}" : "",
+        action: "click->album-card#glue"
+      }
+    ) do
+      # Badge for copies count
+      span(
+        class: "absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full w-5 h-5 text-[10px] flex items-center justify-center font-bold #{copies > 0 ? "" : "hidden"}",
+        data: { album_card_target: "badge" }
+      ) { copies.to_s }
+
+      # Sticker label
+      span(class: "font-mono font-medium leading-tight block") { "#{country.code} #{sticker.number}" }
+
+      # +/- actions
+      div(
+        class: "flex items-center justify-center gap-1 mt-1 #{glued ? "" : "hidden"}",
+        data: { album_card_target: "actions" }
+      ) do
+        button(
+          type: "button",
+          class: "w-6 h-6 rounded bg-muted text-foreground text-sm font-bold hover:bg-accent active:scale-95",
+          data: { action: "click->album-card#decrement" }
+        ) { "−" }
+        button(
+          type: "button",
+          class: "w-6 h-6 rounded bg-muted text-foreground text-sm font-bold hover:bg-accent active:scale-95",
+          data: { action: "click->album-card#increment" }
+        ) { "+" }
+      end
+    end
+  end
+end
