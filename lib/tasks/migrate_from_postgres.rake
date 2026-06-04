@@ -21,7 +21,7 @@ namespace :db do
     puts "==> Migrating users..."
     users = conn.exec("SELECT id, name, email, slug, created_at, updated_at FROM users ORDER BY id")
     users.each do |row|
-      User.create!(
+      user = User.new(
         id: row["id"],
         name: row["name"],
         email: row["email"],
@@ -29,6 +29,7 @@ namespace :db do
         created_at: row["created_at"],
         updated_at: row["updated_at"]
       )
+      user.save!(validate: false)
     end
     puts "    #{users.ntuples} users migrated"
 
@@ -51,7 +52,7 @@ namespace :db do
     puts "==> Migrating trades..."
     trades = conn.exec("SELECT id, user_a_id, user_b_id, confirmed_at, created_at, updated_at FROM trades ORDER BY id")
     trades.each do |row|
-      Trade.create!(
+      trade = Trade.new(
         id: row["id"],
         user_a_id: row["user_a_id"],
         user_b_id: row["user_b_id"],
@@ -59,6 +60,7 @@ namespace :db do
         created_at: row["created_at"],
         updated_at: row["updated_at"]
       )
+      trade.save!(validate: false)
     end
     puts "    #{trades.ntuples} trades migrated"
 
