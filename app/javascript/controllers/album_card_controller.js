@@ -87,15 +87,16 @@ export default class extends Controller {
 
   #render() {
     const card = this.element
+    const color = this.colorValue
 
     if (this.gluedValue) {
-      card.classList.remove("text-gray-600", "border-gray-300", "bg-gray-50")
-      card.classList.add("text-white", "border-transparent")
-      card.style.backgroundColor = this.colorValue
+      card.classList.remove("opacity-50")
+      card.classList.add("text-white")
+      card.style.background = `linear-gradient(135deg, ${color} 0%, ${color}cc 100%)`
     } else {
-      card.classList.add("text-gray-600", "border-gray-300", "bg-gray-50")
-      card.classList.remove("text-white", "border-transparent")
-      card.style.backgroundColor = ""
+      card.classList.add("opacity-50")
+      card.classList.remove("text-white")
+      card.style.background = ""
     }
 
     if (this.hasBadgeTarget) {

@@ -47,7 +47,7 @@ class UI::Fragments::AlbumGrid < UI::Base
       end
 
       CollapsibleContent(class: "hidden") do
-        div(class: "grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2 p-2") do
+        div(class: "grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 p-2") do
           stickers.each do |sticker|
             render_card(sticker, country)
           end
@@ -64,10 +64,11 @@ class UI::Fragments::AlbumGrid < UI::Base
 
     base_url = user_user_stickers_path(@user)
     color = country.color || "#6B7280"
+    is_foil = sticker.shiny?
 
     div(
-      class: "relative rounded-lg border p-2 text-center text-xs cursor-pointer select-none #{glued ? "text-white border-transparent" : "text-gray-600 border-gray-300 bg-gray-50"}",
-      style: glued ? "background-color: #{color}" : "",
+      class: "relative rounded-md border-2 border-gray-900 p-1.5 text-left cursor-pointer select-none aspect-[5/7] flex flex-col justify-between shadow-[2px_2px_0_theme(colors.gray.900)] active:shadow-[1px_1px_0_theme(colors.gray.900)] active:translate-x-px active:translate-y-px #{glued ? "text-white" : "opacity-50"}",
+      style: glued ? "background: linear-gradient(135deg, #{color} 0%, #{color}cc 100%)" : "",
       data: {
         controller: "album-card",
         album_card_sticker_id_value: sticker.id,
@@ -81,29 +82,33 @@ class UI::Fragments::AlbumGrid < UI::Base
         action: "click->album-card#glue"
       }
     ) do
-      # Badge for copies count
+      # Top row: foil indicator
+      if is_foil
+        span(class: "text-[9px] absolute top-1 right-1") { "✨" }
+      end
+
+      # Extras badge (green circle)
       span(
-        class: "absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full w-5 h-5 text-[10px] flex items-center justify-center font-bold #{copies > 0 ? "" : "hidden"}",
+        class: "absolute -top-1.5 -right-1.5 bg-green-600 text-white rounded-full w-[18px] h-[18px] text-[9px] flex items-center justify-center font-bold border-2 border-gray-900 #{copies > 0 ? "" : "hidden"}",
         data: { album_card_target: "badge" }
       ) { copies.to_s }
 
-      # Sticker label
-      span(class: "font-mono font-medium leading-tight block") { "#{country.code} #{sticker.number}" }
-      span(class: "block text-[8px] leading-tight truncate mt-0.5 opacity-75") { sticker.name } if sticker.name
+      # Sticker number (hero)
+      span(class: "font-black text-lg leading-none tracking-tight tabular-nums self-end") { sticker.number }
 
       # +/- actions (invisible but space-reserving when not glued)
       div(
-        class: "flex items-center justify-center gap-1 mt-1 #{glued ? "" : "invisible"}",
+        class: "flex items-center justify-center gap-1 #{glued ? "" : "invisible"}",
         data: { album_card_target: "actions" }
       ) do
         button(
           type: "button",
-          class: "w-6 h-6 rounded bg-white/30 text-white text-sm font-bold active:scale-95",
+          class: "w-5 h-5 rounded bg-white/30 text-white text-xs font-bold active:scale-95",
           data: { action: "click->album-card#decrement" }
         ) { "−" }
         button(
           type: "button",
-          class: "w-6 h-6 rounded bg-white/30 text-white text-sm font-bold active:scale-95",
+          class: "w-5 h-5 rounded bg-white/30 text-white text-xs font-bold active:scale-95",
           data: { action: "click->album-card#increment" }
         ) { "+" }
       end
