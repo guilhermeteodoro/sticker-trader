@@ -67,7 +67,7 @@ class UI::Fragments::AlbumGrid < UI::Base
     is_foil = sticker.shiny?
 
     div(
-      class: "relative rounded-md border border-gray-900 p-1 text-left cursor-pointer select-none aspect-[5/7] flex flex-col justify-between #{glued ? "text-white" : "opacity-50"}",
+      class: "relative rounded-md border border-gray-900 p-1 cursor-pointer select-none aspect-[5/7] flex flex-col #{glued ? "text-white" : "opacity-50"}",
       style: glued ? "background: linear-gradient(135deg, #{color} 0%, #{color}cc 100%)" : "",
       data: {
         controller: "album-card",
@@ -82,10 +82,10 @@ class UI::Fragments::AlbumGrid < UI::Base
         action: "click->album-card#glue"
       }
     ) do
-      # Foil indicator + number top section
+      # Top row: number + foil
       div(class: "flex items-start justify-between") do
+        span(class: "font-black text-sm leading-none tracking-tight tabular-nums") { sticker.number }
         span(class: "text-[9px]") { "✨" } if is_foil
-        span(class: "text-[9px]") { "" } unless is_foil
       end
 
       # Extras badge (green circle)
@@ -94,10 +94,9 @@ class UI::Fragments::AlbumGrid < UI::Base
         data: { album_card_target: "badge" }
       ) { copies.to_s }
 
-      # Content: number + name
-      div(class: "flex flex-col items-end") do
-        span(class: "font-black text-sm leading-none tracking-tight tabular-nums") { sticker.number }
-        span(class: "text-[7px] leading-tight truncate max-w-full opacity-75 mt-0.5") { sticker.name } if sticker.name
+      # Center: player name
+      div(class: "flex-1 flex flex-col items-center justify-center text-center px-0.5") do
+        render_sticker_name(sticker)
       end
 
       # +/- actions (invisible but space-reserving when not glued)
@@ -115,6 +114,32 @@ class UI::Fragments::AlbumGrid < UI::Base
           class: "w-4 h-4 rounded bg-white/30 text-white text-[10px] font-bold active:scale-95",
           data: { action: "click->album-card#increment" }
         ) { "+" }
+      end
+    end
+  end
+
+  def render_sticker_name(sticker)
+    return unless sticker.name
+
+    if sticker.shiny?
+      # FWC special stickers: show full name centered
+      span(class: "text-[7px] leading-tight opacity-75") { sticker.name.sub(" (Foil)", "") }
+    else
+      # Players (normal + coke): Last Name bold, First Name below
+      parts = sticker.name.split(" ", 2)
+      if parts.size == 1
+        span(class: "text-[7px] font-bold leading-tight") { parts[0] }
+      else
+        first_name = parts[0..-2].join(" ")
+        last_name = parts[-1]
+        # Handle multi-word last names
+        name_parts = sticker.name.split
+        if name_parts.size >= 2
+          last_name = name_parts.last
+          first_name = name_parts[0..-2].join(" ")
+        end
+        span(class: "text-[7px] font-bold leading-tight truncate max-w-full") { last_name }
+        span(class: "text-[6px] leading-tight truncate max-w-full opacity-75") { first_name }
       end
     end
   end
