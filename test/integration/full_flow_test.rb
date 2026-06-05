@@ -104,7 +104,7 @@ class FullFlowTest < ActionDispatch::IntegrationTest
     # User B views User A's page → sees trade comparison
     get user_path(user_a)
     assert_response :success
-    assert_includes response.body, I18n.t("views.users.show.trade_title", name: "Alice")
+    assert_includes response.body, I18n.t("views.users.show_visitor.trade_title", name: "Alice")
     assert_includes response.body, "Bob →"
     assert_includes response.body, "Alice →"
   end

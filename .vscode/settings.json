@@ -1,0 +1,9 @@
+{
+  "tailwindCSS.includeLanguages": {
+    "ruby": "html"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["class:\\s*\"([^\"]*)\""],
+    ["class:\\s*\\[([^\\]]*)", "\"([^\"]*)\""]
+  ]
+}

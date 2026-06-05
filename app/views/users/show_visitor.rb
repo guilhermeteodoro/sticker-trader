@@ -1,26 +1,21 @@
 # frozen_string_literal: true
 
-class Views::Users::Show < Views::LoggedIn
-  def initialize(user:, is_owner:, trade_result:, trade_clipboard_text:, current_user:)
+class Views::Users::ShowVisitor < Views::LoggedIn
+  def initialize(user:, trade_result:, trade_clipboard_text:, current_user:)
     @user = user
-    @is_owner = is_owner
     @trade_result = trade_result
     @trade_clipboard_text = trade_clipboard_text
     @current_user = current_user
   end
 
   def page_title
-    @is_owner ? t(".own_collection_title") : t(".collection_title", name: @user.name)
+    t(".title", name: @user.name)
   end
 
   def render_title
     div do
       div(class: "flex items-center gap-2 mb-2") do
-        Heading(level: 2) { @is_owner ? t(".own_collection_title") : t(".collection_title", name: @user.name) }
-
-        if @is_owner
-          Link(href: edit_user_collection_path(@user), variant: :ghost, icon: true, class: "text-muted-foreground") { "✏️" }
-        end
+        Heading(level: 2) { t(".title", name: @user.name) }
       end
 
       div(class: "flex flex-wrap gap-3 text-sm") do
@@ -31,38 +26,21 @@ class Views::Users::Show < Views::LoggedIn
   end
 
   def render_content
-    render_album_grid if @is_owner
     render_user_info
     render_trade if @trade_result
     render_duplicates
-    render_trade_history if @is_owner
   end
 
   private
 
-  def render_album_grid
-    stickers_by_country = Sticker.includes(:country).ordered.group_by(&:country)
-    user_stickers_index = @user.user_stickers.each_with_object({}) do |us, hash|
-      hash[us.sticker_id] = { id: us.id, copies: us.copies }
-    end
-
-    div(class: "mb-6") do
-      render UI::Fragments::AlbumGrid.new(
-        user: @user,
-        stickers_by_country: stickers_by_country,
-        user_stickers_index: user_stickers_index
-      )
-    end
-  end
-
   def render_user_info
+    return if @current_user
+
     div(class: "mb-6") do
-      if !@is_owner && !@current_user
-        Alert(class: "mt-4") do
-          AlertDescription do
-            plain "#{t(".register_prompt")} "
-            a(href: new_registration_path, class: "font-medium underline") { t(".register_link") }
-          end
+      Alert(class: "mt-4") do
+        AlertDescription do
+          plain "#{t(".register_prompt")} "
+          a(href: new_registration_path, class: "font-medium underline") { t(".register_link") }
         end
       end
     end
@@ -111,20 +89,6 @@ class Views::Users::Show < Views::LoggedIn
       render_balanced_trade
       render_consolidate_button
       render_leftovers
-    end
-  end
-
-  def render_diff_section(title, subtitle, stickers)
-    div(class: "mb-6") do
-      Heading(level: 3) { title }
-
-      p(class: "text-sm text-gray-500 mb-2") { subtitle }
-
-      if stickers.any?
-        render UI::Fragments::StickerList.new(stickers: stickers)
-      else
-        p(class: "text-gray-500 italic text-sm") { t(".nothing") }
-      end
     end
   end
 
@@ -201,90 +165,7 @@ class Views::Users::Show < Views::LoggedIn
     end
   end
 
-  def render_trade_history
-    participations = @user.trade_history
-    return if participations.empty?
-
-    div(class: "mt-8") do
-      Heading(level: 3, class: "mb-4") { t(".history_title") }
-
-      participations.each do |participation|
-        div(class: "mb-4") do
-          Collapsible(open: true) do
-            div(class: "flex items-center justify-between mb-2") do
-              div(class: "flex items-center gap-2") do
-                CollapsibleTrigger do
-                  Button(variant: :ghost, icon: true) do
-                    span(class: "transition-transform duration-200", data: { ruby_ui__collapsible_target: "icon" }) { "⬇️" }
-                  end
-                end
-
-                Heading(level: 4) do
-                  a(href: user_path(participation.other_user), class: "hover:underline") do
-                    t(".history_with", name: participation.other_user.name)
-                  end
-                end
-                Badge(variant: :outline) { t(".sticker_count", given: participation.given.count, received: participation.received.count) }
-              end
-
-              div(class: "flex items-center gap-2") do
-                render_export_dialog(participation)
-                span(class: "text-xs text-muted-foreground") { I18n.l(participation.confirmed_at, format: :short) }
-              end
-            end
-
-            CollapsibleContent do
-              Card(class: "pt-6 bg-card") do
-                CardContent do
-                  div(class: "grid grid-cols-2 gap-4 text-sm") do
-                    div do
-                      p(class: "font-medium text-muted-foreground mb-1") do
-                        "#{t(".i_gave")} (#{participation.given.count})"
-                      end
-                      render UI::Fragments::StickerList.new(stickers: participation.given, copyable: true)
-                    end
-                    div do
-                      p(class: "font-medium text-muted-foreground mb-1") do
-                        "#{t(".i_received")} (#{participation.received.count})"
-                      end
-                      render UI::Fragments::StickerList.new(stickers: participation.received, copyable: true)
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-  end
-
   def copy_button
     Button(variant: :outline, size: :sm, icon: true, type: "button", data: { action: "clipboard#copy", copy_button: "" }) { "📋" }
-  end
-
-  def render_export_dialog(participation)
-    Dialog do
-      DialogTrigger do
-        Button(variant: :outline, size: :sm, type: "button") { t(".export") }
-      end
-
-      DialogContent(class: "bg-white sm:max-w-lg") do
-        DialogHeader do
-          DialogTitle { t(".export_title", name: participation.other_user.name) }
-          DialogDescription { t(".export_description") }
-        end
-
-        DialogMiddle do
-          turbo_frame(id: "export_trade_#{participation.trade_id}", src: export_trade_path(participation.trade_id), loading: :lazy) do
-            p(class: "text-sm text-muted-foreground py-4") { t(".loading") }
-          end
-        end
-      end
-    end
-  end
-
-  def dom_id_for_trade(trade_id, prefix)
-    "#{prefix}_trade_#{trade_id}"
   end
 end

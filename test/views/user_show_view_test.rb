@@ -20,12 +20,9 @@ class UserShowViewTest < ActiveSupport::TestCase
     }).call
   end
 
-  test "duplicates clipboard text contains country codes and numbers" do
-    doc = render_document(Views::Users::Show.new(
+  test "owner view shows duplicates clipboard text" do
+    doc = render_document(Views::Users::ShowOwner.new(
       user: @user_a,
-      is_owner: true,
-      trade_result: nil,
-      trade_clipboard_text: nil,
       current_user: @user_a
     ))
 
@@ -36,14 +33,13 @@ class UserShowViewTest < ActiveSupport::TestCase
     assert_includes text, "00"
   end
 
-  test "trade clipboard text contains both directions" do
+  test "visitor view shows trade clipboard text with both directions" do
     trade_result = TradeComparer.new(@user_a, @user_b).call
 
-    doc = render_document(Views::Users::Show.new(
+    doc = render_document(Views::Users::ShowVisitor.new(
       user: @user_b,
-      is_owner: false,
       trade_result: trade_result,
-      trade_clipboard_text: "Gui \u2192 Vitor\nVitor \u2192 Gui",
+      trade_clipboard_text: "Gui → Vitor\nVitor → Gui",
       current_user: @user_a
     ))
 
@@ -56,14 +52,13 @@ class UserShowViewTest < ActiveSupport::TestCase
     assert_includes trade_text, "Vitor →"
   end
 
-  test "trade clipboard text has indentation" do
+  test "visitor view trade clipboard text has indentation" do
     trade_result = TradeComparer.new(@user_a, @user_b).call
 
-    doc = render_document(Views::Users::Show.new(
+    doc = render_document(Views::Users::ShowVisitor.new(
       user: @user_b,
-      is_owner: false,
       trade_result: trade_result,
-      trade_clipboard_text: "Gui \u2192 Vitor\n  FWC: 00, 1, 2\n\nVitor \u2192 Gui\n  CC: 1, 2",
+      trade_clipboard_text: "Gui → Vitor\n  FWC: 00, 1, 2\n\nVitor → Gui\n  CC: 1, 2",
       current_user: @user_a
     ))
 
@@ -76,17 +71,14 @@ class UserShowViewTest < ActiveSupport::TestCase
     assert sticker_lines.any? { |l| l.start_with?("  ") }, "Sticker lines should be indented"
   end
 
-  test "balanced trade section appears when trade is possible" do
-    # Create users with same-category duplicates for balanced trade
+  test "visitor view balanced trade section appears when trade is possible" do
     user_x = create_user(name: "X", email: "x@test.com")
-    # X owns FWC stickers 1-10, has dupes at 1,2,3 (shiny)
     CollectionImporter.new(user_x, {
       owned: Set.new(1..10),
       duplicates: { 1 => 1, 2 => 1, 3 => 1 }
     }).call
 
     user_y = create_user(name: "Y", email: "y@test.com")
-    # Y owns FWC stickers 5-20, has dupes at 11,12 (shiny - FWC 10, FWC 11)
     CollectionImporter.new(user_y, {
       owned: Set.new(5..20),
       duplicates: { 11 => 1, 12 => 1 }
@@ -94,11 +86,10 @@ class UserShowViewTest < ActiveSupport::TestCase
 
     trade_result = TradeComparer.new(user_x, user_y).call
 
-    doc = render_document(Views::Users::Show.new(
+    doc = render_document(Views::Users::ShowVisitor.new(
       user: user_y,
-      is_owner: false,
       trade_result: trade_result,
-      trade_clipboard_text: "X → Y\n" + I18n.t("views.users.show.balanced_title"),
+      trade_clipboard_text: "X → Y\n" + I18n.t("views.users.show_visitor.balanced_title"),
       current_user: user_x
     ))
 
@@ -106,6 +97,6 @@ class UserShowViewTest < ActiveSupport::TestCase
       .map { |d| d["data-clipboard-text-value"] }
       .find { |t| t.include?("→") }
 
-    assert_includes trade_text, I18n.t("views.users.show.balanced_title")
+    assert_includes trade_text, I18n.t("views.users.show_visitor.balanced_title")
   end
 end
