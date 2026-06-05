@@ -89,9 +89,9 @@ class UI::Fragments::AlbumGrid < UI::Base
         span(class: "font-black text-sm leading-none tracking-tight tabular-nums") { sticker.number }
       end
 
-      # Extras badge (green circle)
+      # Extras badge (green circle) - bottom right
       span(
-        class: "absolute -top-1 -right-1 bg-green-600 text-white rounded-full w-4 h-4 text-[8px] flex items-center justify-center font-bold border border-gray-900 #{copies > 0 ? "" : "hidden"}",
+        class: "absolute -bottom-1 -right-1 bg-green-600 text-white rounded-full w-4 h-4 text-[8px] flex items-center justify-center font-bold border border-gray-900 #{copies > 0 ? "" : "hidden"}",
         data: { album_card_target: "badge" }
       ) { copies.to_s }
 
