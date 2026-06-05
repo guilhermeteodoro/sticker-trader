@@ -8,7 +8,7 @@ class UI::Fragments::AlbumGrid < UI::Base
   end
 
   def view_template
-    div(class: "space-y-2 px-2", data: { controller: "album-toggle" }) do
+    div(class: "space-y-1 px-2", data: { controller: "album-toggle" }) do
       div(class: "flex items-center justify-between mb-2") do
         Heading(level: 3) { t(".title") }
         button(
@@ -39,19 +39,19 @@ class UI::Fragments::AlbumGrid < UI::Base
     Collapsible do
       CollapsibleTrigger do
         div(
-          class: "flex items-center gap-2 py-3 px-3 cursor-pointer bg-gray-800 text-gray-100 rounded-lg",
+          class: "flex items-center gap-2 py-3 px-3 cursor-pointer bg-gray-700 text-gray-100 rounded-lg",
           data: { ruby_ui__collapsible_target: "trigger" }
         ) do
           span(class: "transition-transform duration-200 text-sm", data: { ruby_ui__collapsible_target: "icon" }) { "▼" }
           span(class: "font-semibold text-sm") { "#{country.emoji} #{country.code}" }
-          span(class: "italic font-extralight font-stretch-50% text-sm text-gray-400") { country.name }
-          span(class: "text-xs text-gray-400") { "#{owned}/#{total}" }
-          span(class: "text-xs text-gray-400") { "(#{dups} dups)" } if dups > 0
+          span(class: "italic font-extralight font-stretch-50% text-sm text-gray-300") { country.name }
+          span(class: "text-xs text-gray-300") { "#{owned}/#{total}" }
+          span(class: "text-xs text-gray-300") { "(#{dups} dups)" } if dups > 0
         end
       end
 
       CollapsibleContent(class: "hidden") do
-        div(class: "grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-1.5 p-2 bg-gray-800 rounded-b-lg") do
+        div(class: "grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-1.5 p-2 bg-gray-700 rounded-b-lg") do
           stickers.each do |sticker|
             render_card(sticker, country)
           end
@@ -76,11 +76,11 @@ class UI::Fragments::AlbumGrid < UI::Base
       elsif glued
         ""
       else
-        "bg-gray-700"
+        "bg-gray-600"
       end
 
     div(
-      class: "relative border rounded border-gray-600 p-1 select-none aspect-5/7 flex flex-col hover:scale-105 hover:brightness-105 transition-transform #{glued ? "text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]" : "opacity-50 cursor-pointer text-gray-300"} #{card_bg_class}",
+      class: "relative border rounded border-gray-500 p-1 select-none aspect-5/7 flex flex-col hover:scale-105 hover:brightness-105 transition-transform #{glued ? "text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]" : "opacity-50 cursor-pointer text-gray-200"} #{card_bg_class}",
       style: glued ? "background-color: #{color}" : "",
       data: {
         controller: "album-card",
@@ -104,7 +104,7 @@ class UI::Fragments::AlbumGrid < UI::Base
 
       # Extras badge (green circle) - bottom right
       span(
-        class: "absolute -top-1 -left-1 bg-green-600 text-white rounded-full w-4 h-4 text-[8px] flex items-center justify-center font-black border border-gray-800 outline outline-background  #{copies > 0 ? "" : "hidden"}",
+        class: "absolute -top-1 -left-1 bg-green-600 text-white rounded-full w-4 h-4 text-[8px] flex items-center justify-center font-black border border-gray-700 outline outline-background  #{copies > 0 ? "" : "hidden"}",
         data: { album_card_target: "badge" }
       ) { copies.to_s }
 

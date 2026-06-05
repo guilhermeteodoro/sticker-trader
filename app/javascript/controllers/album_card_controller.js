@@ -91,7 +91,7 @@ export default class extends Controller {
     const color = this.colorValue
 
     if (this.gluedValue) {
-      card.classList.remove("opacity-50", "bg-gray-700", "text-gray-300", "cursor-pointer")
+      card.classList.remove("opacity-50", "bg-gray-600", "text-gray-200", "cursor-pointer")
       card.classList.add("text-white", "[text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]")
       if (this.foilValue) {
         card.classList.add("foil-card")
@@ -100,7 +100,7 @@ export default class extends Controller {
       }
       card.style.backgroundColor = color
     } else {
-      card.classList.add("opacity-50", "bg-gray-700", "text-gray-300", "cursor-pointer")
+      card.classList.add("opacity-50", "bg-gray-600", "text-gray-200", "cursor-pointer")
       card.classList.remove("text-white", "foil-card", "[text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]")
       card.style.backgroundColor = ""
     }
