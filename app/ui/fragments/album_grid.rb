@@ -67,17 +67,17 @@ class UI::Fragments::AlbumGrid < UI::Base
     is_foil = sticker.shiny?
     is_team_photo = sticker.name == "Team Photo"
 
-    card_style = if glued && is_foil
-      "background: linear-gradient(135deg, #C0C0C0 0%, #{color} 50%, #C0C0C0 100%)"
+    card_bg_class = if glued && is_foil
+      "bg-gradient-to-br from-gray-300 via-current to-gray-300"
     elsif glued
-      "background: linear-gradient(135deg, #{color} 0%, #{color}cc 100%)"
-    else
       ""
+    else
+      "bg-gray-100"
     end
 
     div(
-      class: "relative rounded-md border border-gray-900 p-1 cursor-pointer select-none aspect-[5/7] flex flex-col #{glued ? "text-white" : "opacity-50"}",
-      style: card_style,
+      class: "relative rounded-md border border-gray-900 p-1 cursor-pointer select-none aspect-[5/7] flex flex-col #{glued ? "text-white" : "opacity-50"} #{card_bg_class}",
+      style: (glued && !is_foil) ? "background-color: #{color}" : "",
       data: {
         controller: "album-card",
         album_card_sticker_id_value: sticker.id,
@@ -85,6 +85,7 @@ class UI::Fragments::AlbumGrid < UI::Base
         album_card_copies_value: copies,
         album_card_glued_value: glued,
         album_card_color_value: color,
+        album_card_foil_value: is_foil,
         album_card_create_url_value: base_url,
         album_card_update_url_value: glued ? "#{base_url}/#{user_sticker_id}" : "",
         album_card_destroy_url_value: glued ? "#{base_url}/#{user_sticker_id}" : "",
@@ -131,23 +132,20 @@ class UI::Fragments::AlbumGrid < UI::Base
 
     if sticker.shiny? || sticker.name == "Team Photo"
       # FWC specials + Team Logo + Team Photo: show full name centered
-      span(class: "text-[7px] leading-tight opacity-75") { sticker.name.sub(" (Foil)", "") }
+      span(class: "text-[9px] sm:text-[10px] leading-tight opacity-75") { sticker.name.sub(" (Foil)", "") }
     else
       # Players (normal + coke): Last Name bold, First Name below
       parts = sticker.name.split(" ", 2)
       if parts.size == 1
-        span(class: "text-[7px] font-bold leading-tight") { parts[0] }
+        span(class: "text-[9px] sm:text-[10px] font-bold leading-tight") { parts[0] }
       else
-        first_name = parts[0..-2].join(" ")
-        last_name = parts[-1]
-        # Handle multi-word last names
         name_parts = sticker.name.split
         if name_parts.size >= 2
           last_name = name_parts.last
           first_name = name_parts[0..-2].join(" ")
         end
-        span(class: "text-[7px] font-bold leading-tight truncate max-w-full") { last_name }
-        span(class: "text-[6px] leading-tight truncate max-w-full opacity-75") { first_name }
+        span(class: "text-[9px] sm:text-[10px] font-bold leading-tight truncate max-w-full") { last_name }
+        span(class: "text-[7px] sm:text-[8px] leading-tight truncate max-w-full opacity-75") { first_name }
       end
     end
   end
