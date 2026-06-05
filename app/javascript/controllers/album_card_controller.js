@@ -16,7 +16,6 @@ export default class extends Controller {
   }
 
   #debounceTimer = null
-  #dialog = null
 
   connect() {
     this.#render()
@@ -62,20 +61,7 @@ export default class extends Controller {
   }
 
   #confirmUnglue() {
-    this.#dialog = document.getElementById("unglue-dialog")
-    if (!this.#dialog) return
-    this.#dialog.classList.remove("hidden")
-    this.#dialog._albumCard = this
-  }
-
-  cancelUnglue() {
-    const dialog = document.getElementById("unglue-dialog")
-    if (dialog) dialog.classList.add("hidden")
-  }
-
-  confirmUnglue() {
-    const dialog = document.getElementById("unglue-dialog")
-    if (dialog) dialog.classList.add("hidden")
+    if (!confirm("Remove this sticker from your collection?")) return
 
     this.gluedValue = false
     this.copiesValue = 0

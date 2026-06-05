@@ -26,8 +26,6 @@ class UI::Fragments::AlbumGrid < UI::Base
       @stickers_by_country.each do |country, stickers|
         render_country_section(country, stickers)
       end
-
-      render_unglue_dialog
     end
   end
 
@@ -158,33 +156,6 @@ class UI::Fragments::AlbumGrid < UI::Base
         end
         span(class: "text-[9px] sm:text-[10px] font-bold leading-tight truncate max-w-full") { last_name }
         span(class: "text-[7px] sm:text-[8px] leading-tight truncate max-w-full opacity-75") { first_name }
-      end
-    end
-  end
-
-  def render_unglue_dialog
-    div(
-      id: "unglue-dialog",
-      class: "hidden fixed inset-0 z-50 flex items-center justify-center"
-    ) do
-      # Backdrop
-      div(class: "absolute inset-0 bg-black/50", data: { action: "click->album-card#cancelUnglue" })
-
-      # Dialog box
-      div(class: "relative bg-white rounded-lg p-6 shadow-xl max-w-xs mx-4 text-center") do
-        p(class: "text-sm text-gray-700 mb-4") { t(".unglue_confirmation") }
-        div(class: "flex gap-2 justify-center") do
-          button(
-            type: "button",
-            class: "px-3 py-1.5 text-sm rounded border border-gray-300 hover:bg-gray-100",
-            data: { action: "click->album-card#cancelUnglue" }
-          ) { t(".cancel") }
-          button(
-            type: "button",
-            class: "px-3 py-1.5 text-sm rounded bg-red-600 text-white hover:bg-red-700",
-            data: { action: "click->album-card#confirmUnglue" }
-          ) { t(".unglue") }
-        end
       end
     end
   end
