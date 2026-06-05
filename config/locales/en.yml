@@ -30,6 +30,9 @@ en:
         title: "Album"
         expand_all: "Expand all"
         collapse_all: "Collapse all"
+        unglue_confirmation: "Remove this sticker from your collection?"
+        cancel: "Cancel"
+        unglue: "Remove"
 
   trades:
     create:

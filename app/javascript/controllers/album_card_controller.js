@@ -16,6 +16,7 @@ export default class extends Controller {
   }
 
   #debounceTimer = null
+  #dialog = null
 
   connect() {
     this.#render()
@@ -61,7 +62,20 @@ export default class extends Controller {
   }
 
   #confirmUnglue() {
-    if (!confirm("Remove this sticker from your collection?")) return
+    this.#dialog = document.getElementById("unglue-dialog")
+    if (!this.#dialog) return
+    this.#dialog.classList.remove("hidden")
+    this.#dialog._albumCard = this
+  }
+
+  cancelUnglue() {
+    const dialog = document.getElementById("unglue-dialog")
+    if (dialog) dialog.classList.add("hidden")
+  }
+
+  confirmUnglue() {
+    const dialog = document.getElementById("unglue-dialog")
+    if (dialog) dialog.classList.add("hidden")
 
     this.gluedValue = false
     this.copiesValue = 0
@@ -109,10 +123,10 @@ export default class extends Controller {
       if (this.copiesValue > 0) {
         this.badgeTarget.textContent = this.copiesValue
         this.badgeTarget.classList.remove("hidden")
-        card.classList.add("shadow-[3px_3px_0_#1f2937]", "border-transparent")
+        card.classList.add("shadow-[3px_3px_0_#374151]", "border-transparent")
       } else {
         this.badgeTarget.classList.add("hidden")
-        card.classList.remove("shadow-[3px_3px_0_#1f2937]", "border-transparent")
+        card.classList.remove("shadow-[3px_3px_0_#374151]", "border-transparent")
       }
     }
 

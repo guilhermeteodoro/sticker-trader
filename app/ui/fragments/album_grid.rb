@@ -26,8 +26,12 @@ class UI::Fragments::AlbumGrid < UI::Base
       @stickers_by_country.each do |country, stickers|
         render_country_section(country, stickers)
       end
+
+      render_unglue_dialog
     end
   end
+
+  private
 
   private
 
@@ -74,7 +78,7 @@ class UI::Fragments::AlbumGrid < UI::Base
 
     glued_classes = "opacity-100 text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]"
     unglued_classes = "opacity-50 cursor-pointer text-gray-600 bg-gray-100"
-    copies_classes = has_copies ? "shadow-[3px_3px_0_#1f2937] border-transparent" : ""
+    copies_classes = has_copies ? "shadow-[3px_3px_0_#374151] border-transparent" : ""
 
     card_classes = glued ? glued_classes : unglued_classes
     card_classes += " #{copies_classes}" if has_copies
@@ -128,7 +132,7 @@ class UI::Fragments::AlbumGrid < UI::Base
 
         # Extras count - blends with shadow
         span(
-          class: "absolute -bottom-1 -right-1 bg-[#1f2937] rounded text-[9px] font-bold text-white w-4 h-4 flex items-center justify-center #{copies > 0 ? "" : "hidden"}",
+          class: "absolute -bottom-1 -right-1 bg-[#374151] rounded text-[9px] font-bold text-white w-4 h-4 flex items-center justify-center #{copies > 0 ? "" : "hidden"}",
           data: { album_card_target: "badge" }
         ) { copies }
       end
@@ -154,6 +158,33 @@ class UI::Fragments::AlbumGrid < UI::Base
         end
         span(class: "text-[9px] sm:text-[10px] font-bold leading-tight truncate max-w-full") { last_name }
         span(class: "text-[7px] sm:text-[8px] leading-tight truncate max-w-full opacity-75") { first_name }
+      end
+    end
+  end
+
+  def render_unglue_dialog
+    div(
+      id: "unglue-dialog",
+      class: "hidden fixed inset-0 z-50 flex items-center justify-center"
+    ) do
+      # Backdrop
+      div(class: "absolute inset-0 bg-black/50", data: { action: "click->album-card#cancelUnglue" })
+
+      # Dialog box
+      div(class: "relative bg-white rounded-lg p-6 shadow-xl max-w-xs mx-4 text-center") do
+        p(class: "text-sm text-gray-700 mb-4") { t(".unglue_confirmation") }
+        div(class: "flex gap-2 justify-center") do
+          button(
+            type: "button",
+            class: "px-3 py-1.5 text-sm rounded border border-gray-300 hover:bg-gray-100",
+            data: { action: "click->album-card#cancelUnglue" }
+          ) { t(".cancel") }
+          button(
+            type: "button",
+            class: "px-3 py-1.5 text-sm rounded bg-red-600 text-white hover:bg-red-700",
+            data: { action: "click->album-card#confirmUnglue" }
+          ) { t(".unglue") }
+        end
       end
     end
   end
