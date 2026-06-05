@@ -77,7 +77,7 @@ class UI::Fragments::AlbumGrid < UI::Base
 
     div(
       class: "relative rounded-md border border-gray-900 p-1 cursor-pointer select-none aspect-[5/7] flex flex-col #{glued ? "text-white" : "opacity-50"} #{card_bg_class}",
-      style: glued ? "background-color: #{is_foil ? "#C0C0C0" : color}" : "",
+      style: glued ? "background-color: #{color}" : "",
       data: {
         controller: "album-card",
         album_card_sticker_id_value: sticker.id,

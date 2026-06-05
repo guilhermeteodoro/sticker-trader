@@ -95,7 +95,7 @@ export default class extends Controller {
       card.classList.add("text-white")
       if (this.foilValue) {
         card.classList.add("metallicss")
-        card.style.backgroundColor = "#C0C0C0"
+        card.style.backgroundColor = color
       } else {
         card.classList.remove("metallicss")
         card.style.backgroundColor = color
