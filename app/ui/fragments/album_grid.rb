@@ -38,7 +38,10 @@ class UI::Fragments::AlbumGrid < UI::Base
 
     Collapsible do
       CollapsibleTrigger do
-        div(class: "flex items-center gap-2 py-3 px-3 cursor-pointer rounded-lg bg-gray-200") do
+        div(
+          class: "flex items-center gap-2 py-3 px-3 cursor-pointer bg-gray-200 rounded-lg",
+          data: { ruby_ui__collapsible_target: "trigger" }
+        ) do
           span(class: "transition-transform duration-200 text-sm", data: { ruby_ui__collapsible_target: "icon" }) { "▼" }
           span(class: "font-semibold text-sm") { "#{country.emoji} #{country.code}" }
           span(class: "italic font-extralight font-stretch-50% text-sm") { country.name }
@@ -48,7 +51,7 @@ class UI::Fragments::AlbumGrid < UI::Base
       end
 
       CollapsibleContent(class: "hidden") do
-        div(class: "grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-1.5 p-2 bg-gray-200") do
+        div(class: "grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-1.5 p-2 bg-gray-200 rounded-b-lg") do
           stickers.each do |sticker|
             render_card(sticker, country)
           end
