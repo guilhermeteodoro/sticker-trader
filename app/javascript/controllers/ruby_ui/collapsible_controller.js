@@ -33,9 +33,9 @@ export default class extends Controller {
   #show(animate) {
     if (!this.hasContentTarget) return
     const el = this.contentTarget
+    el.classList.remove('hidden')
 
-    if (animate) {
-      el.classList.remove('hidden')
+    if (animate && el.scrollHeight > 0) {
       el.style.height = '0px'
       el.style.overflow = 'hidden'
       void el.offsetHeight
@@ -46,8 +46,6 @@ export default class extends Controller {
         el.style.overflow = ''
         el.style.transition = ''
       })
-    } else {
-      el.classList.remove('hidden')
     }
 
     if (this.hasIconTarget) {
@@ -59,7 +57,7 @@ export default class extends Controller {
     if (!this.hasContentTarget) return
     const el = this.contentTarget
 
-    if (animate) {
+    if (animate && el.scrollHeight > 0) {
       el.style.height = el.scrollHeight + 'px'
       el.style.overflow = 'hidden'
       void el.offsetHeight
