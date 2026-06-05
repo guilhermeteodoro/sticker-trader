@@ -82,13 +82,34 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(125deg, #ff008480, #fca40080, #ffff0080, #00ff8780, #00bfff80, #a855f780);
-  background-size: 400% 400%;
+  background:
+    repeating-linear-gradient(
+      133deg,
+      #0e152e 0%,
+      #e8d5b7 3%,
+      #0e152e 5.5%,
+      #e8d5b7 8%,
+      #0e152e 11%
+    ),
+    repeating-linear-gradient(
+      133deg,
+      #0e152e 0%,
+      hsl(180, 90%, 70%) 3.8%,
+      hsl(240, 90%, 70%) 7.6%,
+      hsl(300, 90%, 70%) 11.4%,
+      hsl(360, 90%, 70%) 15.2%,
+      hsl(60, 90%, 70%) 19%,
+      hsl(120, 90%, 70%) 22.8%,
+      #0e152e 26.6%
+    );
+  background-size: 300% 300%, 200% 200%;
   animation: holo-shift 6s ease infinite;
-  mix-blend-mode: overlay;
+  mix-blend-mode: color-dodge;
+  opacity: 0.7;
   border-radius: inherit;
   pointer-events: none;
   z-index: 1;
+  filter: brightness(0.8) contrast(1.5);
 }
 
 .foil-card > * {
@@ -97,6 +118,6 @@
 }
 
 @keyframes holo-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%, 100% { background-position: 0% 0%, 0% 0%; }
+  50% { background-position: 100% 100%, 100% 100%; }
 }
