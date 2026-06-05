@@ -94,15 +94,15 @@ export default class extends Controller {
       card.classList.remove("opacity-50", "bg-gray-100")
       card.classList.add("text-white")
       if (this.foilValue) {
-        card.classList.add("bg-gradient-to-br", "from-gray-300", "via-current", "to-gray-300")
-        card.style.backgroundColor = ""
+        card.classList.add("metallicss")
+        card.style.backgroundColor = "#C0C0C0"
       } else {
-        card.classList.remove("bg-gradient-to-br", "from-gray-300", "via-current", "to-gray-300")
+        card.classList.remove("metallicss")
         card.style.backgroundColor = color
       }
     } else {
       card.classList.add("opacity-50", "bg-gray-100")
-      card.classList.remove("text-white", "bg-gradient-to-br", "from-gray-300", "via-current", "to-gray-300")
+      card.classList.remove("text-white", "metallicss")
       card.style.backgroundColor = ""
     }
 

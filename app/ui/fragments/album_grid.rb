@@ -68,7 +68,7 @@ class UI::Fragments::AlbumGrid < UI::Base
     is_team_photo = sticker.name == "Team Photo"
 
     card_bg_class = if glued && is_foil
-      "bg-gradient-to-br from-gray-300 via-current to-gray-300"
+      "metallicss"
     elsif glued
       ""
     else
@@ -77,7 +77,7 @@ class UI::Fragments::AlbumGrid < UI::Base
 
     div(
       class: "relative rounded-md border border-gray-900 p-1 cursor-pointer select-none aspect-[5/7] flex flex-col #{glued ? "text-white" : "opacity-50"} #{card_bg_class}",
-      style: (glued && !is_foil) ? "background-color: #{color}" : "",
+      style: glued ? "background-color: #{is_foil ? "#C0C0C0" : color}" : "",
       data: {
         controller: "album-card",
         album_card_sticker_id_value: sticker.id,
