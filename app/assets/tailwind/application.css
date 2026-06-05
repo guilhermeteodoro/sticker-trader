@@ -85,17 +85,17 @@
   background:
     repeating-conic-gradient(
       from 0deg,
-      hsl(0, 80%, 70%) 0deg,
-      hsl(60, 80%, 70%) 60deg,
-      hsl(120, 80%, 70%) 120deg,
-      hsl(180, 80%, 70%) 180deg,
-      hsl(240, 80%, 70%) 240deg,
-      hsl(300, 80%, 70%) 300deg,
-      hsl(360, 80%, 70%) 360deg
-    ) 0 0 / 8px 8px;
+      hsl(0, 60%, 75%) 0deg,
+      hsl(60, 60%, 75%) 60deg,
+      hsl(120, 60%, 75%) 120deg,
+      hsl(180, 60%, 75%) 180deg,
+      hsl(240, 60%, 75%) 240deg,
+      hsl(300, 60%, 75%) 300deg,
+      hsl(360, 60%, 75%) 360deg
+    ) 0 0 / 4px 4px;
   animation: holo-shift 4s linear infinite;
   mix-blend-mode: overlay;
-  opacity: 0.8;
+  opacity: 0.5;
   border-radius: inherit;
   pointer-events: none;
   z-index: 1;
