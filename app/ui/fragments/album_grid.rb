@@ -82,10 +82,11 @@ class UI::Fragments::AlbumGrid < UI::Base
         action: "click->album-card#glue"
       }
     ) do
-      # Top row: number + foil
+      # Top row: foil + number
       div(class: "flex items-start justify-between") do
-        span(class: "font-black text-sm leading-none tracking-tight tabular-nums") { sticker.number }
         span(class: "text-[9px]") { "✨" } if is_foil
+        span(class: "text-[9px]") { "" } unless is_foil
+        span(class: "font-black text-sm leading-none tracking-tight tabular-nums") { sticker.number }
       end
 
       # Extras badge (green circle)
