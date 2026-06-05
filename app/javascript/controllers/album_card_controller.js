@@ -109,10 +109,10 @@ export default class extends Controller {
       if (this.copiesValue > 0) {
         this.badgeTarget.textContent = this.copiesValue
         this.badgeTarget.classList.remove("hidden")
-        card.classList.add("shadow-[3px_3px_0_#4b5563]", "border-transparent")
+        card.classList.add("shadow-[3px_3px_0_#1f2937]", "border-transparent")
       } else {
         this.badgeTarget.classList.add("hidden")
-        card.classList.remove("shadow-[3px_3px_0_#4b5563]", "border-transparent")
+        card.classList.remove("shadow-[3px_3px_0_#1f2937]", "border-transparent")
       }
     }
 

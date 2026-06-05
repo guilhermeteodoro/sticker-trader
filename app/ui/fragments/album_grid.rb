@@ -74,7 +74,7 @@ class UI::Fragments::AlbumGrid < UI::Base
 
     glued_classes = "opacity-100 text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]"
     unglued_classes = "opacity-50 cursor-pointer text-gray-600 bg-gray-100"
-    copies_classes = has_copies ? "shadow-[3px_3px_0_#4b5563] border-transparent" : ""
+    copies_classes = has_copies ? "shadow-[3px_3px_0_#1f2937] border-transparent" : ""
 
     card_classes = glued ? glued_classes : unglued_classes
     card_classes += " #{copies_classes}" if has_copies
@@ -128,7 +128,7 @@ class UI::Fragments::AlbumGrid < UI::Base
 
         # Extras count - blends with shadow
         span(
-          class: "absolute -bottom-1 -right-1 bg-[#4b5563] rounded text-[9px] font-bold text-white w-4 h-4 flex items-center justify-center #{copies > 0 ? "" : "hidden"}",
+          class: "absolute -bottom-1 -right-1 bg-[#1f2937] rounded text-[9px] font-bold text-white w-4 h-4 flex items-center justify-center #{copies > 0 ? "" : "hidden"}",
           data: { album_card_target: "badge" }
         ) { copies }
       end
