@@ -80,30 +80,18 @@ class Views::Users::ShowOwner < Views::LoggedIn
   def render_duplicates
     duplicates = @user.duplicate_stickers
 
-    div do
-      Collapsible(open: true) do
-        div(class: "flex items-center justify-between mb-2") do
-          div(class: "flex items-center gap-2") do
-            CollapsibleTrigger do
-              Button(variant: :ghost, icon: true) do
-                span(class: "transition-transform duration-200", data: { ruby_ui__collapsible_target: "icon" }) { "⬇️" }
-              end
-            end
+    div(class: "mt-8") do
+      div(class: "flex items-center gap-2 mb-4") do
+        Heading(level: 3) { t(".available_for_trade") }
+        Badge(variant: :outline) { t(".duplicates", count: @user.duplicates_count) }
+      end
 
-            Heading(level: 3) { t(".available_for_trade") }
-            Badge(variant: :outline) { t(".duplicates", count: @user.duplicates_count) }
-          end
-        end
-
-        CollapsibleContent do
-          Card(class: "pt-6 bg-card") do
-            CardContent do
-              if duplicates.any?
-                render UI::Fragments::StickerList.new(stickers: duplicates, copyable: true)
-              else
-                p(class: "text-muted-foreground italic") { t(".no_duplicates") }
-              end
-            end
+      Card(class: "pt-6 bg-card") do
+        CardContent do
+          if duplicates.any?
+            render UI::Fragments::StickerList.new(stickers: duplicates, copyable: true)
+          else
+            p(class: "text-muted-foreground italic") { t(".no_duplicates") }
           end
         end
       end
