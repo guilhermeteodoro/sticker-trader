@@ -72,13 +72,16 @@ class UI::Fragments::AlbumGrid < UI::Base
 
     has_copies = copies > 0
 
-    state_classes = [ "sticker-card" ]
-    state_classes << "is-glued" if glued
-    state_classes << "has-copies" if has_copies
-    state_classes << "foil-card" if glued && is_foil
+    glued_classes = "opacity-100 text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]"
+    unglued_classes = "opacity-50 cursor-pointer text-gray-600 bg-gray-100"
+    copies_shadow = "shadow-[3px_3px_0_rgba(0,0,0,0.3)]"
+
+    card_classes = glued ? glued_classes : unglued_classes
+    card_classes += " #{copies_shadow}" if has_copies
+    card_classes += " foil-card" if glued && is_foil
 
     div(
-      class: "relative border rounded border-gray-300 p-1 select-none aspect-5/7 flex flex-col hover:scale-105 hover:brightness-105 transition-transform #{state_classes.join(" ")}",
+      class: "relative border rounded border-gray-300 p-1 select-none aspect-5/7 flex flex-col hover:scale-105 hover:brightness-105 transition-transform #{card_classes}",
       style: glued ? "background-color: #{color}" : "",
       data: {
         controller: "album-card",
@@ -125,7 +128,7 @@ class UI::Fragments::AlbumGrid < UI::Base
 
         # Extras count - bottom right (carved)
         span(
-          class: "absolute bottom-0.5 right-1 text-[10px] font-black sticker-carved #{copies > 0 ? "" : "hidden"}",
+          class: "absolute bottom-0.5 right-1 text-[10px] font-black text-black/25 [text-shadow:_0_1px_0_rgba(255,255,255,0.4),_0_-1px_0_rgba(0,0,0,0.2)] #{copies > 0 ? "" : "hidden"}",
           data: { album_card_target: "badge" }
         ) { copies }
       end
