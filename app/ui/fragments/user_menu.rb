@@ -9,11 +9,11 @@ class UI::Fragments::UserMenu < UI::Base
     div do
       Popover(options: { placement: "bottom-end" }) do
         PopoverTrigger do
-          button(type: "button", class: "flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 shadow-sm hover:bg-accent transition-colors") do
+          button(type: "button", class: "flex items-center gap-2 rounded-full border border-border bg-card px-3 py-2 shadow-sm hover:bg-accent transition-colors") do
             span(class: "w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium") do
-              @user.name[0].upcase
+              @user.initials
             end
-            span(class: "text-sm font-medium text-foreground") { @user.name }
+            span(class: "text-sm font-medium text-foreground hidden sm:inline-block") { @user.name }
           end
         end
 

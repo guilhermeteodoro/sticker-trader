@@ -64,6 +64,10 @@ class User < ApplicationRecord
     slug
   end
 
+  def initials
+    name.squish.split(" ").map { it[0].upcase }.join
+  end
+
   private
 
   def generate_slug
