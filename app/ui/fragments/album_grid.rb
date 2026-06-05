@@ -89,6 +89,7 @@ class UI::Fragments::AlbumGrid < UI::Base
 
       # Sticker label
       span(class: "font-mono font-medium leading-tight block") { "#{country.code} #{sticker.number}" }
+      span(class: "block text-[8px] leading-tight truncate mt-0.5 opacity-75") { sticker.name } if sticker.name
 
       # +/- actions (invisible but space-reserving when not glued)
       div(
