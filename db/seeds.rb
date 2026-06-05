@@ -58,7 +58,7 @@ COUNTRIES_DATA = [
 # Parse sticker names from docs/groups/ markdown files
 def load_sticker_names
   names = {}
-  Dir.glob(Rails.root.join("docs/groups/group_*.md")).each do |file|
+  Dir.glob(Rails.root.join("docs/groups/*.md")).each do |file|
     File.readlines(file).each do |line|
       next unless line.match?(/^- [A-Z]{2,3} \d+/)
       # Format: "- MEX 1 - Team Logo (Foil)"
