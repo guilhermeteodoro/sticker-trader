@@ -123,7 +123,7 @@ class UI::Fragments::AlbumGrid < UI::Base
         data: { album_card_target: "actions" }
       ) do
         btn_color = light_color?(color) ? "bg-black/20 text-gray-900" : "bg-white/30 text-white"
-        button_class = "w-4 h-4 rounded-lg #{btn_color} text-sm font-bold active:scale-95 cursor-pointer hover:opacity-70"
+        button_class = "rounded-lg #{btn_color} text-sm font-bold active:scale-95 cursor-pointer hover:opacity-70"
 
         button(
           type: "button",
