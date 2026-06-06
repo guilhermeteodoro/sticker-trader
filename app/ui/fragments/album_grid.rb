@@ -8,7 +8,7 @@ class UI::Fragments::AlbumGrid < UI::Base
   end
 
   def view_template
-    div(class: "space-y-2 px-2", data: { controller: "album-toggle" }) do
+    div(class: "space-y-1 px-2", data: { controller: "album-toggle" }) do
       div(class: "flex items-center justify-between mb-2") do
         Heading(level: 3) { t(".title") }
         button(
@@ -31,6 +31,13 @@ class UI::Fragments::AlbumGrid < UI::Base
 
   private
 
+  def light_color?(hex)
+    return false unless hex
+    r, g, b = hex.match(/#(..)(..)(..)/).captures.map { |c| c.to_i(16) }
+    luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255.0
+    luminance > 0.55
+  end
+
   def render_country_section(country, stickers)
     owned = stickers.count { |s| @user_stickers_index.key?(s.id) }
     total = stickers.size
@@ -38,16 +45,20 @@ class UI::Fragments::AlbumGrid < UI::Base
 
     Collapsible do
       CollapsibleTrigger do
-        div(class: "flex items-center gap-2 py-3 px-3 cursor-pointer bg-muted/50 rounded-lg") do
+        div(
+          class: "flex items-center gap-2 py-3 px-3 cursor-pointer bg-gray-200 text-gray-800 rounded-lg",
+          data: { ruby_ui__collapsible_target: "trigger" }
+        ) do
           span(class: "transition-transform duration-200 text-sm", data: { ruby_ui__collapsible_target: "icon" }) { "▼" }
           span(class: "font-semibold text-sm") { "#{country.emoji} #{country.code}" }
-          span(class: "text-xs text-muted-foreground") { "#{owned}/#{total}" }
-          span(class: "text-xs text-muted-foreground") { "(#{dups} dups)" } if dups > 0
+          span(class: "italic font-extralight font-stretch-50% text-sm text-gray-500") { country.name }
+          span(class: "text-xs text-gray-500") { "#{owned}/#{total}" }
+          span(class: "text-xs text-gray-500") { "(#{dups} dups)" } if dups > 0
         end
       end
 
       CollapsibleContent(class: "hidden") do
-        div(class: "grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2 p-2") do
+        div(class: "grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-1.5 p-2 bg-gray-200 rounded-b-lg") do
           stickers.each do |sticker|
             render_card(sticker, country)
           end
@@ -64,9 +75,21 @@ class UI::Fragments::AlbumGrid < UI::Base
 
     base_url = user_user_stickers_path(@user)
     color = country.color || "#6B7280"
+    is_foil = sticker.shiny?
+
+    has_copies = copies > 0
+
+    text_class = light_color?(color) ? "text-gray-900 [text-shadow:_0_1px_0_rgba(255,255,255,0.3)]" : "text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]"
+    glued_classes = "opacity-100 #{text_class} border-gray-700"
+    unglued_classes = "opacity-50 cursor-pointer text-gray-600 bg-gray-100"
+    copies_classes = has_copies ? "shadow-[3px_3px_0_#374151]" : ""
+
+    card_classes = glued ? glued_classes : unglued_classes
+    card_classes += " #{copies_classes}" if has_copies
+    card_classes += " foil-card" if glued && is_foil
 
     div(
-      class: "relative rounded-lg border p-2 text-center text-xs cursor-pointer select-none #{glued ? "text-white border-transparent" : "text-gray-600 border-gray-300 bg-gray-50"}",
+      class: "relative border rounded border-gray-300 p-1 select-none aspect-5/7 flex flex-col hover:scale-105 hover:brightness-105 transition-transform #{card_classes}",
       style: glued ? "background-color: #{color}" : "",
       data: {
         controller: "album-card",
@@ -75,37 +98,72 @@ class UI::Fragments::AlbumGrid < UI::Base
         album_card_copies_value: copies,
         album_card_glued_value: glued,
         album_card_color_value: color,
+        album_card_foil_value: is_foil,
+        album_card_dark_text_value: light_color?(color),
         album_card_create_url_value: base_url,
         album_card_update_url_value: glued ? "#{base_url}/#{user_sticker_id}" : "",
         album_card_destroy_url_value: glued ? "#{base_url}/#{user_sticker_id}" : "",
         action: "click->album-card#glue"
       }
     ) do
-      # Badge for copies count
-      span(
-        class: "absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full w-5 h-5 text-[10px] flex items-center justify-center font-bold #{copies > 0 ? "" : "hidden"}",
-        data: { album_card_target: "badge" }
-      ) { copies.to_s }
+      # Top row: country code left, number right
+      div(class: "flex items-start justify-between text-sm leading-none") do
+        span(class: "font-extralight text-nowrap font-stretch-50% opacity-50") { sticker.country.code }
+        span(class: "font-black tracking-tight tabular-nums") { sticker.number }
+      end
 
-      # Sticker label
-      span(class: "font-mono font-medium leading-tight block") { "#{country.code} #{sticker.number}" }
-      span(class: "block text-[8px] leading-tight truncate mt-0.5 opacity-75") { sticker.name } if sticker.name
+      # Center: player name
+      div(class: "flex-1 flex flex-col items-center justify-center text-center px-0.5") do
+        render_sticker_name(sticker)
+      end
 
       # +/- actions (invisible but space-reserving when not glued)
       div(
-        class: "flex items-center justify-center gap-1 mt-1 #{glued ? "" : "invisible"}",
+        class: "grid grid-cols-2 gap-1 #{glued ? "" : "invisible"}",
         data: { album_card_target: "actions" }
       ) do
+        btn_color = light_color?(color) ? "bg-black/20 text-gray-900" : "bg-white/30 text-white"
+        button_class = "w-4 h-4 rounded-lg #{btn_color} text-sm font-bold active:scale-95 cursor-pointer hover:opacity-70"
+
         button(
           type: "button",
-          class: "w-6 h-6 rounded bg-white/30 text-white text-sm font-bold active:scale-95",
+          class: button_class,
           data: { action: "click->album-card#decrement" }
         ) { "−" }
         button(
           type: "button",
-          class: "w-6 h-6 rounded bg-white/30 text-white text-sm font-bold active:scale-95",
+          class: button_class,
           data: { action: "click->album-card#increment" }
         ) { "+" }
+
+        # Extras count - blends with shadow
+        span(
+          class: "absolute -bottom-1 -right-1 bg-[#374151] rounded text-[9px] font-bold text-white w-4 h-4 flex items-center justify-center #{copies > 0 ? "" : "hidden"}",
+          data: { album_card_target: "badge" }
+        ) { copies }
+      end
+    end
+  end
+
+  def render_sticker_name(sticker)
+    return unless sticker.name
+
+    if sticker.shiny? || sticker.name == "Team Photo"
+      # FWC specials + Team Logo + Team Photo: show full name centered
+      span(class: "text-[9px] sm:text-[10px] leading-tight opacity-75 italic") { sticker.name.sub(" (Foil)", "") }
+    else
+      # Players (normal + coke): Last Name bold, First Name below
+      parts = sticker.name.split(" ", 2)
+      if parts.size == 1
+        span(class: "text-[9px] sm:text-[10px] font-bold leading-tight") { parts[0] }
+      else
+        name_parts = sticker.name.split
+        if name_parts.size >= 2
+          last_name = name_parts.last
+          first_name = name_parts[0..-2].join(" ")
+        end
+        span(class: "text-[9px] sm:text-[10px] font-bold leading-tight truncate max-w-full") { last_name }
+        span(class: "text-[7px] sm:text-[8px] leading-tight truncate max-w-full opacity-75") { first_name }
       end
     end
   end

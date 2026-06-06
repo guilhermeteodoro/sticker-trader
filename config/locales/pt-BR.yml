@@ -30,6 +30,9 @@ pt-BR:
         title: "Álbum"
         expand_all: "Expandir tudo"
         collapse_all: "Recolher tudo"
+        unglue_confirmation: "Remover esta figurinha da sua coleção?"
+        cancel: "Cancelar"
+        unglue: "Remover"
 
   trades:
     create:

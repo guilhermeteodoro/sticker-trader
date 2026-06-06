@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ['content', 'icon']
+  static targets = ['content', 'icon', 'trigger']
   static values = {
     open: {
       type: Boolean,
@@ -51,6 +51,11 @@ export default class extends Controller {
     if (this.hasIconTarget) {
       this.iconTarget.style.transform = 'rotate(0deg)'
     }
+
+    if (this.hasTriggerTarget) {
+      this.triggerTarget.classList.remove('rounded-lg')
+      this.triggerTarget.classList.add('rounded-t-lg')
+    }
   }
 
   #hide(animate) {
@@ -75,6 +80,11 @@ export default class extends Controller {
 
     if (this.hasIconTarget) {
       this.iconTarget.style.transform = 'rotate(-90deg)'
+    }
+
+    if (this.hasTriggerTarget) {
+      this.triggerTarget.classList.remove('rounded-t-lg')
+      this.triggerTarget.classList.add('rounded-lg')
     }
   }
 
