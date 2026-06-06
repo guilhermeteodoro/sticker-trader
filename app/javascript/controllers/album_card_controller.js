@@ -10,6 +10,7 @@ export default class extends Controller {
     glued: Boolean,
     color: String,
     foil: Boolean,
+    darkText: Boolean,
     createUrl: String,
     updateUrl: String,
     destroyUrl: String
@@ -92,7 +93,14 @@ export default class extends Controller {
 
     if (this.gluedValue) {
       card.classList.remove("opacity-50", "cursor-pointer", "text-gray-600", "bg-gray-100", "border-gray-300")
-      card.classList.add("opacity-100", "text-white", "[text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]", "border-gray-700")
+      card.classList.add("opacity-100", "border-gray-700")
+      if (this.darkTextValue) {
+        card.classList.add("text-gray-900", "[text-shadow:_0_1px_0_rgba(255,255,255,0.3)]")
+        card.classList.remove("text-white", "[text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]")
+      } else {
+        card.classList.add("text-white", "[text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]")
+        card.classList.remove("text-gray-900", "[text-shadow:_0_1px_0_rgba(255,255,255,0.3)]")
+      }
       if (this.foilValue) {
         card.classList.add("foil-card")
       } else {
@@ -101,7 +109,7 @@ export default class extends Controller {
       card.style.backgroundColor = color
     } else {
       card.classList.add("opacity-50", "cursor-pointer", "text-gray-600", "bg-gray-100", "border-gray-300")
-      card.classList.remove("opacity-100", "text-white", "[text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]", "foil-card", "border-gray-700")
+      card.classList.remove("opacity-100", "text-white", "text-gray-900", "[text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]", "[text-shadow:_0_1px_0_rgba(255,255,255,0.3)]", "foil-card", "border-gray-700")
       card.style.backgroundColor = ""
     }
 

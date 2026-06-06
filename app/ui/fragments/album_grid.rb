@@ -31,7 +31,12 @@ class UI::Fragments::AlbumGrid < UI::Base
 
   private
 
-  private
+  def light_color?(hex)
+    return false unless hex
+    r, g, b = hex.match(/#(..)(..)(..)/).captures.map { |c| c.to_i(16) }
+    luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255.0
+    luminance > 0.55
+  end
 
   def render_country_section(country, stickers)
     owned = stickers.count { |s| @user_stickers_index.key?(s.id) }
@@ -74,7 +79,8 @@ class UI::Fragments::AlbumGrid < UI::Base
 
     has_copies = copies > 0
 
-    glued_classes = "opacity-100 text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.5)] border-gray-700"
+    text_class = light_color?(color) ? "text-gray-900 [text-shadow:_0_1px_0_rgba(255,255,255,0.3)]" : "text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]"
+    glued_classes = "opacity-100 #{text_class} border-gray-700"
     unglued_classes = "opacity-50 cursor-pointer text-gray-600 bg-gray-100"
     copies_classes = has_copies ? "shadow-[3px_3px_0_#374151]" : ""
 
@@ -93,6 +99,7 @@ class UI::Fragments::AlbumGrid < UI::Base
         album_card_glued_value: glued,
         album_card_color_value: color,
         album_card_foil_value: is_foil,
+        album_card_dark_text_value: light_color?(color),
         album_card_create_url_value: base_url,
         album_card_update_url_value: glued ? "#{base_url}/#{user_sticker_id}" : "",
         album_card_destroy_url_value: glued ? "#{base_url}/#{user_sticker_id}" : "",
