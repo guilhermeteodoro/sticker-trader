@@ -84,8 +84,8 @@ en:
           waiting_for_other: "Waiting for %{name}"
           other_accepted: "%{name} accepted"
         agreement_info:
-          explanation: "Both users must accept the trade for it to be confirmed. Edit the stickers until you're both happy, then accept."
-          you_accepted: "You accepted this trade. Waiting for %{name} to accept. If either side edits the trade, acceptances are reset."
+          explanation: "Both users must accept for the trade to be confirmed. If either side edits the stickers, acceptances reset. Use 'Auto agree' to lock your acceptance through edits."
+          you_accepted: "You accepted this trade. Waiting for %{name} to accept. If either side edits the trade, your acceptance resets (unless you used auto agree)."
           they_accepted: "%{name} already accepted this trade. Review the stickers and accept to confirm the deal."
           both_accepted: "Both sides have accepted. The trade is confirmed!"
       index:

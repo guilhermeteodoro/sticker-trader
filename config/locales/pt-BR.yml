@@ -96,8 +96,8 @@ pt-BR:
           waiting_for_other: "Aguardando %{name}"
           other_accepted: "%{name} aceitou"
         agreement_info:
-          explanation: "Ambos os usuários precisam aceitar a troca para ela ser confirmada. Edite as figurinhas até estarem satisfeitos e então aceite."
-          you_accepted: "Você aceitou esta troca. Aguardando %{name} aceitar. Se alguém editar a troca, os aceites são resetados."
+          explanation: "Ambos precisam aceitar para confirmar a troca. Se alguém editar as figurinhas, os aceites resetam. Use 'Aceitar automaticamente' para travar seu aceite nas edições."
+          you_accepted: "Você aceitou esta troca. Aguardando %{name} aceitar. Se alguém editar a troca, seu aceite reseta (a menos que tenha usado aceite automático)."
           they_accepted: "%{name} já aceitou esta troca. Revise as figurinhas e aceite para confirmar o negócio."
           both_accepted: "Ambos os lados aceitaram. A troca está confirmada!"
       index:
