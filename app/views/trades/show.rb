@@ -89,7 +89,7 @@ class Views::Trades::Show < Views::LoggedIn
         Collapsible(open: true, persist_key: "trade_#{@trade.id}_pool_#{giver.id}",
           class: "rounded-md border border-dashed") do
           CollapsibleTrigger(class: "flex items-center justify-between p-3 cursor-pointer hover:bg-muted/50 transition-colors") do
-            p(class: "text-xs font-semibold text-muted-foreground") { t(".available") }
+            p(class: "text-xs font-semibold text-muted-foreground") { t(".available", count: pool_stickers.size) }
             span(class: "text-xs text-muted-foreground transition-transform", style: "display:inline-block",
               data: { ruby_ui__collapsible_target: "icon" }) { "▾" }
           end
@@ -257,10 +257,23 @@ class Views::Trades::Show < Views::LoggedIn
           end
         end
 
-        # Cancel button
-        form(action: cancel_trade_path(@trade), method: "post") do
-          input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-          Button(type: :submit, variant: :destructive) { t(".cancel") }
+        # Reject button with confirmation dialog
+        Dialog do
+          DialogTrigger do
+            Button(variant: :destructive) { t(".reject") }
+          end
+          DialogContent do
+            DialogHeader do
+              DialogTitle { t(".reject_confirm.title") }
+              DialogDescription { t(".reject_confirm.description", name: @other_user.name) }
+            end
+            DialogFooter do
+              form(action: cancel_trade_path(@trade), method: "post") do
+                input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+                Button(type: :submit, variant: :destructive) { t(".reject_confirm.confirm") }
+              end
+            end
+          end
         end
       end
     end
