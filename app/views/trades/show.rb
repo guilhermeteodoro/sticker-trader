@@ -65,32 +65,29 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   def render_user_card(title:, trade_stickers:, pool_stickers:, giver:, removable:)
-    Card do
-      CardHeader(class: "pb-2") do
-        CardTitle(class: "text-sm") { title }
-      end
-      CardContent do
-        # In trade section (green-tinted)
-        div(class: "rounded-md border border-green-200 bg-green-50 p-3 mb-3") do
-          p(class: "text-xs font-semibold text-muted-foreground mb-2") do
-            plain t(".in_trade", count: trade_stickers.size)
-          end
-          if trade_stickers.any?
-            render_grouped_trade_stickers(trade_stickers, removable: removable)
-          else
-            p(class: "text-muted-foreground italic text-sm") { t(".empty_zone") }
-          end
-        end
+    div do
+      p(class: "text-sm font-semibold mb-2") { title }
 
-        # Available pool section (dashed border, only during negotiation)
-        unless @trade.agreed?
-          div(class: "rounded-md border border-dashed p-3") do
-            p(class: "text-xs font-semibold text-muted-foreground mb-2") { t(".available") }
-            if pool_stickers.any?
-              render_grouped_pool_stickers(pool_stickers, giver: giver)
-            else
-              p(class: "text-muted-foreground italic text-sm") { t(".empty_pool") }
-            end
+      # In trade section (green-tinted)
+      div(class: "rounded-md border border-green-200 bg-green-50 p-3 mb-3") do
+        p(class: "text-xs font-semibold text-muted-foreground mb-2") do
+          plain t(".in_trade", count: trade_stickers.size)
+        end
+        if trade_stickers.any?
+          render_grouped_trade_stickers(trade_stickers, removable: removable)
+        else
+          p(class: "text-muted-foreground italic text-sm") { t(".empty_zone") }
+        end
+      end
+
+      # Available pool section (dashed border, only during negotiation)
+      unless @trade.agreed?
+        div(class: "rounded-md border border-dashed p-3") do
+          p(class: "text-xs font-semibold text-muted-foreground mb-2") { t(".available") }
+          if pool_stickers.any?
+            render_grouped_pool_stickers(pool_stickers, giver: giver)
+          else
+            p(class: "text-muted-foreground italic text-sm") { t(".empty_pool") }
           end
         end
       end
