@@ -308,7 +308,7 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   def render_agree_split_button
-    div(class: "inline-flex items-stretch rounded-md shadow-sm", data: { controller: "split-button" }) do
+    div(class: "inline-flex items-stretch rounded-md shadow-sm", data: { controller: "split-button", split_button_key_value: "trade_agree_preference" }) do
       form(
         action: agree_trade_path(@trade),
         method: "post",
