@@ -213,7 +213,6 @@ Omit empty sections. File-level docs are rare — only when a file outgrows its 
 When the user requests a durable behavior change (e.g., "always do X", "never do Y", "I prefer Z"), persist it immediately in this section or in the relevant child AGENTS.md file. Do not wait for the end of the task.
 
 - **DOX-first editing is non-negotiable.** Before writing any source code, read the DOX chain for every file you intend to touch. Never skip this step due to momentum, context, or familiarity. If you catch yourself editing without having read DOX, stop immediately, read them, and course-correct.
-- **Always use `replace block N` when rewriting entire methods or blocks.** Never hand-count `end` lines with `replace N..M` for full method rewrites — tree-sitter resolves the closing line automatically and eliminates stray `end` bugs.
 
 ## Child DOX Index
 
