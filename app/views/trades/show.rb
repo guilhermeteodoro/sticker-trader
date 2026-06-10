@@ -53,7 +53,7 @@ class Views::Trades::Show < Views::LoggedIn
         trade_stickers: stickers_given_by(@current_user),
         pool_stickers: available_pool_for(@current_user),
         giver: @current_user,
-        removable: !@trade.agreed?
+        removable: editable?
       )
 
       render_user_card(
@@ -61,7 +61,7 @@ class Views::Trades::Show < Views::LoggedIn
         trade_stickers: stickers_given_by(@other_user),
         pool_stickers: available_pool_for(@other_user),
         giver: @other_user,
-        removable: !@trade.agreed?
+        removable: editable?
       )
     end
 
@@ -85,7 +85,7 @@ class Views::Trades::Show < Views::LoggedIn
       end
 
       # Available pool section (dashed border, only during negotiation)
-      unless @trade.agreed?
+      unless @trade.agreed? || @trade.accepted_by?(@current_user)
         render UI::Components::Collapsible.new(open: true,
           persist_key: "trade_#{@trade.id}_pool_#{giver.id}",
           class: "rounded-md border border-dashed") do |c|
@@ -347,6 +347,10 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   # Helpers
+
+  def editable?
+    !@trade.agreed? && !@trade.accepted_by?(@current_user)
+  end
 
   def stickers_given_by(user)
     @trade.trade_stickers.includes(sticker: :country).where(giver: user).order("stickers.position")
