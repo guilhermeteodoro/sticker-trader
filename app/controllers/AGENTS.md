@@ -13,4 +13,5 @@ HTTP request handlers. Thin — delegate to services, render Phlex views.
 - `UserStickersController#glue_all` transitions `to_be_glued` stickers to `glued` (or `duplicate` if already owned).
 - Flash messages use i18n keys.
 - Soft delete via `discard!` — never `destroy!` for user-facing deletions (trades, user_stickers).
+- Guard invalid state transitions in controller actions (e.g., check `agreed?` before `discard!`). Never override gem methods like `discard` — use explicit checks.
 - `AnonymousTradesController` handles one-sided bookkeeping for trades with non-users. Self-referencing trade (user_a = user_b = current_user), immediately agreed + confirmed, soft-deletes given duplicates and creates `to_be_glued` rows for received stickers.

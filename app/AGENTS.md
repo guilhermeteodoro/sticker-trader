@@ -6,6 +6,12 @@ Application source code. Standard Rails layout with one deviation: UI components
 
 All runtime application code. This doc owns guidance for `app/helpers/`, `app/assets/`, `app/javascript/`, and `app/jobs/` — folders without their own AGENTS.md files.
 
+## JavaScript Controllers (`app/javascript/controllers/`)
+
+- `ui_state_controller.js` — generalized sessionStorage persistence. Manages boolean `open` state with toggle action. Exposes static `read(key, name)` / `write(key, name, value)` for other controllers to reuse without mounting the controller.
+- Other controllers that need persistence should import and use `UiStateController.read/write` rather than accessing sessionStorage directly.
+- Stimulus controller registration lives in `index.js` — keep alphabetical-ish, one import+register pair per controller.
+
 # Local Contracts
 
 - No business logic in controllers — delegate to services or models
