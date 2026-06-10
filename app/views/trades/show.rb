@@ -13,16 +13,18 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   def render_title
-    div do
-      Heading(level: 2) { t(".title", name: @other_user.name) }
-      render_status_badge
+    div(class: "flex items-center justify-between gap-4") do
+      div do
+        Heading(level: 2) { t(".title", name: @other_user.name) }
+        render_status_badge
+      end
     end
   end
 
   def render_content
     turbo_frame(id: "trade_#{@trade.id}_zones") do
-      render_trade_zones
       render_actions
+      render_trade_zones
     end
   end
 
@@ -222,7 +224,7 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   def render_actions
-    div(class: "mt-6 flex gap-3") do
+    div(class: "flex gap-3 justify-end") do
       unless @trade.agreed?
         if @trade.accepted_by?(@current_user) || @trade.auto_agreed_by?(@current_user)
           form(action: withdraw_trade_path(@trade), method: "post", class: "inline") do
