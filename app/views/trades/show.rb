@@ -20,8 +20,10 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   def render_content
-    render_trade_zones
-    render_actions
+    turbo_frame(id: "trade_#{@trade.id}_zones") do
+      render_trade_zones
+      render_actions
+    end
   end
 
   private
@@ -149,7 +151,7 @@ class Views::Trades::Show < Views::LoggedIn
       span { "#{sticker.country.code} #{sticker.number}" }
 
       if removable
-        form(action: trade_path(@trade), method: "post", class: "inline", data: { turbo_action: "replace" }) do
+        form(action: trade_path(@trade), method: "post", class: "inline", data: { turbo_frame: "trade_#{@trade.id}_zones" }) do
           input(type: "hidden", name: "_method", value: "patch")
           input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
           input(type: "hidden", name: "action_type", value: "remove")
@@ -163,7 +165,7 @@ class Views::Trades::Show < Views::LoggedIn
   def render_pool_sticker_chip(sticker, giver:)
     color = sticker.country.color || "#6B7280"
 
-    form(action: trade_path(@trade), method: "post", class: "inline", data: { turbo_action: "replace" }) do
+    form(action: trade_path(@trade), method: "post", class: "inline", data: { turbo_frame: "trade_#{@trade.id}_zones" }) do
       input(type: "hidden", name: "_method", value: "patch")
       input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
       input(type: "hidden", name: "action_type", value: "add")
