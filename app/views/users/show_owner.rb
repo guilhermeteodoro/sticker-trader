@@ -64,8 +64,19 @@ class Views::Users::ShowOwner < Views::LoggedIn
 
   def render_album_grid
     stickers_by_country = Sticker.includes(:country).ordered.group_by(&:country)
-    user_stickers_index = @user.user_stickers.each_with_object({}) do |us, hash|
-      hash[us.sticker_id] = { id: us.id, copies: us.copies }
+    user_stickers_index = {}
+    @user.user_stickers.each do |us|
+      case us.state
+      when "glued"
+        user_stickers_index[us.sticker_id] ||= { id: us.id, copies: 0, state: "glued" }
+      when "duplicate"
+        user_stickers_index[us.sticker_id] ||= { id: nil, copies: 0, state: nil }
+        user_stickers_index[us.sticker_id][:copies] += 1
+      when "to_be_glued"
+        user_stickers_index[us.sticker_id] ||= { id: nil, copies: 0, state: nil }
+        user_stickers_index[us.sticker_id][:to_be_glued] = true
+        user_stickers_index[us.sticker_id][:to_be_glued_id] = us.id
+      end
     end
 
     div(class: "mb-6") do

@@ -211,6 +211,8 @@ Omit empty sections. File-level docs are rare — only when a file outgrows its 
 
 When the user requests a durable behavior change (e.g., "always do X", "never do Y", "I prefer Z"), persist it immediately in this section or in the relevant child DOX file. Do not wait for the end of the task.
 
+- **DOX-first editing is non-negotiable.** Before writing any source code, read the DOX chain for every file you intend to touch. Never skip this step due to momentum, context, or familiarity. If you catch yourself editing without having read DOX, stop immediately, read them, and course-correct.
+
 Load the `dox` skill for operational helpers (commands, templates, orphan checks).
 
 ## Child DOX Index
