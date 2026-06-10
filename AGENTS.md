@@ -125,12 +125,13 @@ Examples:
 
 ### Read Before Editing
 
-1. Identify every file or folder you expect to touch
-2. Walk from the repository root to each target path
-3. Read this root `AGENTS.md`
+1. Read this root `AGENTS.md`
+2. Identify every file or folder you expect to touch
+3. Walk from the repository root to each target path
 4. For each path segment, check if `.agents/dox/{accumulated_path}/_index.md` exists — read it if so
-5. Use the nearest DOX file as the local contract; parent docs for repo-wide rules
-6. If docs conflict, the closer doc controls local work details
+5. If a parent DOX file lists a child DOX file whose scope contains the path, read that child and continue from there
+6. Use the nearest DOX file as the local contract; parent docs for repo-wide rules
+7. If docs conflict, the closer doc controls local work details, but no child doc may weaken DOX
 
 Do not rely on memory. Re-read the applicable DOX chain in the current session before editing.
 
@@ -142,8 +143,10 @@ Update the closest owning DOX file when a change affects:
 - purpose, scope, ownership, or responsibilities
 - durable structure, contracts, workflows, or operating rules
 - required inputs, outputs, permissions, constraints, side effects, or artifacts
+- user preferences about behavior, communication, process, organization, or quality
+- DOX file creation, deletion, move, rename, or index contents
 
-Update parent docs when parent-level structure, ownership, or child index changes. Update child docs when parent changes alter local rules. Remove stale or contradictory text immediately.
+Update parent docs when parent-level structure, ownership, workflow, or child index changes. Update child docs when parent changes alter local rules. Remove stale or contradictory text immediately.
 
 Small edits that do not change behavior or contracts may leave docs unchanged, but the DOX pass still must happen.
 
@@ -156,7 +159,9 @@ Small edits that do not change behavior or contracts may leave docs unchanged, b
 
 ### Creating Child Docs
 
-Create `.agents/dox/{path}/_index.md` when a folder becomes a durable boundary with its own purpose, rules, responsibilities, workflow, or quality standards.
+Create `.agents/dox/{path}/_index.md` when a folder becomes a durable boundary with its own purpose, rules, responsibilities, workflow, materials, or quality standards.
+
+Work Guidance must reflect the current standards of the project or user instructions; if there are no specific standards or instructions yet, leave it empty. Verification must reflect an existing check; if no verification framework exists yet, leave it empty and update it when one exists.
 
 Default section order:
 - Purpose
@@ -175,6 +180,7 @@ Omit empty sections. File-level docs are rare — only when a file outgrows its 
 3. Refresh every affected Child DOX Index
 4. Remove stale or contradictory text
 5. Run existing verification when relevant
+6. Report any docs intentionally left unchanged and why
 
 ### Style
 
@@ -184,6 +190,10 @@ Omit empty sections. File-level docs are rare — only when a file outgrows its 
 - Direct bullets with explicit names
 - No duplication across files unless each scope needs a local version
 - Delete stale notes immediately
+
+### User Preferences
+
+When the user requests a durable behavior change, record it in this section or in the relevant child DOX file.
 
 Load the `dox` skill for operational helpers (commands, templates, orphan checks).
 
