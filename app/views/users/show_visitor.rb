@@ -144,6 +144,13 @@ class Views::Users::ShowVisitor < Views::LoggedIn
         input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
         Button(type: :submit, variant: :primary) { t(".new_trade") }
       end
+
+      # Auto-agree button (for in-person trading)
+      form(action: user_trades_path(@user), method: "post") do
+        input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+        input(type: "hidden", name: "auto_agree", value: "true")
+        Button(type: :submit, variant: :outline) { t(".auto_agree") }
+      end
     end
   end
 

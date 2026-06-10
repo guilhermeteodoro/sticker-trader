@@ -151,6 +151,7 @@ en:
         still_has: "%{name} still has to offer (%{count}):"
         consolidate: "Consolidate trade"
         new_trade: "New trade"
+        auto_agree: "Trade now (auto-agree)"
         view_existing_trade: "View existing trade"
       edit:
         title: "Account settings"

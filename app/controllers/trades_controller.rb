@@ -7,13 +7,22 @@ class TradesController < ApplicationController
 
   # POST /u/:user_slug/trades
   # Creates a new trade pre-loaded with balanced suggestion
+  # Pass auto_agree=true for in-person trades (skips negotiation)
   def create
     other_user = User.find_by!(slug: params[:user_slug])
 
     result = TradeComparer.new(current_user, other_user).call
     balanced = result.balanced
 
-    trade = Trade.create!(user_a: current_user, user_b: other_user)
+    auto_agree = params[:auto_agree] == "true"
+
+    trade = Trade.create!(
+      user_a: current_user,
+      user_b: other_user,
+      user_a_accepted_at: auto_agree ? Time.current : nil,
+      user_b_accepted_at: auto_agree ? Time.current : nil,
+      confirmed_at: auto_agree ? Time.current : nil
+    )
 
     # Pre-load with balanced suggestion
     [ :shiny, :coke, :normal ].each do |cat|
