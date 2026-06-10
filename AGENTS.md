@@ -86,6 +86,12 @@ UI code lives in `app/ui/` (components, fragments, layouts) — not `app/views/`
 - All environments use SQLite via `database.yml`
 - Production database lives at `/var/data/production.sqlite3` (Render persistent disk)
 
+## Schema conventions
+
+- **Models own defaults and validations.** Do not add default values at the database level.
+- **DB-level constraints only for race conditions and data integrity** that can't be guaranteed at the app layer: unique indexes, foreign keys, not-null on columns that would corrupt data if nil.
+- When in doubt, keep the constraint in the model and add a DB constraint only if concurrent requests could violate it.
+
 ## Domain language
 
 [CONTEXT.md](CONTEXT.md) is the glossary for this project. When introducing a new domain concept, update CONTEXT.md inline — don't batch. When the user uses a term that conflicts with the glossary, call it out. Keep CONTEXT.md free of implementation details — it's a glossary, not a spec.
