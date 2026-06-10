@@ -122,6 +122,8 @@ This project uses [DOX](https://github.com/agent0ai/dox) — a hierarchical docu
 
 Work products, source materials, instructions, records, assets, and durable docs must stay understandable from the nearest applicable DOX file (`.agents/dox/{path}/_index.md`) plus every parent DOX file above it up to this root.
 
+DOX assumes [CONTEXT.md](CONTEXT.md) has been read. Reference it for domain terminology — don't restate definitions.
+
 ### Path Convention
 
 - Folder contracts → `.agents/dox/{path}/_index.md`
