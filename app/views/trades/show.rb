@@ -94,7 +94,8 @@ class Views::Trades::Show < Views::LoggedIn
           div(class: "flex items-center justify-between p-3 cursor-pointer hover:bg-muted/50 transition-colors",
             data: { action: "click->persistent-collapsible#toggle", persistent_collapsible_target: "trigger" }) do
             p(class: "text-xs font-semibold text-muted-foreground") { t(".available") }
-            span(class: "text-xs text-muted-foreground") { "▸" }
+            span(class: "text-xs text-muted-foreground transition-transform", style: "display:inline-block",
+              data: { persistent_collapsible_target: "icon" }) { "▾" }
           end
           div(data: { persistent_collapsible_target: "content" }, class: "p-3 pt-0") do
             if pool_stickers.any?
