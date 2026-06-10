@@ -224,7 +224,7 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   def render_actions
-    div(class: "flex items-center justify-between") do
+    div(class: "flex flex-col gap-3 md:flex-row md:items-center md:justify-between") do
       # Help text on the left
       unless @trade.agreed?
         p(class: "text-sm text-muted-foreground") { t(".help_text") }
