@@ -22,6 +22,9 @@ application.register("hello", HelloController)
 import ImportFormController from "./import_form_controller"
 application.register("import-form", ImportFormController)
 
+import AgreeModeController from "./agree_mode_controller"
+application.register("agree-mode", AgreeModeController)
+
 import RubyUi__CollapsibleController from "./ruby_ui/collapsible_controller"
 application.register("ruby-ui--collapsible", RubyUi__CollapsibleController)
 

@@ -78,6 +78,7 @@ pt-BR:
         empty_pool: "Nenhuma figurinha disponível"
         in_trade: "Na troca (%{count})"
         available: "Disponíveis"
+        help_text: "Clique nas figurinhas abaixo para editar a troca"
         accept: "Aceitar troca"
         accepted: "Aceito ✓"
         auto_agree: "Aceitar automaticamente"

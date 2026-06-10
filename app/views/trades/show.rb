@@ -224,40 +224,52 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   def render_actions
-    div(class: "flex gap-3 justify-end") do
+    div(class: "flex items-center justify-between") do
+      # Help text on the left
       unless @trade.agreed?
-        if @trade.accepted_by?(@current_user) || @trade.auto_agreed_by?(@current_user)
-          form(action: withdraw_trade_path(@trade), method: "post", class: "inline") do
-            input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-            Button(type: :submit, variant: :outline) do
-              @trade.auto_agreed_by?(@current_user) ? t(".auto_agreed") : t(".accepted")
-            end
-          end
-        else
-          render_agree_split_button
-        end
+        p(class: "text-sm text-muted-foreground") { t(".help_text") }
       end
 
-      # Cancel button
-      form(action: cancel_trade_path(@trade), method: "post") do
-        input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-        Button(type: :submit, variant: :destructive) { t(".cancel") }
+      div(class: "flex gap-3") do
+        unless @trade.agreed?
+          if @trade.accepted_by?(@current_user) || @trade.auto_agreed_by?(@current_user)
+            form(action: withdraw_trade_path(@trade), method: "post", class: "inline") do
+              input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+              Button(type: :submit, variant: :outline) do
+                @trade.auto_agreed_by?(@current_user) ? t(".auto_agreed") : t(".accepted")
+              end
+            end
+          else
+            render_agree_split_button
+          end
+        end
+
+        # Cancel button
+        form(action: cancel_trade_path(@trade), method: "post") do
+          input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+          Button(type: :submit, variant: :destructive) { t(".cancel") }
+        end
       end
     end
   end
 
   def render_agree_split_button
-    div(class: "inline-flex rounded-md shadow-sm") do
-      # Primary action: Agree
-      form(action: agree_trade_path(@trade), method: "post") do
+    div(class: "inline-flex rounded-md shadow-sm", data: { controller: "agree-mode" }) do
+      # Primary action form — action path toggled by stimulus
+      form(
+        action: agree_trade_path(@trade),
+        method: "post",
+        data: { agree_mode_target: "form", default_action: agree_trade_path(@trade), auto_action: agree_trade_path(@trade, auto: true) }
+      ) do
         input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
         button(
           type: "submit",
-          class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-primary rounded-l-md hover:bg-primary/90 cursor-pointer"
+          class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-primary rounded-l-md hover:bg-primary/90 cursor-pointer",
+          data: { agree_mode_target: "label", default_label: t(".accept"), auto_label: t(".auto_agree") }
         ) { t(".accept") }
       end
 
-      # Dropdown trigger
+      # Dropdown to switch mode
       DropdownMenu do
         DropdownMenuTrigger do
           button(
@@ -267,13 +279,16 @@ class Views::Trades::Show < Views::LoggedIn
         end
 
         DropdownMenuContent do
-          form(action: agree_trade_path(@trade, auto: true), method: "post", class: "w-full") do
-            input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-            button(
-              type: "submit",
-              class: "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
-            ) { t(".auto_agree") }
-          end
+          button(
+            type: "button",
+            class: "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground",
+            data: { action: "agree-mode#switchToAuto" }
+          ) { t(".auto_agree") }
+          button(
+            type: "button",
+            class: "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground",
+            data: { action: "agree-mode#switchToDefault" }
+          ) { t(".accept") }
         end
       end
     end
