@@ -258,19 +258,21 @@ class Views::Trades::Show < Views::LoggedIn
         end
 
         # Reject button with confirmation dialog
-        Dialog do
-          DialogTrigger do
-            Button(variant: :destructive) { t(".reject") }
-          end
-          DialogContent do
-            DialogHeader do
-              DialogTitle { t(".reject_confirm.title") }
-              DialogDescription { t(".reject_confirm.description", name: @other_user.name) }
+        unless @trade.agreed?
+          Dialog do
+            DialogTrigger do
+              Button(variant: :destructive) { t(".reject") }
             end
-            DialogFooter do
-              form(action: cancel_trade_path(@trade), method: "post") do
-                input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-                Button(type: :submit, variant: :destructive) { t(".reject_confirm.confirm") }
+            DialogContent do
+              DialogHeader do
+                DialogTitle { t(".reject_confirm.title") }
+                DialogDescription { t(".reject_confirm.description", name: @other_user.name) }
+              end
+              DialogFooter do
+                form(action: cancel_trade_path(@trade), method: "post") do
+                  input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+                  Button(type: :submit, variant: :destructive) { t(".reject_confirm.confirm") }
+                end
               end
             end
           end
