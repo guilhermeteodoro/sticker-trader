@@ -57,7 +57,8 @@ class TradesController < ApplicationController
     render Views::Trades::Show.new(
       trade: @trade,
       current_user: current_user,
-      receipt_frame_id: "receipt_trade_#{@trade.id}"
+      receipt_frame_id: "receipt_trade_#{@trade.id}",
+      zones_frame_id: "trade_#{@trade.id}_zones"
     )
   end
 

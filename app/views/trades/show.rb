@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class Views::Trades::Show < Views::LoggedIn
-  def initialize(trade:, current_user:, receipt_frame_id:)
+  def initialize(trade:, current_user:, receipt_frame_id:, zones_frame_id:)
     @trade = trade
     @current_user = current_user
     @other_user = trade.other_user(current_user)
     @receipt_frame_id = receipt_frame_id
+    @zones_frame_id = zones_frame_id
   end
 
   def page_title
@@ -22,7 +23,7 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   def render_content
-    turbo_frame(id: "trade_#{@trade.id}_zones") do
+    turbo_frame(id: @zones_frame_id) do
       render_actions
       render_trade_zones
     end
@@ -84,12 +85,17 @@ class Views::Trades::Show < Views::LoggedIn
 
       # Available pool section (dashed border, only during negotiation)
       unless @trade.agreed?
-        div(class: "rounded-md border border-dashed p-3") do
-          p(class: "text-xs font-semibold text-muted-foreground mb-2") { t(".available") }
-          if pool_stickers.any?
-            render_grouped_pool_stickers(pool_stickers, giver: giver)
-          else
-            p(class: "text-muted-foreground italic text-sm") { t(".empty_pool") }
+        Collapsible(open: false, class: "rounded-md border border-dashed") do
+          CollapsibleTrigger(class: "flex items-center justify-between p-3 cursor-pointer hover:bg-muted/50 transition-colors") do
+            p(class: "text-xs font-semibold text-muted-foreground") { t(".available") }
+            span(class: "text-xs text-muted-foreground") { "▸" }
+          end
+          CollapsibleContent(class: "p-3 pt-0") do
+            if pool_stickers.any?
+              render_grouped_pool_stickers(pool_stickers, giver: giver)
+            else
+              p(class: "text-muted-foreground italic text-sm") { t(".empty_pool") }
+            end
           end
         end
       end
@@ -147,7 +153,7 @@ class Views::Trades::Show < Views::LoggedIn
     color = sticker.country.color || "#6B7280"
 
     if removable
-      form(action: trade_path(@trade), method: "post", class: "inline", data: { turbo_frame: "trade_#{@trade.id}_zones" }) do
+      form(action: trade_path(@trade), method: "post", class: "inline", data: { turbo_frame: @zones_frame_id }) do
         input(type: "hidden", name: "_method", value: "patch")
         input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
         input(type: "hidden", name: "action_type", value: "remove")
@@ -168,7 +174,7 @@ class Views::Trades::Show < Views::LoggedIn
   def render_pool_sticker_chip(sticker, giver:)
     color = sticker.country.color || "#6B7280"
 
-    form(action: trade_path(@trade), method: "post", class: "inline", data: { turbo_frame: "trade_#{@trade.id}_zones" }) do
+    form(action: trade_path(@trade), method: "post", class: "inline", data: { turbo_frame: @zones_frame_id }) do
       input(type: "hidden", name: "_method", value: "patch")
       input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
       input(type: "hidden", name: "action_type", value: "add")
