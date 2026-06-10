@@ -254,41 +254,40 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   def render_agree_split_button
-    div(class: "inline-flex rounded-md shadow-sm", data: { controller: "agree-mode" }) do
-      # Primary action form — action path toggled by stimulus
+    div(class: "inline-flex rounded-md shadow-sm", data: { controller: "split-button" }) do
       form(
         action: agree_trade_path(@trade),
         method: "post",
-        data: { agree_mode_target: "form", default_action: agree_trade_path(@trade), auto_action: agree_trade_path(@trade, auto: true) }
+        class: "flex",
+        data: { split_button_target: "form" }
       ) do
         input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
         button(
           type: "submit",
-          class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-primary rounded-l-md hover:bg-primary/90 cursor-pointer",
-          data: { agree_mode_target: "label", default_label: t(".accept"), auto_label: t(".auto_agree") }
+          class: "inline-flex items-center whitespace-nowrap px-4 py-2 text-sm font-medium text-white bg-primary rounded-l-md hover:bg-primary/90 cursor-pointer",
+          data: { split_button_target: "label" }
         ) { t(".accept") }
       end
 
-      # Dropdown to switch mode
       DropdownMenu(options: { placement: "bottom-end" }) do
         DropdownMenuTrigger do
           button(
             type: "button",
-            class: "inline-flex items-center px-2 py-2 text-sm font-medium text-white bg-primary border-l border-primary-foreground/20 rounded-r-md hover:bg-primary/90 cursor-pointer"
+            class: "inline-flex items-center self-stretch px-2 text-sm font-medium text-white bg-primary border-l border-primary-foreground/20 rounded-r-md hover:bg-primary/90 cursor-pointer"
           ) { "▾" }
         end
 
         DropdownMenuContent do
           button(
             type: "button",
-            class: "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground",
-            data: { action: "agree-mode#switchToAuto", agree_mode_target: "autoOption" }
-          ) { t(".auto_agree") }
+            class: "relative flex w-full whitespace-nowrap cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground",
+            data: { action: "split-button#select", split_button_target: "option", action_value: agree_trade_path(@trade), label_value: t(".accept") }
+          ) { t(".accept") }
           button(
             type: "button",
-            class: "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground hidden",
-            data: { action: "agree-mode#switchToDefault", agree_mode_target: "defaultOption" }
-          ) { t(".accept") }
+            class: "relative flex w-full whitespace-nowrap cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground",
+            data: { action: "split-button#select", split_button_target: "option", action_value: agree_trade_path(@trade, auto: true), label_value: t(".auto_agree") }
+          ) { t(".auto_agree") }
         end
       end
     end
