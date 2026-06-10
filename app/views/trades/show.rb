@@ -25,6 +25,7 @@ class Views::Trades::Show < Views::LoggedIn
   def render_content
     turbo_frame(id: @zones_frame_id) do
       render_actions
+      render_agreement_info unless @trade.agreed?
       render_trade_zones
     end
   end
@@ -261,6 +262,21 @@ class Views::Trades::Show < Views::LoggedIn
           input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
           Button(type: :submit, variant: :destructive) { t(".cancel") }
         end
+      end
+    end
+  end
+
+  def render_agreement_info
+    div(class: "mt-4 rounded-md bg-muted/50 p-3 text-sm text-muted-foreground") do
+      if @trade.accepted_by?(@current_user) && @trade.accepted_by?(@other_user)
+        # Should not happen (would be agreed), but defensive
+        plain t(".agreement_info.both_accepted")
+      elsif @trade.accepted_by?(@current_user)
+        plain t(".agreement_info.you_accepted", name: @other_user.name)
+      elsif @trade.accepted_by?(@other_user)
+        plain t(".agreement_info.they_accepted", name: @other_user.name)
+      else
+        plain t(".agreement_info.explanation")
       end
     end
   end
