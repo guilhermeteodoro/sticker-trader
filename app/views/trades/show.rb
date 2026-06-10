@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class Views::Trades::Show < Views::LoggedIn
-  def initialize(trade:, current_user:)
+  def initialize(trade:, current_user:, receipt_frame_id:)
     @trade = trade
     @current_user = current_user
     @other_user = trade.other_user(current_user)
+    @receipt_frame_id = receipt_frame_id
   end
 
   def page_title
@@ -88,9 +89,24 @@ class Views::Trades::Show < Views::LoggedIn
       end
       CardContent do
         if stickers.any?
-          div(class: "flex flex-wrap gap-1.5") do
-            stickers.each do |ts|
-              render_trade_sticker_chip(ts, removable: removable)
+          grouped = stickers.group_by { |ts| ts.sticker.category }
+          %w[shiny coke normal].each do |cat|
+            group = grouped[cat]
+            next unless group&.any?
+
+            div(class: "mb-3 last:mb-0") do
+              p(class: "text-xs font-semibold text-muted-foreground mb-1") { t("categories.#{cat}") }
+              by_country = group.group_by { |ts| ts.sticker.country }
+              by_country.each do |country, country_stickers|
+                div(class: "mb-1.5 last:mb-0") do
+                  span(class: "text-[10px] font-medium text-muted-foreground mr-1") { "#{country.emoji} #{country.code}" }
+                  div(class: "inline-flex flex-wrap gap-1.5") do
+                    country_stickers.each do |ts|
+                      render_trade_sticker_chip(ts, removable: removable)
+                    end
+                  end
+                end
+              end
             end
           end
         else
@@ -108,9 +124,24 @@ class Views::Trades::Show < Views::LoggedIn
       end
       CardContent do
         if stickers.any?
-          div(class: "flex flex-wrap gap-1.5") do
-            stickers.each do |sticker|
-              render_pool_sticker_chip(sticker, giver: giver)
+          grouped = stickers.group_by(&:category)
+          %w[shiny coke normal].each do |cat|
+            group = grouped[cat]
+            next unless group&.any?
+
+            div(class: "mb-3 last:mb-0") do
+              p(class: "text-xs font-semibold text-muted-foreground mb-1") { t("categories.#{cat}") }
+              by_country = group.group_by(&:country)
+              by_country.each do |country, country_stickers|
+                div(class: "mb-1.5 last:mb-0") do
+                  span(class: "text-[10px] font-medium text-muted-foreground mr-1") { "#{country.emoji} #{country.code}" }
+                  div(class: "inline-flex flex-wrap gap-1.5") do
+                    country_stickers.each do |sticker|
+                      render_pool_sticker_chip(sticker, giver: giver)
+                    end
+                  end
+                end
+              end
             end
           end
         else
@@ -160,37 +191,39 @@ class Views::Trades::Show < Views::LoggedIn
     my_receipts = @trade.trade_stickers.where(receiver: @current_user)
     return if my_receipts.empty?
 
-    div(class: "mt-6") do
-      Card do
-        CardHeader do
-          CardTitle { t(".receipt_title") }
-        end
-        CardContent do
-          div(class: "flex flex-wrap gap-2") do
-            my_receipts.each do |ts|
-              confirmed = ts.user_sticker&.discarded?
-              sticker = ts.sticker
+    turbo_frame(id: @receipt_frame_id) do
+      div(class: "mt-6") do
+        Card do
+          CardHeader do
+            CardTitle { t(".receipt_title") }
+          end
+          CardContent do
+            div(class: "flex flex-wrap gap-2") do
+              my_receipts.each do |ts|
+                confirmed = ts.user_sticker&.discarded?
+                sticker = ts.sticker
 
-              div(class: "inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium #{confirmed ? "bg-green-100 text-green-800 line-through" : "bg-yellow-100 text-yellow-800"}") do
-                span { "#{sticker.country.code} #{sticker.number}" }
+                div(class: "inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium #{confirmed ? "bg-green-100 text-green-800 line-through" : "bg-yellow-100 text-yellow-800"}") do
+                  span { "#{sticker.country.code} #{sticker.number}" }
 
-                unless confirmed
-                  form(action: confirm_receipt_trade_path(@trade, trade_sticker_id: ts.id), method: "post", class: "inline") do
-                    input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-                    button(type: "submit", class: "ml-1 text-green-600 hover:text-green-800 cursor-pointer") { "✓" }
+                  unless confirmed
+                    form(action: confirm_receipt_trade_path(@trade, trade_sticker_id: ts.id), method: "post", class: "inline") do
+                      input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+                      button(type: "submit", class: "ml-1 text-green-600 hover:text-green-800 cursor-pointer") { "✓" }
+                    end
                   end
                 end
               end
             end
-          end
 
-          # Confirm all button
-          unconfirmed = my_receipts.reject { |ts| ts.user_sticker&.discarded? }
-          if unconfirmed.any?
-            div(class: "mt-4") do
-              form(action: confirm_all_receipts_trade_path(@trade), method: "post") do
-                input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-                Button(type: :submit, variant: :outline, size: :sm) { t(".confirm_all") }
+            # Confirm all button
+            unconfirmed = my_receipts.reject { |ts| ts.user_sticker&.discarded? }
+            if unconfirmed.any?
+              div(class: "mt-4") do
+                form(action: confirm_all_receipts_trade_path(@trade), method: "post") do
+                  input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+                  Button(type: :submit, variant: :outline, size: :sm) { t(".confirm_all") }
+                end
               end
             end
           end
@@ -202,14 +235,15 @@ class Views::Trades::Show < Views::LoggedIn
   def render_actions
     div(class: "mt-6 flex gap-3") do
       unless @trade.agreed?
-        # Accept button
-        form(action: accept_trade_path(@trade), method: "post") do
-          input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-          if @trade.accepted_by?(@current_user)
-            Button(type: :submit, variant: :primary, disabled: true) { t(".accepted") }
-          else
-            Button(type: :submit, variant: :primary) { t(".accept") }
+        if @trade.accepted_by?(@current_user) || @trade.auto_agreed_by?(@current_user)
+          form(action: withdraw_trade_path(@trade), method: "post", class: "inline") do
+            input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+            Button(type: :submit, variant: :outline) do
+              @trade.auto_agreed_by?(@current_user) ? t(".auto_agreed") : t(".accepted")
+            end
           end
+        else
+          render_agree_split_button
         end
       end
 
@@ -217,6 +251,39 @@ class Views::Trades::Show < Views::LoggedIn
       form(action: cancel_trade_path(@trade), method: "post") do
         input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
         Button(type: :submit, variant: :destructive) { t(".cancel") }
+      end
+    end
+  end
+
+  def render_agree_split_button
+    div(class: "inline-flex rounded-md shadow-sm") do
+      # Primary action: Agree
+      form(action: agree_trade_path(@trade), method: "post") do
+        input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+        button(
+          type: "submit",
+          class: "inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-primary rounded-l-md hover:bg-primary/90 cursor-pointer"
+        ) { t(".accept") }
+      end
+
+      # Dropdown trigger
+      DropdownMenu do
+        DropdownMenuTrigger do
+          button(
+            type: "button",
+            class: "inline-flex items-center px-2 py-2 text-sm font-medium text-white bg-primary border-l border-primary-foreground/20 rounded-r-md hover:bg-primary/90 cursor-pointer"
+          ) { "▾" }
+        end
+
+        DropdownMenuContent do
+          form(action: agree_trade_path(@trade, auto: true), method: "post", class: "w-full") do
+            input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+            button(
+              type: "submit",
+              class: "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
+            ) { t(".auto_agree") }
+          end
+        end
       end
     end
   end
@@ -229,15 +296,15 @@ class Views::Trades::Show < Views::LoggedIn
 
   def available_pool_for(giver)
     receiver = @trade.other_user(giver)
-    # Giver's available duplicates that receiver is missing
-    giver_available = giver.user_stickers.available_for_trade.pluck(:sticker_id)
-    receiver_missing = receiver.missing_stickers.pluck(:id)
-    available_ids = giver_available & receiver_missing
+    # Giver's duplicates that receiver is missing, excluding stickers already in trade
+    giver_sticker_ids = giver.user_stickers.available_for_trade.select(:sticker_id)
+    receiver_owned_ids = receiver.user_stickers.glued.select(:sticker_id)
+    already_in_trade_ids = @trade.trade_stickers.where(giver: giver).select(:sticker_id)
 
-    # Exclude stickers already in this trade
-    already_in_trade = @trade.trade_stickers.where(giver: giver).pluck(:sticker_id)
-    available_ids -= already_in_trade
-
-    Sticker.includes(:country).where(id: available_ids).order(:position)
+    Sticker.includes(:country)
+      .where(id: giver_sticker_ids)
+      .where.not(id: receiver_owned_ids)
+      .where.not(id: already_in_trade_ids)
+      .order(:position)
   end
 end

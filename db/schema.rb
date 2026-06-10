@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_10_183625) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_10_213627) do
   create_table "countries", force: :cascade do |t|
     t.string "code", null: false
     t.string "color"
@@ -59,8 +59,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_183625) do
     t.datetime "deleted_at"
     t.datetime "updated_at", null: false
     t.datetime "user_a_accepted_at"
+    t.datetime "user_a_auto_agreed_at"
     t.integer "user_a_id", null: false
     t.datetime "user_b_accepted_at"
+    t.datetime "user_b_auto_agreed_at"
     t.integer "user_b_id", null: false
     t.index ["deleted_at"], name: "index_trades_on_deleted_at"
     t.index ["user_a_id"], name: "index_trades_on_user_a_id"

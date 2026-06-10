@@ -2,8 +2,8 @@
 
 class TradesController < ApplicationController
   before_action :require_login
-  before_action :set_trade, only: [ :show, :update, :accept, :cancel, :confirm_receipt, :confirm_all_receipts ]
-  before_action :authorize_participant!, only: [ :show, :update, :accept, :cancel, :confirm_receipt, :confirm_all_receipts ]
+  before_action :set_trade, except: [ :create, :index ]
+  before_action :authorize_participant!, except: [ :create, :index ]
 
   # POST /u/:user_slug/trades
   # Creates a new trade pre-loaded with balanced suggestion
@@ -56,7 +56,8 @@ class TradesController < ApplicationController
   def show
     render Views::Trades::Show.new(
       trade: @trade,
-      current_user: current_user
+      current_user: current_user,
+      receipt_frame_id: "receipt_trade_#{@trade.id}"
     )
   end
 
@@ -76,15 +77,24 @@ class TradesController < ApplicationController
     redirect_to trade_path(@trade)
   end
 
-  # POST /trades/:id/accept
-  def accept
-    @trade.accept!(current_user)
-
-    if @trade.reload.agreed?
-      @trade.update!(confirmed_at: Time.current)
+  # POST /trades/:id/agree
+  # Params: auto=true for sticky acceptance
+  def agree
+    if params[:auto].present?
+      @trade.auto_agree!(current_user)
+    else
+      @trade.accept!(current_user)
     end
+    check_agreement!
 
-    redirect_to trade_path(@trade), notice: t("trades.accept.success")
+    notice = params[:auto].present? ? t("trades.auto_agree.success") : t("trades.accept.success")
+    redirect_to trade_path(@trade), notice: notice
+  end
+
+  # POST /trades/:id/withdraw
+  def withdraw
+    @trade.withdraw!(current_user)
+    redirect_to trade_path(@trade), notice: t("trades.withdraw.success")
   end
 
   # POST /trades/:id/cancel
@@ -123,9 +133,6 @@ class TradesController < ApplicationController
   end
 
   def export
-    @trade = Trade.find(params[:id])
-    authorize_participant!
-
     result = TradeExporter.new(user: current_user, trade: @trade).call
 
     render Views::Trades::Export.new(
@@ -151,6 +158,11 @@ class TradesController < ApplicationController
     unless @trade.participant?(current_user)
       redirect_to root_path, alert: t("trades.unauthorized")
     end
+  end
+
+  def check_agreement!
+    @trade.reload
+    @trade.update!(confirmed_at: Time.current) if @trade.agreed?
   end
 
   def add_sticker_to_trade

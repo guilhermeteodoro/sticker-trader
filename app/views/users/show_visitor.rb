@@ -132,7 +132,7 @@ class Views::Users::ShowVisitor < Views::LoggedIn
 
     div(class: "mt-4 flex flex-wrap gap-3") do
       # Link to existing pending trade if any
-      existing_trade = Trade.involving(@current_user).involving(@user).pending.first if @current_user
+      existing_trade = Trade.between(@current_user, @user).pending.first if @current_user
       if existing_trade
         a(href: trade_path(existing_trade), class: "inline-flex") do
           Button(variant: :outline) { t(".view_existing_trade") }

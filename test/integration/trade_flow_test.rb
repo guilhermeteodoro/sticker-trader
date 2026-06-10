@@ -33,13 +33,13 @@ class TradeFlowTest < ActionDispatch::IntegrationTest
     trade = create_trade_between(@user_a, @user_b)
 
     login_as @user_a
-    post accept_trade_path(trade)
+    post agree_trade_path(trade)
     trade.reload
     assert trade.accepted_by?(@user_a)
     refute trade.agreed?
 
     login_as @user_b
-    post accept_trade_path(trade)
+    post agree_trade_path(trade)
     trade.reload
     assert trade.agreed?
     assert trade.confirmed_at.present?
@@ -50,7 +50,7 @@ class TradeFlowTest < ActionDispatch::IntegrationTest
 
     # Alice accepts
     login_as @user_a
-    post accept_trade_path(trade)
+    post agree_trade_path(trade)
     trade.reload
     assert trade.accepted_by?(@user_a)
 
@@ -112,10 +112,10 @@ class TradeFlowTest < ActionDispatch::IntegrationTest
     trade = create_trade_between(user_a, user_b)
 
     login_as user_a
-    post accept_trade_path(trade)
+    post agree_trade_path(trade)
 
     login_as user_b
-    post accept_trade_path(trade)
+    post agree_trade_path(trade)
 
     trade.reload
   end

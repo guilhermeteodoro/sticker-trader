@@ -32,6 +32,9 @@ class Trade < ApplicationRecord
   has_many :trade_stickers, dependent: :destroy
 
   scope :involving, ->(user) { where(user_a: user).or(where(user_b: user)) }
+  scope :between, ->(user_a, user_b) {
+    where(user_a: user_a, user_b: user_b).or(where(user_a: user_b, user_b: user_a))
+  }
   scope :pending, -> { kept.where(confirmed_at: nil) }
   scope :agreed, -> { kept.where.not(user_a_accepted_at: nil).where.not(user_b_accepted_at: nil) }
   scope :confirmed, -> { where.not(confirmed_at: nil) }
@@ -68,7 +71,25 @@ class Trade < ApplicationRecord
     end
   end
 
+  def auto_agree!(user)
+    if user_a_id == user.id
+      update!(user_a_accepted_at: Time.current, user_a_auto_agreed_at: Time.current)
+    elsif user_b_id == user.id
+      update!(user_b_accepted_at: Time.current, user_b_auto_agreed_at: Time.current)
+    end
+  end
+
+  def auto_agreed_by?(user)
+    if user_a_id == user.id
+      user_a_auto_agreed_at.present?
+    elsif user_b_id == user.id
+      user_b_auto_agreed_at.present?
+    end
+  end
+
   def reset_acceptance_for(user)
+    return if auto_agreed_by?(user)
+
     if user_a_id == user.id
       update!(user_a_accepted_at: nil)
     elsif user_b_id == user.id
@@ -79,6 +100,14 @@ class Trade < ApplicationRecord
   def reset_other_acceptance!(user)
     other = other_user(user)
     reset_acceptance_for(other)
+  end
+
+  def withdraw!(user)
+    if user_a_id == user.id
+      update!(user_a_accepted_at: nil, user_a_auto_agreed_at: nil)
+    elsif user_b_id == user.id
+      update!(user_b_accepted_at: nil, user_b_auto_agreed_at: nil)
+    end
   end
 
   def stickers_given_by(user)

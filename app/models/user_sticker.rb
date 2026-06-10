@@ -43,6 +43,7 @@ class UserSticker < ApplicationRecord
   scope :available_for_trade, -> {
     duplicates.where.not(
       id: TradeSticker.joins(:trade).merge(Trade.agreed)
+        .where.not(user_sticker_id: nil)
         .select(:user_sticker_id)
     )
   }

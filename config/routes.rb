@@ -19,7 +19,8 @@ Rails.application.routes.draw do
   resources :trades, only: [ :index, :show, :update ] do
     member do
       get :export
-      post :accept
+      post :agree
+      post :withdraw
       post :cancel
       post "trade_stickers/:trade_sticker_id/confirm_receipt", action: :confirm_receipt, as: :confirm_receipt
       post :confirm_all_receipts
@@ -28,5 +29,5 @@ Rails.application.routes.draw do
 
   resource :diff, only: [ :show, :create ]
 
-  get "up" => "rails/health#show", as: :rails_health_check
+  resources :anonymous_trades, only: [ :new, :create ]
 end

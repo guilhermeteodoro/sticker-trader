@@ -39,6 +39,10 @@ en:
       success: "Trade created!"
     accept:
       success: "Trade accepted!"
+    auto_agree:
+      success: "Auto agreed! Your acceptance won't be reset."
+    withdraw:
+      success: "Acceptance withdrawn."
     cancel:
       success: "Trade cancelled."
     confirm_receipt:
@@ -62,6 +66,8 @@ en:
         empty_pool: "No stickers available"
         accept: "Accept trade"
         accepted: "Accepted ✓"
+        auto_agree: "Auto agree"
+        auto_agreed: "Auto agreed ✓"
         cancel: "Cancel trade"
         receipt_title: "Confirm receipt"
         confirm_all: "Confirm all received"
@@ -188,10 +194,25 @@ en:
         only_in_b: "Only in List B"
         empty: "(nothing)"
         parse_warning: "Could not find"
+    anonymous_trades:
+      new:
+        title: "Record anonymous trade"
+        description: "Record a trade with someone who doesn't use StickerTrader."
+        given_label: "Stickers you gave"
+        given_placeholder: "Enter sticker IDs you gave away"
+        given_help: "One sticker ID per line, or comma-separated"
+        received_label: "Stickers you received"
+        received_placeholder: "Enter sticker IDs you received"
+        received_help: "One sticker ID per line, or comma-separated"
+        submit: "Record trade"
 
   user_stickers:
     glue_all:
       success: "All stickers glued to your album!"
+
+  anonymous_trades:
+    create:
+      success: "Anonymous trade recorded!"
 
   # Controller flash messages (not view-rendered)
   sessions:
