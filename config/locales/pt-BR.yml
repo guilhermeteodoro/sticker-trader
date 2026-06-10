@@ -76,6 +76,8 @@ pt-BR:
         their_available: "Figurinhas disponíveis de %{name}"
         empty_zone: "Nenhuma figurinha ainda"
         empty_pool: "Nenhuma figurinha disponível"
+        in_trade: "Na troca (%{count})"
+        available: "Disponíveis"
         accept: "Aceitar troca"
         accepted: "Aceito ✓"
         auto_agree: "Aceitar automaticamente"

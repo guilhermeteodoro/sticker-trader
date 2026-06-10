@@ -41,111 +41,101 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   def render_trade_zones
-    div(class: "space-y-4 mt-6") do
-      # Current user gives
-      render_zone(
+    div(class: "grid grid-cols-1 md:grid-cols-2 gap-4 mt-6") do
+      render_user_card(
         title: t(".you_give"),
-        stickers: stickers_given_by(@current_user),
-        zone: :current_user_gives,
+        trade_stickers: stickers_given_by(@current_user),
+        pool_stickers: available_pool_for(@current_user),
+        giver: @current_user,
         removable: !@trade.agreed?
       )
 
-      # Current user's available pool
-      unless @trade.agreed?
-        render_pool(
-          title: t(".your_available"),
-          stickers: available_pool_for(@current_user),
-          giver: @current_user
-        )
-      end
-
-      # Other user gives
-      render_zone(
+      render_user_card(
         title: t(".they_give", name: @other_user.name),
-        stickers: stickers_given_by(@other_user),
-        zone: :other_user_gives,
+        trade_stickers: stickers_given_by(@other_user),
+        pool_stickers: available_pool_for(@other_user),
+        giver: @other_user,
         removable: !@trade.agreed?
       )
-
-      # Other user's available pool
-      unless @trade.agreed?
-        render_pool(
-          title: t(".their_available", name: @other_user.name),
-          stickers: available_pool_for(@other_user),
-          giver: @other_user
-        )
-      end
     end
 
-    # Receipt confirmation section (only after agreement)
     render_receipt_section if @trade.agreed?
   end
 
-  def render_zone(title:, stickers:, zone:, removable:)
-    Card(class: "border-green-200 bg-green-50") do
+  def render_user_card(title:, trade_stickers:, pool_stickers:, giver:, removable:)
+    Card do
       CardHeader(class: "pb-2") do
         CardTitle(class: "text-sm") { title }
-        Badge(variant: :outline) { stickers.size.to_s }
       end
       CardContent do
-        if stickers.any?
-          grouped = stickers.group_by { |ts| ts.sticker.category }
-          %w[shiny coke normal].each do |cat|
-            group = grouped[cat]
-            next unless group&.any?
+        # In trade section (green-tinted)
+        div(class: "rounded-md border border-green-200 bg-green-50 p-3 mb-3") do
+          p(class: "text-xs font-semibold text-muted-foreground mb-2") do
+            plain t(".in_trade", count: trade_stickers.size)
+          end
+          if trade_stickers.any?
+            render_grouped_trade_stickers(trade_stickers, removable: removable)
+          else
+            p(class: "text-muted-foreground italic text-sm") { t(".empty_zone") }
+          end
+        end
 
-            div(class: "mb-3 last:mb-0") do
-              p(class: "text-xs font-semibold text-muted-foreground mb-1") { t("categories.#{cat}") }
-              by_country = group.group_by { |ts| ts.sticker.country }
-              by_country.each do |country, country_stickers|
-                div(class: "mb-1.5 last:mb-0") do
-                  span(class: "text-[10px] font-medium text-muted-foreground mr-1") { "#{country.emoji} #{country.code}" }
-                  div(class: "inline-flex flex-wrap gap-1.5") do
-                    country_stickers.each do |ts|
-                      render_trade_sticker_chip(ts, removable: removable)
-                    end
-                  end
-                end
-              end
+        # Available pool section (dashed border, only during negotiation)
+        unless @trade.agreed?
+          div(class: "rounded-md border border-dashed p-3") do
+            p(class: "text-xs font-semibold text-muted-foreground mb-2") { t(".available") }
+            if pool_stickers.any?
+              render_grouped_pool_stickers(pool_stickers, giver: giver)
+            else
+              p(class: "text-muted-foreground italic text-sm") { t(".empty_pool") }
             end
           end
-        else
-          p(class: "text-muted-foreground italic text-sm") { t(".empty_zone") }
         end
       end
     end
   end
 
-  def render_pool(title:, stickers:, giver:)
-    Card(class: "border-dashed") do
-      CardHeader(class: "pb-2") do
-        CardTitle(class: "text-sm text-muted-foreground") { title }
-        Badge(variant: :outline) { stickers.size.to_s }
-      end
-      CardContent do
-        if stickers.any?
-          grouped = stickers.group_by(&:category)
-          %w[shiny coke normal].each do |cat|
-            group = grouped[cat]
-            next unless group&.any?
+  def render_grouped_trade_stickers(stickers, removable:)
+    grouped = stickers.group_by { |ts| ts.sticker.category }
+    %w[shiny coke normal].each do |cat|
+      group = grouped[cat]
+      next unless group&.any?
 
-            div(class: "mb-3 last:mb-0") do
-              p(class: "text-xs font-semibold text-muted-foreground mb-1") { t("categories.#{cat}") }
-              by_country = group.group_by(&:country)
-              by_country.each do |country, country_stickers|
-                div(class: "mb-1.5 last:mb-0") do
-                  span(class: "text-[10px] font-medium text-muted-foreground mr-1") { "#{country.emoji} #{country.code}" }
-                  div(class: "inline-flex flex-wrap gap-1.5") do
-                    country_stickers.each do |sticker|
-                      render_pool_sticker_chip(sticker, giver: giver)
-                    end
-                  end
-                end
+      div(class: "mb-3 last:mb-0") do
+        p(class: "text-xs font-semibold text-muted-foreground mb-1") { t("categories.#{cat}") }
+        by_country = group.group_by { |ts| ts.sticker.country }
+        by_country.each do |country, country_stickers|
+          div(class: "mb-1.5 last:mb-0") do
+            span(class: "text-[10px] font-medium text-muted-foreground mr-1") { "#{country.emoji} #{country.code}" }
+            div(class: "inline-flex flex-wrap gap-1.5") do
+              country_stickers.each do |ts|
+                render_trade_sticker_chip(ts, removable: removable)
               end
             end
           end
-        else
-          p(class: "text-muted-foreground italic text-sm") { t(".empty_pool") }
+        end
+      end
+    end
+  end
+
+  def render_grouped_pool_stickers(stickers, giver:)
+    grouped = stickers.group_by(&:category)
+    %w[shiny coke normal].each do |cat|
+      group = grouped[cat]
+      next unless group&.any?
+
+      div(class: "mb-3 last:mb-0") do
+        p(class: "text-xs font-semibold text-muted-foreground mb-1") { t("categories.#{cat}") }
+        by_country = group.group_by(&:country)
+        by_country.each do |country, country_stickers|
+          div(class: "mb-1.5 last:mb-0") do
+            span(class: "text-[10px] font-medium text-muted-foreground mr-1") { "#{country.emoji} #{country.code}" }
+            div(class: "inline-flex flex-wrap gap-1.5") do
+              country_stickers.each do |sticker|
+                render_pool_sticker_chip(sticker, giver: giver)
+              end
+            end
+          end
         end
       end
     end

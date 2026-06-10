@@ -64,6 +64,8 @@ en:
         their_available: "%{name}'s available stickers"
         empty_zone: "No stickers yet"
         empty_pool: "No stickers available"
+        in_trade: "In trade (%{count})"
+        available: "Available"
         accept: "Accept trade"
         accepted: "Accepted ✓"
         auto_agree: "Auto agree"
