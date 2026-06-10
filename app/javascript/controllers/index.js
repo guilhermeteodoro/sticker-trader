@@ -25,8 +25,11 @@ application.register("import-form", ImportFormController)
 import SplitButtonController from "./split_button_controller"
 application.register("split-button", SplitButtonController)
 
-import PersistentCollapsibleController from "./persistent_collapsible_controller"
-application.register("ruby-ui--collapsible", PersistentCollapsibleController)
+import UiStateController from "./ui_state_controller"
+application.register("ui-state", UiStateController)
+
+import RubyUi__CollapsibleController from "./ruby_ui/collapsible_controller"
+application.register("ruby-ui--collapsible", RubyUi__CollapsibleController)
 
 import RubyUi__ComboboxController from "./ruby_ui/combobox_controller"
 application.register("ruby-ui--combobox", RubyUi__ComboboxController)
