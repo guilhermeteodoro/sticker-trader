@@ -146,17 +146,21 @@ class Views::Trades::Show < Views::LoggedIn
     sticker = trade_sticker.sticker
     color = sticker.country.color || "#6B7280"
 
-    div(class: "inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-white", style: "background-color: #{color}") do
-      span { "#{sticker.country.code} #{sticker.number}" }
-
-      if removable
-        form(action: trade_path(@trade), method: "post", class: "inline", data: { turbo_frame: "trade_#{@trade.id}_zones" }) do
-          input(type: "hidden", name: "_method", value: "patch")
-          input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-          input(type: "hidden", name: "action_type", value: "remove")
-          input(type: "hidden", name: "trade_sticker_id", value: trade_sticker.id)
-          button(type: "submit", class: "ml-1 hover:text-red-200 cursor-pointer") { "×" }
-        end
+    if removable
+      form(action: trade_path(@trade), method: "post", class: "inline", data: { turbo_frame: "trade_#{@trade.id}_zones" }) do
+        input(type: "hidden", name: "_method", value: "patch")
+        input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+        input(type: "hidden", name: "action_type", value: "remove")
+        input(type: "hidden", name: "trade_sticker_id", value: trade_sticker.id)
+        button(
+          type: "submit",
+          class: "inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-white cursor-pointer hover:opacity-80 transition-opacity",
+          style: "background-color: #{color}"
+        ) { "#{sticker.country.code} #{sticker.number} ×" }
+      end
+    else
+      div(class: "inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-white", style: "background-color: #{color}") do
+        span { "#{sticker.country.code} #{sticker.number}" }
       end
     end
   end
