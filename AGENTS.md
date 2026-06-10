@@ -2,6 +2,10 @@
 
 Instructions for AI coding agents working on this codebase.
 
+## Baseline
+
+Rails 8 application. Assume standard Rails conventions unless explicitly overridden in this file, a DOX file, or an ADR.
+
 ## Checks
 
 Run before pushing or updating a PR:
@@ -107,6 +111,108 @@ If you notice a multi-step workflow being repeated across sessions (complex enou
 - [README.md](README.md) — project overview for humans
 - [docs/adr/](docs/adr/) — architecture decision records
 - [.agents/skills/](.agents/skills/) — reusable workflow skills
+
+## DOX (Adapted)
+
+This project uses [DOX](https://github.com/agent0ai/dox) — a hierarchical documentation framework for AI agents. DOX files are binding work contracts for their subtrees. See [ADR-0007](docs/adr/0007-adapted-dox-mirror-tree.md) for the adaptation rationale.
+
+**Adaptation:** child DOX files live under `.agents/dox/` in a mirror-tree structure instead of co-located `AGENTS.md` files in source folders. The root `AGENTS.md` stays here (DOX rail).
+
+### Core Contract
+
+Work products, source materials, instructions, records, assets, and durable docs must stay understandable from the nearest applicable DOX file (`.agents/dox/{path}/_index.md`) plus every parent DOX file above it up to this root.
+
+DOX assumes [CONTEXT.md](CONTEXT.md) has been read. Reference it for domain terminology — don't restate definitions. When a DOX pass introduces or clarifies a domain concept, update CONTEXT.md in the same commit.
+
+### Path Convention
+
+- Folder contracts → `.agents/dox/{path}/_index.md`
+- File contracts (rare) → `.agents/dox/{path}/{filename_without_ext}.md`
+
+Examples:
+- `app/services/` → `.agents/dox/app/services/_index.md`
+- `app/services/trade_comparer.rb` → `.agents/dox/app/services/trade_comparer.md`
+
+### Read Before Editing
+
+1. Read this root `AGENTS.md`
+2. Identify every file or folder you expect to touch
+3. Walk from the repository root to each target path
+4. For each path segment, check if `.agents/dox/{accumulated_path}/_index.md` exists — read it if so
+5. Use the nearest DOX file as the local contract; parent docs for repo-wide rules
+6. If docs conflict, the closer doc controls local work details, but no child doc may weaken DOX
+
+Do not rely on memory. Re-read the applicable DOX chain in the current session before editing.
+
+### Update After Editing
+
+Every meaningful change requires a DOX pass before the task is done.
+
+Update the closest owning DOX file when a change affects:
+- purpose, scope, ownership, or responsibilities
+- durable structure, contracts, workflows, or operating rules
+- required inputs, outputs, permissions, constraints, side effects, or artifacts
+- user preferences about behavior, communication, process, organization, or quality
+- DOX file creation, deletion, move, rename, or index contents
+
+Update parent docs when parent-level structure, ownership, workflow, or child index changes. Update child docs when parent changes alter local rules. Remove stale or contradictory text immediately.
+
+Small edits that do not change behavior or contracts may leave docs unchanged, but the DOX pass still must happen.
+
+### Hierarchy
+
+- This root AGENTS.md is the DOX rail: project-wide instructions, global preferences, durable workflow rules, and the top-level Child DOX Index
+- Child DOX files own domain-specific instructions and their own Child DOX Index
+- Each parent explains what its direct children cover and what stays owned by the parent
+- The closer a doc is to the work, the more specific and practical it must be
+
+### Creating Child Docs
+
+Create `.agents/dox/{path}/_index.md` when a folder becomes a durable boundary with its own purpose, rules, responsibilities, workflow, materials, or quality standards.
+
+Work Guidance must reflect the current standards of the project or user instructions; if there are no specific standards or instructions yet, leave it empty. Verification must reflect an existing check; if no verification framework exists yet, leave it empty and update it when one exists.
+
+Default section order:
+- Purpose
+- Ownership
+- Local Contracts
+- Work Guidance
+- Verification
+- Child DOX Index
+
+Omit empty sections. File-level docs are rare — only when a file outgrows its folder's `_index.md`.
+
+### Closeout
+
+1. Re-check changed paths against the DOX chain
+2. Update nearest owning docs and any affected parents or children
+3. Refresh every affected Child DOX Index
+4. Remove stale or contradictory text
+5. Run existing verification when relevant
+
+### Style
+
+- Concise, current, operational
+- Document stable interfaces, non-obvious technical decisions, and information that saves tokens in future agentic interactions
+- Do not describe what the source code makes obvious — document what an agent would otherwise waste tokens discovering
+- Document stable contracts, not diary entries
+- Broad rules in parent docs, concrete details in child docs
+- Direct bullets with explicit names
+- No duplication across files unless each scope needs a local version
+- Delete stale notes immediately
+
+### User Preferences
+
+When the user requests a durable behavior change (e.g., "always do X", "never do Y", "I prefer Z"), persist it immediately in this section or in the relevant child DOX file. Do not wait for the end of the task.
+
+Load the `dox` skill for operational helpers (commands, templates, orphan checks).
+
+## Child DOX Index
+
+- [.agents/dox/app/_index.md](.agents/dox/app/_index.md) — application source code
+- [.agents/dox/test/_index.md](.agents/dox/test/_index.md) — test suite
+- [.agents/dox/config/_index.md](.agents/dox/config/_index.md) — Rails configuration
+- [.agents/dox/db/_index.md](.agents/dox/db/_index.md) — database schema, migrations, seeds
 
 ## Contributing to AGENTS.md
 
