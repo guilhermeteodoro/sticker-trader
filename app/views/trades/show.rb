@@ -85,7 +85,8 @@ class Views::Trades::Show < Views::LoggedIn
 
       # Available pool section (dashed border, only during negotiation)
       unless @trade.agreed?
-        Collapsible(open: false, class: "rounded-md border border-dashed") do
+        Collapsible(open: true, class: "rounded-md border border-dashed",
+          data: { controller: "persistent-collapsible", persistent_collapsible_key_value: "trade_#{@trade.id}_pool_#{giver.id}" }) do
           CollapsibleTrigger(class: "flex items-center justify-between p-3 cursor-pointer hover:bg-muted/50 transition-colors") do
             p(class: "text-xs font-semibold text-muted-foreground") { t(".available") }
             span(class: "text-xs text-muted-foreground") { "▸" }
