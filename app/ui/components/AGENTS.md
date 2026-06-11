@@ -34,4 +34,4 @@ end
 
 ## UiState (Stimulus controller)
 
-Generalized state persistence controller (`app/javascript/controllers/ui_state_controller.js`). Collapsible uses it internally. Other components can use its static `read(key, name)` / `write(key, name, value)` methods for arbitrary sessionStorage-backed state.
+Generalized state persistence controller (`app/javascript/controllers/ui_state_controller.js`). Collapsible uses it internally. Other components can use its static `read(key, name)` / `write(key, name, value)` methods for arbitrary sessionStorage-backed state. Public methods: `open()`, `close()`, `toggle()` — each persists if `keyValue` is set.

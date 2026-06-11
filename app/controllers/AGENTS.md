@@ -11,7 +11,7 @@ HTTP request handlers. Thin — delegate to services, render Phlex views.
 - `ReceiptsController` handles the receipt confirmation phase (after agreement): toggle confirm/unconfirm per trade_sticker, end confirmation (triggers state transitions for confirmed stickers). Nested under trades (`/trades/:trade_id/receipts`).
 - Trade creation computes the balanced trade at request time (ADR-0002) and persists it as the starting point for negotiation.
 - Modifying a trade resets the other participant's acceptance.
-- `UserStickersController#glue_all` transitions `to_be_glued` stickers to `glued` (or `duplicate` if already owned).
+- `UserStickersController#glue_all` transitions `to_be_glued` stickers to `glued` (or `duplicate` if already owned). `#update` handles both `copies` param (add/remove duplicates) and `state` param (glue a `to_be_glued` sticker).
 - Flash messages use i18n keys.
 - Soft delete via `discard!` — never `destroy!` for user-facing deletions (trades, user_stickers).
 - Guard invalid state transitions in controller actions (e.g., check `agreed?` before `discard!`). Never override gem methods like `discard` — use explicit checks.
