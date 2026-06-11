@@ -47,6 +47,14 @@ class Trade < ApplicationRecord
     confirmed_at.present?
   end
 
+  def receipt_ended_by?(user)
+    if user_a_id == user.id
+      user_a_receipt_ended_at.present?
+    else
+      user_b_receipt_ended_at.present?
+    end
+  end
+
   def participant?(user)
     user_a_id == user.id || user_b_id == user.id
   end

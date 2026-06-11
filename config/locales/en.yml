@@ -55,6 +55,11 @@ en:
     export:
       unauthorized: "You don't have access to this trade."
 
+  receipts:
+    unauthorized: "Only the receiver can confirm receipt."
+    already_ended: "You already ended the confirmation phase."
+    ended: "Confirmation ended! Confirmed stickers are now in your album."
+
   views:
     trades:
       show:
@@ -78,6 +83,14 @@ en:
           description: "This will permanently cancel the trade with %{name}. All stickers will be returned to their owners."
           confirm: "Yes, reject trade"
         receipt_title: "Confirm receipt"
+        receipt_help: "Have you received your stickers? Confirm each one below — confirmed stickers will be added to your album as 'to be glued' once you end the confirmation."
+        confirm_all_and_end: "Confirm all & end"
+        end_confirmation: "End confirmation"
+        end_confirm_all:
+          message: "You're confirming receipt of all %{count} stickers. They'll appear in your album as 'to be glued'. This cannot be undone."
+        end_confirm_partial:
+          message: "You're confirming receipt of %{confirmed} out of %{total} stickers. The %{unconfirmed} unconfirmed stickers will not be added to your album. This cannot be undone."
+        receipt_ended: "Confirmation ended"
         confirm_all: "Confirm all received"
         status:
           agreed: "Agreed ✓"

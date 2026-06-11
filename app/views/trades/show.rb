@@ -24,9 +24,13 @@ class Views::Trades::Show < Views::LoggedIn
 
   def render_content
     turbo_frame(id: @zones_frame_id) do
-      render_actions
-      render_agreement_info unless @trade.agreed?
-      render_trade_zones
+      if @trade.agreed?
+        render_confirmation_phase
+      else
+        render_actions
+        render_agreement_info
+        render_trade_zones
+      end
     end
   end
 
@@ -72,8 +76,13 @@ class Views::Trades::Show < Views::LoggedIn
     div do
       p(class: "text-sm font-semibold mb-2") { title }
 
-      # In trade section (green-tinted)
-      div(class: "rounded-md border border-green-200 bg-green-50 p-3 mb-3") do
+      # In trade section
+      card_classes = if @trade.agreed?
+                       "rounded-md border border-gray-200 bg-gray-50 p-3 mb-3"
+      else
+                       "rounded-md border border-green-200 bg-green-50 p-3 mb-3"
+      end
+      div(class: card_classes) do
         p(class: "text-xs font-semibold text-muted-foreground mb-2") do
           plain t(".in_trade", count: trade_stickers.size)
         end
@@ -167,6 +176,26 @@ class Views::Trades::Show < Views::LoggedIn
           style: "background-color: #{color}"
         ) { "#{sticker.country.code} #{sticker.number} ×" }
       end
+    elsif confirmation_phase? && trade_sticker.receiver_id == @current_user.id
+      confirmed = trade_sticker.confirmed_at.present?
+      form(action: trade_receipt_path(@trade, trade_sticker), method: "post", class: "inline", data: { turbo_frame: @zones_frame_id }) do
+        input(type: "hidden", name: "_method", value: "patch")
+        input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+        input(type: "hidden", name: "confirmed", value: confirmed ? "false" : "true")
+        if confirmed
+          button(
+            type: "submit",
+            class: "inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-white cursor-pointer hover:opacity-80 transition-opacity ring-2 ring-green-400",
+            style: "background-color: #{color}"
+          ) { "#{sticker.country.code} #{sticker.number} ✓" }
+        else
+          button(
+            type: "submit",
+            class: "inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-white opacity-60 cursor-pointer hover:opacity-100 transition-opacity",
+            style: "background-color: #{color}"
+          ) { "#{sticker.country.code} #{sticker.number}" }
+        end
+      end
     else
       div(class: "inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-white", style: "background-color: #{color}") do
         span { "#{sticker.country.code} #{sticker.number}" }
@@ -191,48 +220,52 @@ class Views::Trades::Show < Views::LoggedIn
     end
   end
 
-  def render_receipt_section
-    my_receipts = @trade.trade_stickers.where(receiver: @current_user)
-    return if my_receipts.empty?
+  def render_confirmation_phase
+    if receipt_ended?
+      render_receipt_ended
+    else
+      render_receipt_actions
+    end
+    render_trade_zones
+  end
 
-    turbo_frame(id: @receipt_frame_id) do
-      div(class: "mt-6") do
-        Card do
-          CardHeader do
-            CardTitle { t(".receipt_title") }
-          end
-          CardContent do
-            div(class: "flex flex-wrap gap-2") do
-              my_receipts.each do |ts|
-                confirmed = ts.user_sticker&.discarded?
-                sticker = ts.sticker
+  def render_receipt_actions
+    my_receipts = receipts_for_current_user
+    confirmed_count = my_receipts.where.not(confirmed_at: nil).count
+    total_count = my_receipts.count
 
-                div(class: "inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium #{confirmed ? "bg-green-100 text-green-800 line-through" : "bg-yellow-100 text-yellow-800"}") do
-                  span { "#{sticker.country.code} #{sticker.number}" }
+    # Help text
+    div(class: "rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200") do
+      p { t(".receipt_help") }
+    end
 
-                  unless confirmed
-                    form(action: confirm_receipt_trade_path(@trade, trade_sticker_id: ts.id), method: "post", class: "inline") do
-                      input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-                      button(type: "submit", class: "ml-1 text-green-600 hover:text-green-800 cursor-pointer") { "✓" }
-                    end
-                  end
-                end
-              end
-            end
-
-            # Confirm all button
-            unconfirmed = my_receipts.reject { |ts| ts.user_sticker&.discarded? }
-            if unconfirmed.any?
-              div(class: "mt-4") do
-                form(action: confirm_all_receipts_trade_path(@trade), method: "post") do
-                  input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-                  Button(type: :submit, variant: :outline, size: :sm) { t(".confirm_all") }
-                end
-              end
-            end
-          end
-        end
+    # Action buttons
+    div(class: "flex gap-3 mt-3") do
+      # Confirm all & end
+      form(action: end_confirmation_trade_receipts_path(@trade), method: "post", class: "inline") do
+        input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+        input(type: "hidden", name: "confirm_all", value: "true")
+        confirm_msg = t(".end_confirm_all.message", count: total_count)
+        Button(type: :submit, data: { turbo_confirm: confirm_msg }) { t(".confirm_all_and_end") }
       end
+
+      # End confirmation (with current state)
+      form(action: end_confirmation_trade_receipts_path(@trade), method: "post", class: "inline") do
+        input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+        unconfirmed_count = total_count - confirmed_count
+        confirm_msg = if unconfirmed_count == 0
+                        t(".end_confirm_all.message", count: total_count)
+        else
+                        t(".end_confirm_partial.message", confirmed: confirmed_count, total: total_count, unconfirmed: unconfirmed_count)
+        end
+        Button(type: :submit, variant: :outline, data: { turbo_confirm: confirm_msg }) { t(".end_confirmation") }
+      end
+    end
+  end
+
+  def render_receipt_ended
+    div(class: "rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-600") do
+      p { t(".receipt_ended") }
     end
   end
 
@@ -284,15 +317,15 @@ class Views::Trades::Show < Views::LoggedIn
   def render_agreement_info
     variant = if @trade.accepted_by?(@other_user) && !@trade.accepted_by?(@current_user)
                 :warning
-              else
+    else
                 :info
-              end
+    end
 
     classes = if variant == :warning
                 "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-800 dark:bg-amber-950 dark:text-amber-200"
-              else
+    else
                 "border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-200"
-              end
+    end
 
     div(class: "mt-4 rounded-md border px-3 py-2 text-sm #{classes}") do
       p do
@@ -370,5 +403,17 @@ class Views::Trades::Show < Views::LoggedIn
       .where.not(id: receiver_owned_ids)
       .where.not(id: already_in_trade_ids)
       .order(:position)
+  end
+
+  def receipt_ended?
+    @trade.receipt_ended_by?(@current_user)
+  end
+
+  def receipts_for_current_user
+    @trade.trade_stickers.where(receiver: @current_user)
+  end
+
+  def confirmation_phase?
+    @trade.agreed? && !receipt_ended?
   end
 end

@@ -55,6 +55,11 @@ pt-BR:
     export:
       unauthorized: "Você não tem acesso a essa troca."
 
+  receipts:
+    unauthorized: "Apenas o destinatário pode confirmar o recebimento."
+    already_ended: "Você já encerrou a fase de confirmação."
+    ended: "Confirmação encerrada! Figurinhas confirmadas estão no seu álbum."
+
   user_stickers:
     glue_all:
       success: "Todas as figurinhas coladas no álbum!"
@@ -90,6 +95,14 @@ pt-BR:
           description: "Isso vai cancelar permanentemente a troca com %{name}. Todas as figurinhas serão devolvidas."
           confirm: "Sim, rejeitar troca"
         receipt_title: "Confirmar recebimento"
+        receipt_help: "Você recebeu suas figurinhas? Confirme cada uma abaixo — as figurinhas confirmadas serão adicionadas ao seu álbum como 'para colar' ao encerrar a confirmação."
+        confirm_all_and_end: "Confirmar tudo & encerrar"
+        end_confirmation: "Encerrar confirmação"
+        end_confirm_all:
+          message: "Você está confirmando o recebimento de todas as %{count} figurinhas. Elas aparecerão no seu álbum como 'para colar'. Isso não pode ser desfeito."
+        end_confirm_partial:
+          message: "Você está confirmando o recebimento de %{confirmed} de %{total} figurinhas. As %{unconfirmed} figurinhas não confirmadas não serão adicionadas ao seu álbum. Isso não pode ser desfeito."
+        receipt_ended: "Confirmação encerrada"
         confirm_all: "Confirmar todos recebidos"
         status:
           agreed: "Combinado ✓"

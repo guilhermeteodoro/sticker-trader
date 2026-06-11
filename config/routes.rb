@@ -22,8 +22,12 @@ Rails.application.routes.draw do
       post :agree
       post :withdraw
       post :cancel
-      post "trade_stickers/:trade_sticker_id/confirm_receipt", action: :confirm_receipt, as: :confirm_receipt
-      post :confirm_all_receipts
+    end
+
+    resources :receipts, only: [ :update ] do
+      collection do
+        post :end_confirmation
+      end
     end
   end
 

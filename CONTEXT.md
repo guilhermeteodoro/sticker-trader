@@ -91,7 +91,7 @@ The state when both trade participants have accepted the current sticker arrange
 _Avoid_: Confirmation, deal
 
 **Receipt confirmation**:
-The act of a receiver confirming they physically received a specific sticker from an agreed trade. Triggers the state transition: giver's copy is soft-deleted, receiver gets a `to_be_glued` row. Can be done per-sticker or all at once.
+A two-phase process after agreement. Phase 1: the receiver toggles individual stickers as confirmed/unconfirmed (`trade_sticker.confirmed_at`). Phase 2: the receiver "ends confirmation" — confirmed stickers trigger the state transition (giver's copy soft-deleted, receiver gets a `to_be_glued` row); unconfirmed stickers are left untransitioned. Each side ends independently (`user_a_receipt_ended_at` / `user_b_receipt_ended_at`).
 _Avoid_: Delivery confirmation
 
 **Anonymous trade**:

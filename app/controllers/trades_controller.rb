@@ -108,28 +108,6 @@ class TradesController < ApplicationController
     redirect_to user_path(@trade.other_user(current_user)), notice: t("trades.cancel.success")
   end
 
-  # POST /trades/:id/trade_stickers/:trade_sticker_id/confirm_receipt
-  def confirm_receipt
-    trade_sticker = @trade.trade_stickers.find(params[:trade_sticker_id])
-
-    unless trade_sticker.receiver_id == current_user.id
-      redirect_to trade_path(@trade), alert: t("trades.confirm_receipt.unauthorized")
-      return
-    end
-
-    trade_sticker.confirm_receipt!
-    redirect_to trade_path(@trade), notice: t("trades.confirm_receipt.success")
-  end
-
-  # POST /trades/:id/confirm_all_receipts
-  def confirm_all_receipts
-    @trade.trade_stickers.where(receiver: current_user).each do |ts|
-      ts.confirm_receipt! unless ts.user_sticker&.discarded?
-    end
-
-    redirect_to trade_path(@trade), notice: t("trades.confirm_all_receipts.success")
-  end
-
   # GET /trades
   # User's trades dashboard
   def index

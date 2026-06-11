@@ -72,15 +72,22 @@ class TradeFlowTest < ActionDispatch::IntegrationTest
     assert trade.reload.discarded?
   end
 
-  test "confirm receipt creates to_be_glued sticker" do
+  test "receipt confirmation creates to_be_glued sticker" do
     trade = create_agreed_trade(@user_a, @user_b)
 
     login_as @user_b
     ts = trade.trade_stickers.where(receiver: @user_b).first
 
+    # Toggle confirm
+    patch trade_receipt_path(trade, ts), params: { confirmed: "true" }
+    assert ts.reload.confirmed_at.present?
+
+    # End confirmation
     assert_difference -> { @user_b.user_stickers.to_be_glued.count }, 1 do
-      post confirm_receipt_trade_path(trade, trade_sticker_id: ts.id)
+      post end_confirmation_trade_receipts_path(trade)
     end
+
+    assert trade.reload.user_b_receipt_ended_at.present?
   end
 
   test "glue_all applies to_be_glued stickers" do
