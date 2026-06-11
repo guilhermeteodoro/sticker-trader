@@ -20,9 +20,8 @@ class Views::Trades::Show < Views::LoggedIn
           plain t(".title_with_id", id: @trade.id)
           a(href: user_path(@other_user), class: "underline hover:no-underline") { @other_user.name }
         end
-        div(class: "flex items-center gap-2 mt-1") do
+        div(class: "mt-1") do
           render_status_badge_inline
-          span(class: "text-xs text-muted-foreground") { "· #{I18n.l(trade_latest_date, format: :short)}" }
         end
       end
     end
@@ -41,14 +40,15 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   def render_status_badge_inline
+    date_str = " · #{I18n.l(trade_latest_date, format: :short)}"
     if @trade.agreed?
-      Badge(variant: :default) { t(".status.agreed") }
+      Badge(variant: :default) { t(".status.agreed") + date_str }
     elsif @trade.accepted_by?(@current_user)
-      Badge(variant: :outline) { t(".status.waiting_for_other", name: @other_user.name) }
+      Badge(variant: :outline) { t(".status.waiting_for_other", name: @other_user.name) + date_str }
     elsif @trade.accepted_by?(@other_user)
-      Badge(variant: :outline) { t(".status.other_accepted", name: @other_user.name) }
+      Badge(variant: :outline) { t(".status.other_accepted", name: @other_user.name) + date_str }
     else
-      Badge(variant: :outline) { t(".status.negotiating") }
+      Badge(variant: :outline) { t(".status.negotiating") + date_str }
     end
   end
 
