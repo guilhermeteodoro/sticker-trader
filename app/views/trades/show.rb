@@ -193,8 +193,8 @@ class Views::Trades::Show < Views::LoggedIn
         else
           button(
             type: "submit",
-            class: "inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium text-white opacity-60 cursor-pointer hover:opacity-100 transition-opacity",
-            style: "background-color: #{color}"
+            class: "inline-flex items-center gap-1 px-2 py-1 rounded border text-xs font-medium cursor-pointer hover:opacity-80 transition-opacity",
+            style: "border-color: #{color}; color: #{color}"
           ) { "#{sticker.country.code} #{sticker.number}" }
         end
       end
@@ -247,8 +247,8 @@ class Views::Trades::Show < Views::LoggedIn
     confirmed_receipts = receipts_for_current_user.where.not(confirmed_at: nil).includes(sticker: :country).order("stickers.position")
     return if confirmed_receipts.empty?
 
-    div(class: "mt-4 rounded-md border border-gray-200 bg-gray-50 p-3 opacity-60") do
-      p(class: "text-xs font-semibold text-gray-500 mb-2") { t(".receipt_ended") }
+    div(class: "mt-4 rounded-md border border-gray-200 bg-gray-50 p-3") do
+      p(class: "text-xs font-semibold text-muted-foreground mb-2") { t(".receipt_ended") }
       render_grouped_trade_stickers(confirmed_receipts, removable: false)
     end
   end
