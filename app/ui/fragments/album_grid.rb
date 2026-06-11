@@ -124,25 +124,22 @@ class UI::Fragments::AlbumGrid < UI::Base
       end
 
       # +/- actions
-      actions_attrs = {
-        class: "grid grid-cols-2 gap-1 mt-auto",
-        data: { album_card_target: "actions" }
-      }
-      actions_attrs[:hidden] = true unless glued || to_be_glued
-      div(**actions_attrs) do
-        btn_color = light_color?(color) ? "bg-black/20 text-gray-900" : "bg-white/30 text-white"
-        button_class = "h-6 rounded-lg #{btn_color} text-xs font-bold active:scale-95 cursor-pointer"
+      div(data: { album_card_target: "actions" }, hidden: !(glued || to_be_glued)) do
+        div(class: "grid grid-cols-2 gap-1") do
+          btn_color = light_color?(color) ? "bg-black/20 text-gray-900" : "bg-white/30 text-white"
+          button_class = "h-6 rounded-lg #{btn_color} text-xs font-bold active:scale-95 cursor-pointer"
 
-        button(
-          type: "button",
-          class: button_class,
-          data: { action: "click->album-card#decrement" }
-        ) { "−" }
-        button(
-          type: "button",
-          class: button_class,
-          data: { action: "click->album-card#increment" }
-        ) { "+" }
+          button(
+            type: "button",
+            class: button_class,
+            data: { action: "click->album-card#decrement" }
+          ) { "−" }
+          button(
+            type: "button",
+            class: button_class,
+            data: { action: "click->album-card#increment" }
+          ) { "+" }
+        end
       end
 
       # Extras count - blends with shadow
