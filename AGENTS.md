@@ -62,24 +62,11 @@ Examples:
 
 ## Tests
 
-### Guidelines
-
-**Integration tests** are broad smoke tests — one or two happy-path flows per feature. They verify routes work, redirects happen, and the right status codes come back. Don't assert HTML content in integration tests.
-
-**View tests** verify rendering: what text appears, what components are present, clipboard data attributes, Turbo frame structure. Render Phlex components directly via `ComponentTestHelper` and assert on the HTML output with Nokogiri.
-
-**Service/model tests** verify business logic in isolation.
-
-### Rules
-
-1. **Minimal data** — create only the records needed for the assertion. Use small inline dumps (`"SA26|1|1-5|1:1"`) instead of `sample_dump`. A test for balanced trading needs 5 stickers per user, not 591.
-2. **Seed is shared** — the sticker catalog (994 stickers, 49 countries) is loaded once at suite startup and shared via transactional rollback. Don't re-seed or depend on seed order.
-3. **No content assertions in integration tests** — if you're asserting `response.body` includes specific text, it probably belongs in a view test.
-4. **Edge cases in unit tests** — integration tests cover the happy path. Parser edge cases, empty states, error handling, and rendering variations go in service or view tests.
+See [test/AGENTS.md](test/AGENTS.md) for guidelines, rules, and conventions.
 
 ## Presentation layer
 
-UI code lives in `app/ui/` (components, fragments, layouts) — not `app/views/`. See [ADR-0006](docs/adr/0006-presentation-layer-organization.md) for the decision guide on where to place new UI classes.
+UI code lives in `app/ui/` (components, fragments, layouts) — not `app/views/`. See [ADR-0006](docs/adr/0006-presentation-layer-organization.md) and [app/ui/AGENTS.md](app/ui/AGENTS.md).
 
 ## Environment
 
@@ -88,10 +75,7 @@ UI code lives in `app/ui/` (components, fragments, layouts) — not `app/views/`
 
 ## Schema conventions
 
-- **Models own defaults and validations.** Do not add default values at the database level.
-- **DB-level constraints only for race conditions and data integrity** that can't be guaranteed at the app layer: unique indexes, foreign keys, not-null on columns that would corrupt data if nil.
-- When in doubt, keep the constraint in the model and add a DB constraint only if concurrent requests could violate it.
-- **Prefer datetime columns over booleans.** A boolean can always be inferred from a datetime (`present?` = true). Datetimes carry more information (when it happened) at no extra cost. Use `_at` suffix (e.g., `confirmed_at`, `auto_agreed_at`).
+See [db/AGENTS.md](db/AGENTS.md). Key rule: models own defaults/validations; DB constraints only for race conditions.
 
 ## Domain language
 
