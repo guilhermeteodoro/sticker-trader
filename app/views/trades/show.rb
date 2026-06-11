@@ -69,7 +69,6 @@ class Views::Trades::Show < Views::LoggedIn
       )
     end
 
-    render_receipt_section if @trade.agreed?
   end
 
   def render_user_card(title:, trade_stickers:, pool_stickers:, giver:, removable:)
