@@ -123,22 +123,24 @@ class UI::Fragments::AlbumGrid < UI::Base
         render_sticker_name(sticker)
       end
 
-      # +/- actions
-      div(data: { album_card_target: "actions" }, hidden: !(glued || to_be_glued)) do
-        div(class: "grid grid-cols-2 gap-1") do
-          btn_color = light_color?(color) ? "bg-black/20 text-gray-900" : "bg-white/30 text-white"
-          button_class = "h-6 rounded-lg #{btn_color} text-xs font-bold active:scale-95 cursor-pointer"
+      # +/- actions (only for owned cards)
+      if glued
+        div(data: { album_card_target: "actions" }) do
+          div(class: "grid grid-cols-2 gap-1") do
+            btn_color = light_color?(color) ? "bg-black/20 text-gray-900" : "bg-white/30 text-white"
+            button_class = "h-6 rounded-lg #{btn_color} text-xs font-bold active:scale-95 cursor-pointer"
 
-          button(
-            type: "button",
-            class: button_class,
-            data: { action: "click->album-card#decrement" }
-          ) { "−" }
-          button(
-            type: "button",
-            class: button_class,
-            data: { action: "click->album-card#increment" }
-          ) { "+" }
+            button(
+              type: "button",
+              class: button_class,
+              data: { action: "click->album-card#decrement" }
+            ) { "−" }
+            button(
+              type: "button",
+              class: button_class,
+              data: { action: "click->album-card#increment" }
+            ) { "+" }
+          end
         end
       end
 

@@ -151,7 +151,7 @@ export default class extends Controller {
     }
 
     if (this.hasActionsTarget) {
-      if (this.gluedValue || this.toBeGluedValue) {
+      if (this.gluedValue) {
         this.actionsTarget.removeAttribute("hidden")
       } else {
         this.actionsTarget.setAttribute("hidden", "")
