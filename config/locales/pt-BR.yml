@@ -33,6 +33,9 @@ pt-BR:
         unglue_confirmation: "Remover esta figurinha da sua coleção?"
         cancel: "Cancelar"
         unglue: "Remover"
+        new_count:
+          one: "(%{count} nova)"
+          other: "(%{count} novas)"
 
   trades:
     create:

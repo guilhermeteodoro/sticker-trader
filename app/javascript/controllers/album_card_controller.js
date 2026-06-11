@@ -32,12 +32,14 @@ export default class extends Controller {
       this.toBeGluedValue = false
       this.gluedValue = true
       this.#render()
+      this.#decrementNewCount()
 
       patch(this.updateUrlValue, { body: { state: "glued" } })
         .then(async (response) => {
           if (!response.ok) {
             this.toBeGluedValue = true
             this.#render()
+            this.#incrementNewCount()
           }
         })
     } else {
@@ -149,11 +151,35 @@ export default class extends Controller {
     }
 
     if (this.hasActionsTarget) {
-      if (this.gluedValue || this.toBeGluedValue) {
-        this.actionsTarget.classList.remove("hidden")
-      } else {
-        this.actionsTarget.classList.add("hidden")
-      }
+      this.actionsTarget.style.display = (this.gluedValue || this.toBeGluedValue) ? "" : "none"
     }
+  }
+
+  #findNewCountEl() {
+    // Walk up to the collapsible wrapper, then find the new count span in its trigger
+    const section = this.element.closest('[data-controller="ui-state"]')
+    return section?.querySelector('[data-new-count]')
+  }
+
+  #decrementNewCount() {
+    const el = this.#findNewCountEl()
+    if (!el) return
+    const match = el.textContent.match(/\d+/)
+    if (!match) return
+    const count = parseInt(match[0]) - 1
+    if (count <= 0) {
+      el.remove()
+    } else {
+      el.textContent = el.textContent.replace(/\d+/, count)
+    }
+  }
+
+  #incrementNewCount() {
+    const el = this.#findNewCountEl()
+    if (!el) return
+    const match = el.textContent.match(/\d+/)
+    if (!match) return
+    const count = parseInt(match[0]) + 1
+    el.textContent = el.textContent.replace(/\d+/, count)
   }
 }

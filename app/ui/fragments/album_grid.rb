@@ -51,7 +51,7 @@ class UI::Fragments::AlbumGrid < UI::Base
         span(class: "italic font-extralight font-stretch-50% text-sm text-gray-500") { country.name }
         span(class: "text-xs text-gray-500") { "#{owned}/#{total}" }
         span(class: "text-xs text-gray-500") { "(#{dups} dups)" } if dups > 0
-        span(class: "text-xs text-amber-600") { "(#{to_glue} new)" } if to_glue > 0
+        span(class: "text-xs text-amber-600", data: { new_count: true }) { t(".new_count", count: to_glue) } if to_glue > 0
       end
 
       c.content do
@@ -123,9 +123,10 @@ class UI::Fragments::AlbumGrid < UI::Base
         render_sticker_name(sticker)
       end
 
-      # +/- actions (invisible but space-reserving when not glued)
+      # +/- actions (hidden when not glued/to_be_glued)
       div(
-        class: "grid grid-cols-2 gap-1 mt-auto #{(glued || to_be_glued) ? "" : "hidden"}",
+        class: "grid grid-cols-2 gap-1 mt-auto",
+        style: (glued || to_be_glued) ? "" : "display:none",
         data: { album_card_target: "actions" }
       ) do
         btn_color = light_color?(color) ? "bg-black/20 text-gray-900" : "bg-white/30 text-white"

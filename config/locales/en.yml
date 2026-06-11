@@ -33,6 +33,9 @@ en:
         unglue_confirmation: "Remove this sticker from your collection?"
         cancel: "Cancel"
         unglue: "Remove"
+        new_count:
+          one: "(%{count} new)"
+          other: "(%{count} new)"
 
   trades:
     create:
