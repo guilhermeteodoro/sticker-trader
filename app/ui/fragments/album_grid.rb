@@ -123,12 +123,13 @@ class UI::Fragments::AlbumGrid < UI::Base
         render_sticker_name(sticker)
       end
 
-      # +/- actions (hidden when not glued/to_be_glued)
-      div(
+      # +/- actions
+      actions_attrs = {
         class: "grid grid-cols-2 gap-1 mt-auto",
-        style: (glued || to_be_glued) ? "" : "display:none",
         data: { album_card_target: "actions" }
-      ) do
+      }
+      actions_attrs[:hidden] = true unless glued || to_be_glued
+      div(**actions_attrs) do
         btn_color = light_color?(color) ? "bg-black/20 text-gray-900" : "bg-white/30 text-white"
         button_class = "h-6 rounded-lg #{btn_color} text-xs font-bold active:scale-95 cursor-pointer"
 
