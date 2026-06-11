@@ -8,6 +8,7 @@ export default class extends Controller {
     userStickerId: Number,
     copies: Number,
     glued: Boolean,
+    toBeGlued: Boolean,
     color: String,
     foil: Boolean,
     darkText: Boolean,
@@ -23,24 +24,40 @@ export default class extends Controller {
   }
 
   glue(event) {
-    if (this.gluedValue) return
+    if (this.gluedValue && !this.toBeGluedValue) return
     if (event.target.closest('[data-album-card-target="actions"]')) return
 
-    this.gluedValue = true
-    this.copiesValue = 0
-    this.#render()
+    if (this.toBeGluedValue) {
+      // Transition to_be_glued → glued
+      this.toBeGluedValue = false
+      this.gluedValue = true
+      this.#render()
 
-    post(this.createUrlValue, { body: { sticker_id: this.stickerIdValue } })
-      .then(async (response) => {
-        if (response.ok) {
-          const data = await response.json
-          this.userStickerIdValue = data.id
-          this.#updateUrls(data.id)
-        } else {
-          this.gluedValue = false
-          this.#render()
-        }
-      })
+      patch(this.updateUrlValue, { body: { state: "glued" } })
+        .then(async (response) => {
+          if (!response.ok) {
+            this.toBeGluedValue = true
+            this.#render()
+          }
+        })
+    } else {
+      // Create new glued sticker
+      this.gluedValue = true
+      this.copiesValue = 0
+      this.#render()
+
+      post(this.createUrlValue, { body: { sticker_id: this.stickerIdValue } })
+        .then(async (response) => {
+          if (response.ok) {
+            const data = await response.json
+            this.userStickerIdValue = data.id
+            this.#updateUrls(data.id)
+          } else {
+            this.gluedValue = false
+            this.#render()
+          }
+        })
+    }
   }
 
   increment(event) {
@@ -91,7 +108,7 @@ export default class extends Controller {
     const card = this.element
     const color = this.colorValue
 
-    if (this.gluedValue) {
+    if (this.gluedValue || this.toBeGluedValue) {
       card.classList.remove("opacity-50", "cursor-pointer", "text-gray-600", "bg-gray-100", "border-gray-300")
       card.classList.add("opacity-100", "border-gray-700")
       if (this.darkTextValue) {
@@ -107,9 +124,16 @@ export default class extends Controller {
         card.classList.remove("foil-card")
       }
       card.style.backgroundColor = color
+
+      // to_be_glued visual: rotated with amber ring
+      if (this.toBeGluedValue) {
+        card.classList.add("rotate-3", "ring-2", "ring-amber-400")
+      } else {
+        card.classList.remove("rotate-3", "ring-2", "ring-amber-400")
+      }
     } else {
       card.classList.add("opacity-50", "cursor-pointer", "text-gray-600", "bg-gray-100", "border-gray-300")
-      card.classList.remove("opacity-100", "text-white", "text-gray-900", "[text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]", "[text-shadow:_0_1px_0_rgba(255,255,255,0.3)]", "foil-card", "border-gray-700")
+      card.classList.remove("opacity-100", "text-white", "text-gray-900", "[text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]", "[text-shadow:_0_1px_0_rgba(255,255,255,0.3)]", "foil-card", "border-gray-700", "rotate-3", "ring-2", "ring-amber-400")
       card.style.backgroundColor = ""
     }
 
@@ -125,7 +149,7 @@ export default class extends Controller {
     }
 
     if (this.hasActionsTarget) {
-      if (this.gluedValue) {
+      if (this.gluedValue || this.toBeGluedValue) {
         this.actionsTarget.classList.remove("invisible")
       } else {
         this.actionsTarget.classList.add("invisible")
