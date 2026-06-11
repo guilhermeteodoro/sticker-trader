@@ -244,8 +244,12 @@ class Views::Trades::Show < Views::LoggedIn
   end
 
   def render_receipt_ended
-    div(class: "rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-600") do
-      p { t(".receipt_ended") }
+    confirmed_receipts = receipts_for_current_user.where.not(confirmed_at: nil).includes(sticker: :country).order("stickers.position")
+    return if confirmed_receipts.empty?
+
+    div(class: "mt-4 rounded-md border border-gray-200 bg-gray-50 p-3 opacity-60") do
+      p(class: "text-xs font-semibold text-gray-500 mb-2") { t(".receipt_ended") }
+      render_grouped_trade_stickers(confirmed_receipts, removable: false)
     end
   end
 
