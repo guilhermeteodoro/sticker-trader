@@ -95,6 +95,7 @@ en:
         confirm_all: "Confirm all received"
         status:
           agreed: "Agreed ✓"
+          confirmed: "Confirmed ✓"
           negotiating: "Negotiating"
           waiting_for_other: "Waiting for %{name}"
           other_accepted: "%{name} accepted"

@@ -41,7 +41,9 @@ class Views::Trades::Show < Views::LoggedIn
 
   def render_status_badge_inline
     date_str = " · #{I18n.l(trade_latest_date, format: :short)}"
-    if @trade.agreed?
+    if receipt_ended?
+      Badge(variant: :default) { t(".status.confirmed") + date_str }
+    elsif @trade.agreed?
       Badge(variant: :default) { t(".status.agreed") + date_str }
     elsif @trade.accepted_by?(@current_user)
       Badge(variant: :outline) { t(".status.waiting_for_other", name: @other_user.name) + date_str }

@@ -107,6 +107,7 @@ pt-BR:
         confirm_all: "Confirmar todos recebidos"
         status:
           agreed: "Combinado ✓"
+          confirmed: "Confirmado ✓"
           negotiating: "Negociando"
           waiting_for_other: "Aguardando %{name}"
           other_accepted: "%{name} aceitou"
