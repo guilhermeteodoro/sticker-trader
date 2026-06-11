@@ -125,7 +125,7 @@ class UI::Fragments::AlbumGrid < UI::Base
 
       # +/- actions (invisible but space-reserving when not glued)
       div(
-        class: "grid grid-cols-2 gap-1 mt-auto #{(glued || to_be_glued) ? "" : "invisible"}",
+        class: "grid grid-cols-2 gap-1 mt-auto #{(glued || to_be_glued) ? "" : "hidden"}",
         data: { album_card_target: "actions" }
       ) do
         btn_color = light_color?(color) ? "bg-black/20 text-gray-900" : "bg-white/30 text-white"
