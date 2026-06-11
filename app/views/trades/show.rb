@@ -68,7 +68,6 @@ class Views::Trades::Show < Views::LoggedIn
         removable: editable?
       )
     end
-
   end
 
   def render_user_card(title:, trade_stickers:, pool_stickers:, giver:, removable:)
@@ -231,35 +230,12 @@ class Views::Trades::Show < Views::LoggedIn
 
   def render_receipt_actions
     my_receipts = receipts_for_current_user
-    confirmed_count = my_receipts.where.not(confirmed_at: nil).count
-    total_count = my_receipts.count
+    @receipt_confirmed_count = my_receipts.where.not(confirmed_at: nil).count
+    @receipt_total_count = my_receipts.count
 
     # Help text
     div(class: "rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200") do
       p { t(".receipt_help") }
-    end
-
-    # Action buttons
-    div(class: "flex gap-3 mt-3") do
-      # Confirm all & end
-      form(action: end_confirmation_trade_receipts_path(@trade), method: "post", class: "inline") do
-        input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-        input(type: "hidden", name: "confirm_all", value: "true")
-        confirm_msg = t(".end_confirm_all.message", count: total_count)
-        Button(type: :submit, data: { turbo_confirm: confirm_msg }) { t(".confirm_all_and_end") }
-      end
-
-      # End confirmation (with current state)
-      form(action: end_confirmation_trade_receipts_path(@trade), method: "post", class: "inline") do
-        input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
-        unconfirmed_count = total_count - confirmed_count
-        confirm_msg = if unconfirmed_count == 0
-                        t(".end_confirm_all.message", count: total_count)
-        else
-                        t(".end_confirm_partial.message", confirmed: confirmed_count, total: total_count, unconfirmed: unconfirmed_count)
-        end
-        Button(type: :submit, variant: :outline, data: { turbo_confirm: confirm_msg }) { t(".end_confirmation") }
-      end
     end
   end
 
@@ -276,6 +252,29 @@ class Views::Trades::Show < Views::LoggedIn
     div(class: "mt-4 rounded-md border-2 border-green-300 bg-green-50 p-3") do
       p(class: "text-xs font-semibold text-green-800 mb-2") { t(".receipt_title") }
       render_grouped_trade_stickers(my_receipts, removable: false)
+
+      # Action buttons bottom-right
+      div(class: "flex justify-end gap-3 mt-4") do
+        # Confirm all & end
+        form(action: end_confirmation_trade_receipts_path(@trade), method: "post", class: "inline") do
+          input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+          input(type: "hidden", name: "confirm_all", value: "true")
+          confirm_msg = t(".end_confirm_all.message", count: @receipt_total_count)
+          Button(type: :submit, data: { turbo_confirm: confirm_msg }) { t(".confirm_all_and_end") }
+        end
+
+        # End confirmation (with current state)
+        form(action: end_confirmation_trade_receipts_path(@trade), method: "post", class: "inline") do
+          input(type: "hidden", name: "authenticity_token", value: form_authenticity_token)
+          unconfirmed_count = @receipt_total_count - @receipt_confirmed_count
+          confirm_msg = if unconfirmed_count == 0
+                          t(".end_confirm_all.message", count: @receipt_total_count)
+          else
+                          t(".end_confirm_partial.message", confirmed: @receipt_confirmed_count, total: @receipt_total_count, unconfirmed: unconfirmed_count)
+          end
+          Button(type: :submit, variant: :outline, data: { turbo_confirm: confirm_msg }) { t(".end_confirmation") }
+        end
+      end
     end
   end
 
