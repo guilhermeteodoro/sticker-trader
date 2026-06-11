@@ -31,6 +31,7 @@ export default class extends Controller {
       // Transition to_be_glued → glued
       this.toBeGluedValue = false
       this.gluedValue = true
+      this.#ensureActions()
       this.#render()
       this.#decrementNewCount()
 
@@ -46,6 +47,7 @@ export default class extends Controller {
       // Create new glued sticker
       this.gluedValue = true
       this.copiesValue = 0
+      this.#ensureActions()
       this.#render()
 
       post(this.createUrlValue, { body: { sticker_id: this.stickerIdValue } })
@@ -185,5 +187,37 @@ export default class extends Controller {
     if (!match) return
     const count = parseInt(match[0]) + 1
     el.textContent = el.textContent.replace(/\d+/, count)
+  }
+
+  #ensureActions() {
+    if (this.hasActionsTarget) return
+
+    const isDark = this.darkTextValue
+    const btnColor = isDark ? "bg-black/20 text-gray-900" : "bg-white/30 text-white"
+    const btnClass = `h-6 rounded-lg ${btnColor} text-xs font-bold active:scale-95 cursor-pointer`
+
+    const wrapper = document.createElement("div")
+    wrapper.setAttribute("data-album-card-target", "actions")
+
+    const grid = document.createElement("div")
+    grid.className = "grid grid-cols-2 gap-1"
+
+    const dec = document.createElement("button")
+    dec.type = "button"
+    dec.className = btnClass
+    dec.setAttribute("data-action", "click->album-card#decrement")
+    dec.textContent = "−"
+
+    const inc = document.createElement("button")
+    inc.type = "button"
+    inc.className = btnClass
+    inc.setAttribute("data-action", "click->album-card#increment")
+    inc.textContent = "+"
+
+    grid.append(dec, inc)
+    wrapper.append(grid)
+    // Insert before the badge span
+    const badge = this.element.querySelector('[data-album-card-target="badge"]')
+    this.element.insertBefore(wrapper, badge)
   }
 }
