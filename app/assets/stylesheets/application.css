@@ -41,18 +41,19 @@
 /* Folded corner — clips the top-right corner off the to_be_glued card */
 .folded-corner {
   clip-path: polygon(0 0, 60% 0, 100% 40%, 100% 100%, 0 100%);
+}
+
+/* Card shadow — must live on the wrapper because filter is applied before clip-path */
+[data-controller="album-card"]:has(.folded-corner) {
   filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.18));
 }
 
-/* Shadow along the fold edge — gradient inside the card near the diagonal cut */
+/* Fold crease shadow — dark band along the diagonal, clipped at the fold edge */
 .folded-corner::after {
   content: '';
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 60%;
-  height: 60%;
-  background: linear-gradient(to bottom left, rgba(0,0,0,0.13) 0%, transparent 35%);
+  inset: 0;
+  background: linear-gradient(315deg, transparent 74%, rgba(0,0,0,0.12) 80%, transparent 84%);
   pointer-events: none;
   z-index: 2;
 }
