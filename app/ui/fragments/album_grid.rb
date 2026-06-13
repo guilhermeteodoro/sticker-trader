@@ -126,7 +126,7 @@ class UI::Fragments::AlbumGrid < UI::Base
 
       # Top card (absolute — overlays placeholder)
       div(
-        class: "absolute inset-0 border rounded border-gray-300 p-1 select-none flex flex-col hover:scale-105 hover:brightness-105 transition-transform #{top_classes}",
+        class: "absolute inset-0 z-10 border rounded border-gray-300 p-1 select-none flex flex-col hover:scale-105 hover:brightness-105 transition-transform #{top_classes}",
         style: top_style,
         data: { album_card_target: "topCard" }
       ) do
