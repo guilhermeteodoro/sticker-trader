@@ -134,7 +134,7 @@ class UI::Fragments::AlbumGrid < UI::Base
         # Card group — owns clip-path and transform
         div(
           class: "absolute inset-0 #{group_classes}",
-          style: [group_style.presence, group_filter].compact.join("; ").presence,
+          style: [ group_style.presence, group_filter ].compact.join("; ").presence,
           data: { album_card_target: "cardGroup" }
         ) do
           # Top card
