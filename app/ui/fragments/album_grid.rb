@@ -97,7 +97,7 @@ class UI::Fragments::AlbumGrid < UI::Base
     end
 
     # Wrapper
-    div(class: "relative aspect-5/7", data: { controller: "album-card",
+    div(class: "relative", data: { controller: "album-card",
       album_card_sticker_id_value: sticker.id,
       album_card_user_sticker_id_value: user_sticker_id,
       album_card_copies_value: copies,
@@ -112,7 +112,7 @@ class UI::Fragments::AlbumGrid < UI::Base
       action: "click->album-card#glue" }) do
       # Placeholder (relative — sets the height)
       div(
-        class: "absolute inset-0 border rounded border-gray-300 p-1 opacity-50 text-gray-600 bg-gray-100 flex flex-col select-none cursor-pointer",
+        class: "border rounded border-gray-300 p-1 opacity-50 text-gray-600 bg-gray-100 flex flex-col select-none cursor-pointer aspect-5/7",
         data: { album_card_target: "placeholder" }
       ) do
         div(class: "flex items-start justify-between text-sm leading-none") do
