@@ -45,11 +45,10 @@
 }
 
 /*
- * Fold shadow — a diagonal gradient on the placeholder's top-right corner.
- * Always rendered but only visible when the folded card's clip-path reveals it.
+ * Fold shadow — only rendered on placeholders inside a wrapper with a folded card.
  * Simulates the shadow cast by the fold crease.
  */
-[data-album-card-target="placeholder"]::after {
+[data-controller="album-card"]:has(.folded-corner) [data-album-card-target="placeholder"]::after {
   content: '';
   position: absolute;
   top: 0;
