@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import { post, patch, destroy } from "@rails/request.js"
 
 export default class extends Controller {
-  static targets = ["card", "badge", "actions"]
+  static targets = ["cardGroup", "topCard", "placeholder", "badge", "actions"]
   static values = {
     stickerId: Number,
     userStickerId: Number,
@@ -44,20 +44,34 @@ export default class extends Controller {
           }
         })
     } else {
-      // Create new glued sticker
-      this.gluedValue = true
-      this.copiesValue = 0
-      this.#ensureActions()
+      // Determine state based on click position
+      const rect = this.element.getBoundingClientRect()
+      const x = event.clientX - rect.left
+      const y = event.clientY - rect.top
+      const isTopRight = x > rect.width * 0.5 && y < rect.height * 0.5
+      const state = isTopRight ? "to_be_glued" : "glued"
+
+      if (state === "to_be_glued") {
+        this.toBeGluedValue = true
+      } else {
+        this.gluedValue = true
+        this.copiesValue = 0
+        this.#ensureActions()
+      }
       this.#render()
 
-      post(this.createUrlValue, { body: { sticker_id: this.stickerIdValue } })
+      post(this.createUrlValue, { body: { sticker_id: this.stickerIdValue, state } })
         .then(async (response) => {
           if (response.ok) {
             const data = await response.json
             this.userStickerIdValue = data.id
             this.#updateUrls(data.id)
+            if (state === "to_be_glued") {
+              this.#incrementNewCount()
+            }
           } else {
             this.gluedValue = false
+            this.toBeGluedValue = false
             this.#render()
           }
         })
@@ -86,6 +100,7 @@ export default class extends Controller {
     if (!confirm("Remove this sticker from your collection?")) return
 
     this.gluedValue = false
+    this.toBeGluedValue = false
     this.copiesValue = 0
     this.#render()
 
@@ -109,12 +124,16 @@ export default class extends Controller {
   }
 
   #render() {
-    const card = this.element
+    const group = this.hasCardGroupTarget ? this.cardGroupTarget : this.element
+    const card = this.hasTopCardTarget ? this.topCardTarget : this.element
     const color = this.colorValue
 
     if (this.gluedValue || this.toBeGluedValue) {
-      card.classList.remove("opacity-50", "cursor-pointer", "text-gray-600", "bg-gray-100", "border-gray-300")
-      card.classList.add("opacity-100", "border-gray-700")
+      // Card group visible
+      group.classList.remove("opacity-0", "pointer-events-none")
+      group.classList.add("opacity-100")
+
+      // Text styling on topCard
       if (this.darkTextValue) {
         card.classList.add("text-gray-900", "[text-shadow:_0_1px_0_rgba(255,255,255,0.3)]")
         card.classList.remove("text-white", "[text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]")
@@ -129,15 +148,20 @@ export default class extends Controller {
       }
       card.style.backgroundColor = color
 
-      // to_be_glued visual: rotated with amber ring
+      // to_be_glued visual: folded corner + offset on the group
       if (this.toBeGluedValue) {
-        card.classList.add("rotate-3", "ring-2", "ring-amber-400")
+        group.classList.add("folded-corner")
+        group.style.transform = "rotate(2deg) translate(2px, 2px)"
       } else {
-        card.classList.remove("rotate-3", "ring-2", "ring-amber-400")
+        group.classList.remove("folded-corner")
+        group.style.transform = ""
       }
     } else {
-      card.classList.add("opacity-50", "cursor-pointer", "text-gray-600", "bg-gray-100", "border-gray-300")
-      card.classList.remove("opacity-100", "text-white", "text-gray-900", "[text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]", "[text-shadow:_0_1px_0_rgba(255,255,255,0.3)]", "foil-card", "border-gray-700", "rotate-3", "ring-2", "ring-amber-400")
+      // Card group hidden — placeholder shows through
+      group.classList.add("opacity-0", "pointer-events-none")
+      group.classList.remove("opacity-100", "folded-corner")
+      group.style.transform = ""
+      card.classList.remove("text-white", "text-gray-900", "[text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]", "[text-shadow:_0_1px_0_rgba(255,255,255,0.3)]", "foil-card")
       card.style.backgroundColor = ""
     }
 
@@ -145,15 +169,15 @@ export default class extends Controller {
       if (this.copiesValue > 0) {
         this.badgeTarget.textContent = this.copiesValue
         this.badgeTarget.classList.remove("hidden")
-        card.classList.add("shadow-[3px_3px_0_#374151]")
+        group.style.filter = "drop-shadow(3px 3px 0 #374151)"
       } else {
         this.badgeTarget.classList.add("hidden")
-        card.classList.remove("shadow-[3px_3px_0_#374151]")
+        group.style.filter = ""
       }
     }
 
     if (this.hasActionsTarget) {
-      if (this.gluedValue) {
+      if (this.gluedValue || this.toBeGluedValue) {
         this.actionsTarget.removeAttribute("hidden")
       } else {
         this.actionsTarget.setAttribute("hidden", "")
@@ -216,8 +240,9 @@ export default class extends Controller {
 
     grid.append(dec, inc)
     wrapper.append(grid)
-    // Insert before the badge span
-    const badge = this.element.querySelector('[data-album-card-target="badge"]')
-    this.element.insertBefore(wrapper, badge)
+    // Insert before the badge span in topCard
+    const topCard = this.hasTopCardTarget ? this.topCardTarget : this.element
+    const badge = topCard.querySelector('[data-album-card-target="badge"]')
+    topCard.insertBefore(wrapper, badge)
   }
 }

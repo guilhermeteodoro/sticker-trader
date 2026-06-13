@@ -74,81 +74,114 @@ class UI::Fragments::AlbumGrid < UI::Base
     base_url = user_user_stickers_path(@user)
     color = country.color || "#6B7280"
     is_foil = sticker.shiny?
-
     has_copies = copies > 0
+    owned = glued || to_be_glued
 
     text_class = light_color?(color) ? "text-gray-900 [text-shadow:_0_1px_0_rgba(255,255,255,0.3)]" : "text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.5)]"
-    glued_classes = "opacity-100 #{text_class} border-gray-700"
-    unglued_classes = "opacity-50 cursor-pointer text-gray-600 bg-gray-100"
-    to_be_glued_classes = "opacity-100 #{text_class} border-gray-700 rotate-3 ring-2 ring-amber-400"
-    copies_classes = has_copies ? "shadow-[3px_3px_0_#374151]" : ""
 
-    card_classes = if to_be_glued
-      to_be_glued_classes
-    elsif glued
-      glued_classes
+    group_classes = if owned
+      "opacity-100"
     else
-      unglued_classes
+      "opacity-0 pointer-events-none"
     end
-    card_classes += " #{copies_classes}" if has_copies
-    card_classes += " foil-card" if (glued || to_be_glued) && is_foil
+    group_classes += " folded-corner" if to_be_glued
 
-    div(
-      class: "relative border rounded border-gray-300 p-1 select-none aspect-5/7 flex flex-col hover:scale-105 hover:brightness-105 transition-transform #{card_classes}",
-      style: (glued || to_be_glued) ? "background-color: #{color}" : "",
-      data: {
-        controller: "album-card",
-        album_card_sticker_id_value: sticker.id,
-        album_card_user_sticker_id_value: user_sticker_id,
-        album_card_copies_value: copies,
-        album_card_glued_value: glued,
-        album_card_to_be_glued_value: to_be_glued,
-        album_card_color_value: color,
-        album_card_foil_value: is_foil,
-        album_card_dark_text_value: light_color?(color),
-        album_card_create_url_value: base_url,
-        album_card_update_url_value: (glued || to_be_glued) ? "#{base_url}/#{user_sticker_id}" : "",
-        album_card_destroy_url_value: (glued || to_be_glued) ? "#{base_url}/#{user_sticker_id}" : "",
-        action: "click->album-card#glue"
-      }
-    ) do
-      # Top row: country code left, number right
-      div(class: "flex items-start justify-between text-sm leading-none") do
-        span(class: "font-extralight text-nowrap font-stretch-50% opacity-50") { sticker.country.code }
-        span(class: "font-black tracking-tight tabular-nums") { sticker.number }
-      end
+    group_style = if to_be_glued
+      "transform: rotate(2deg) translate(2px, 2px)"
+    else
+      ""
+    end
 
-      # Center: player name
-      div(class: "flex-1 flex flex-col items-center justify-center text-center px-0.5") do
-        render_sticker_name(sticker)
-      end
+    card_classes = if owned
+      "#{text_class}"
+    else
+      ""
+    end
+    card_classes += " foil-card" if owned && is_foil
 
-      # +/- actions (only for owned cards)
-      if glued
-        div(data: { album_card_target: "actions" }) do
-          div(class: "grid grid-cols-2 gap-1") do
-            btn_color = light_color?(color) ? "bg-black/20 text-gray-900" : "bg-white/30 text-white"
-            button_class = "h-6 rounded-lg #{btn_color} text-xs font-bold active:scale-95 cursor-pointer"
+    group_filter = has_copies ? "filter: drop-shadow(3px 3px 0 #374151)" : nil
 
-            button(
-              type: "button",
-              class: button_class,
-              data: { action: "click->album-card#decrement" }
-            ) { "−" }
-            button(
-              type: "button",
-              class: button_class,
-              data: { action: "click->album-card#increment" }
-            ) { "+" }
-          end
+    # Wrapper
+    div(class: "relative", data: { controller: "album-card",
+      album_card_sticker_id_value: sticker.id,
+      album_card_user_sticker_id_value: user_sticker_id,
+      album_card_copies_value: copies,
+      album_card_glued_value: glued,
+      album_card_to_be_glued_value: to_be_glued,
+      album_card_color_value: color,
+      album_card_foil_value: is_foil,
+      album_card_dark_text_value: light_color?(color),
+      album_card_create_url_value: base_url,
+      album_card_update_url_value: owned ? "#{base_url}/#{user_sticker_id}" : "",
+      album_card_destroy_url_value: owned ? "#{base_url}/#{user_sticker_id}" : "",
+      action: "click->album-card#glue" }) do
+      # Placeholder (relative — sets the height)
+      div(
+        class: "border rounded border-gray-300 p-1 opacity-50 text-gray-600 bg-gray-100 flex flex-col select-none cursor-pointer aspect-5/7",
+        data: { album_card_target: "placeholder" }
+      ) do
+        div(class: "flex items-start justify-between text-sm leading-none") do
+          span(class: "font-extralight text-nowrap font-stretch-50% opacity-50") { sticker.country.code }
+          span(class: "font-black tracking-tight tabular-nums") { sticker.number }
+        end
+        div(class: "flex-1 flex flex-col items-center justify-center text-center px-0.5") do
+          render_sticker_name(sticker)
         end
       end
 
-      # Extras count - blends with shadow
-      span(
-        class: "absolute -bottom-1 -right-1 bg-[#374151] rounded text-[9px] font-bold text-white w-4 h-4 flex items-center justify-center #{copies > 0 ? "" : "hidden"}",
-        data: { album_card_target: "badge" }
-      ) { copies }
+      # Hover wrapper — scales card + badge together
+      div(class: "absolute inset-0 z-10 transition-transform hover:scale-105 hover:brightness-105") do
+        # Card group — owns clip-path and transform
+        div(
+          class: "absolute inset-0 #{group_classes}",
+          style: [ group_style.presence, group_filter ].compact.join("; ").presence,
+          data: { album_card_target: "cardGroup" }
+        ) do
+          # Top card
+          div(
+            class: "w-full h-full border rounded border-gray-300 p-1 select-none flex flex-col #{card_classes}",
+            style: owned ? "background-color: #{color}" : nil,
+            data: { album_card_target: "topCard" }
+          ) do
+            div(class: "flex items-start justify-between text-sm leading-none") do
+              span(class: "font-extralight text-nowrap font-stretch-50% opacity-50") { sticker.country.code }
+              span(class: "font-black tracking-tight tabular-nums") { sticker.number }
+            end
+            div(class: "flex-1 flex flex-col items-center justify-center text-center px-0.5") do
+              render_sticker_name(sticker)
+            end
+
+            if owned
+              div(data: { album_card_target: "actions" }) do
+                div(class: "grid grid-cols-2 gap-1") do
+                  btn_color = light_color?(color) ? "bg-black/20 text-gray-900" : "bg-white/30 text-white"
+                  button_class = "h-6 rounded-lg #{btn_color} text-xs font-bold active:scale-95 cursor-pointer"
+
+                  button(
+                    type: "button",
+                    class: button_class,
+                    data: { action: "click->album-card#decrement" }
+                  ) { "−" }
+                  button(
+                    type: "button",
+                    class: button_class,
+                    data: { action: "click->album-card#increment" }
+                  ) { "+" }
+                end
+              end
+            end
+          end
+
+          # Fold flap — square in top-right, clipped by parent's polygon
+          div(class: "fold-flap absolute top-0 right-0 w-[40%] h-[40%] rounded-bl border border-gray-300 bg-gradient-to-bl from-white to-gray-100 shadow-[-2px_2px_3px_rgba(0,0,0,0.15)] pointer-events-none")
+        end
+
+        # Badge — outside cardGroup so clip-path doesn't cut it
+        span(
+          class: "absolute z-30 -bottom-1 -right-1 bg-[#374151] rounded text-[9px] font-bold text-white w-4 h-4 flex items-center justify-center #{copies > 0 ? "" : "hidden"}",
+          data: { album_card_target: "badge" }
+        ) { copies }
+      end
     end
   end
 

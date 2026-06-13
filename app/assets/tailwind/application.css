@@ -72,38 +72,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-.foil-card {
-  position: relative;
-}
-
-.foil-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-conic-gradient(
-      from 0deg,
-      hsl(0, 60%, 75%) 0deg,
-      hsl(60, 60%, 75%) 60deg,
-      hsl(120, 60%, 75%) 120deg,
-      hsl(180, 60%, 75%) 180deg,
-      hsl(240, 60%, 75%) 240deg,
-      hsl(300, 60%, 75%) 300deg,
-      hsl(360, 60%, 75%) 360deg
-    ) 0 0 / 10px 10px;
-  animation: holo-shift 2s ease-in infinite;
-  mix-blend-mode: soft-light;
-  opacity: 0.5;
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 1;
-}
-
-@keyframes holo-shift {
-  0% { filter: hue-rotate(0deg) brightness(1); }
-  50% { filter: hue-rotate(180deg) brightness(1.1); }
-  100% { filter: hue-rotate(360deg) brightness(1); }
-}
-
-
