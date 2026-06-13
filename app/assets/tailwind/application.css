@@ -117,9 +117,8 @@
   right: 0;
   width: 40%;
   aspect-ratio: 1;
-  background: linear-gradient(225deg, transparent 50%, rgba(0,0,0,0.15) 50%);
+  background: linear-gradient(225deg, rgba(243,244,246,0.8) 50%, rgba(0,0,0,0.12) 50%);
   border-bottom-left-radius: 3px;
   pointer-events: none;
   z-index: 2;
 }
-
