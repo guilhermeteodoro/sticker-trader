@@ -60,12 +60,19 @@
 - [x] Integration smoke tests (routes, registration, login)
 - [x] E2E test: navigate home → register with collection → assert sees own info and collection
 
-## Phase 9: Trade consolidation
-- [x] Create `trades` table (user_a, user_b, confirmed_at)
-- [x] Create `trade_stickers` pivot (trade_id, sticker_id, giver_id, receiver_id)
-- [x] "Consolidar troca" button saves balanced trade to DB
-- [x] Trade history on owner's collection page
-- [x] Schema annotations on all models
+## Phase 9: Trade lifecycle (replaces old "consolidation")
+- [x] Create `trades` table (user_a, user_b, timestamps for accept/receipt phases)
+- [x] Create `trade_stickers` pivot (trade_id, sticker_id, giver_id, receiver_id, confirmed_at)
+- [x] Create `UserSticker` state machine (to_be_glued, duplicate, glued, incoming, incoming_to_be_glued, incoming_glued)
+- [x] Trade creation from balanced suggestion (both users can modify freely)
+- [x] Agreement: both users accept → stickers allocated (giver's duplicate soft-deleted, receiver gets `incoming`)
+- [x] Receipt confirmation: per-sticker toggle + end confirmation phase (two phases, per side)
+- [x] State transitions: confirmed stickers → giver's copy gone, receiver gets `to_be_glued`; unconfirmed → returned to giver
+- [x] Withdraw / Cancel: abort trade before agreement
+- [x] Reclaim: giver recovers duplicate after receiver ends confirmation with unconfirmed stickers
+- [x] Trade history on user's collection page (via `TradeParticipation` virtual model)
+- [x] Schema annotations + Discard gem soft-deletes on all tables
+- [x] Backfill migration for `incoming` stickers on existing agreed trades
 
 ## Phase 10: Deploy
 - [ ] Configure Render deployment (render.yaml, Dockerfile or buildpack)
