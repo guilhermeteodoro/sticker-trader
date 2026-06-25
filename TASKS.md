@@ -1,3 +1,11 @@
+---
+type: Task Plan
+title: Rails app implementation task plan
+description: Living checklist of implementation phases with per-task completion status.
+tags: [planning, tasks]
+timestamp: '2026-06-16T17:40:31Z'
+---
+
 # Rails App — Task Plan
 
 > **Note to agents/bots:** Update this file as you complete tasks (check them off) or

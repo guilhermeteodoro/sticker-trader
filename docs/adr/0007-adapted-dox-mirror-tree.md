@@ -1,3 +1,12 @@
+---
+type: Architecture Decision Record
+title: 'ADR-0007: DOX convention: co-located AGENTS.md files'
+description: Co-locate AGENTS.md inside each governed folder so agents always discover
+  the local DOX contract.
+tags: [adr, dox, agents, accepted]
+timestamp: '2026-06-11T07:19:49Z'
+---
+
 # 7. DOX convention: co-located AGENTS.md files
 
 Date: 2026-06-10

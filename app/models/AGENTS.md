@@ -1,3 +1,12 @@
+---
+type: Folder Contract
+title: app/models/ contract
+description: 'Domain entity conventions: associations, soft delete, trade lifecycle
+  invariants.'
+tags: [agents, dox, models]
+timestamp: '2026-06-13T21:00:01Z'
+---
+
 # Purpose
 
 Domain entities. Thin models — associations, validations, scopes, computed attributes.

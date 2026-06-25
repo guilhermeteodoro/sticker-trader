@@ -1,3 +1,12 @@
+---
+type: Glossary
+title: Sticker Trader domain glossary
+description: 'Domain language for the Sticker Trader project: terms, components, and
+  example dialogue.'
+tags: [glossary, domain]
+timestamp: '2026-06-13T21:00:01Z'
+---
+
 # Sticker Trader
 
 Web app for World Cup 2026 sticker collectors to find and record trades with friends.

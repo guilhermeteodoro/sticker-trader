@@ -1,3 +1,11 @@
+---
+type: Folder Contract
+title: app/views/ contract
+description: Full-page Phlex view class conventions.
+tags: [agents, dox, views, phlex]
+timestamp: '2026-06-11T07:19:49Z'
+---
+
 # Purpose
 
 Full-page Phlex view classes rendered by controllers.

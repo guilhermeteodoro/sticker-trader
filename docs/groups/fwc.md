@@ -1,3 +1,11 @@
+---
+type: Sticker Group
+title: FIFA World Cup
+description: 'FIFA World Cup (FWC) sticker listing: 20 stickers.'
+tags: [sticker-group, catalog]
+timestamp: '2026-06-05T03:44:08Z'
+---
+
 # FIFA World Cup
 
 ## FWC - World Cup History

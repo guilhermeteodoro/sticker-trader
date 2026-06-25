@@ -1,3 +1,12 @@
+---
+type: Architecture Decision Record
+title: 'ADR-0002: Trade comparisons are computed, not persisted'
+description: Why trade comparisons are calculated on-the-fly from live user_stickers
+  data rather than persisted in a table.
+tags: [adr, trades, accepted]
+timestamp: '2026-05-29T20:48:24Z'
+---
+
 # Trade comparisons are computed, not persisted
 
 Trade comparisons between two users are calculated on-the-fly from their live `user_stickers` data rather than stored in a `trades` table. Any logged-in user viewing another user's collection page sees the potential trade immediately.

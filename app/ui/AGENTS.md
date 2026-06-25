@@ -1,3 +1,12 @@
+---
+type: Folder Contract
+title: app/ui/ contract
+description: Phlex presentation layer conventions and child DOX index for components
+  and fragments.
+tags: [agents, dox, ui, phlex]
+timestamp: '2026-06-13T13:19:26Z'
+---
+
 # Purpose
 
 Phlex-based presentation layer. Replaces `app/views/` for component rendering (ADR-0006).

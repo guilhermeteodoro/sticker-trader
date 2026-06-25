@@ -1,3 +1,12 @@
+---
+type: Folder Contract
+title: app/controllers/ contract
+description: 'HTTP request handler conventions: auth, Phlex rendering, trade and receipt
+  lifecycle.'
+tags: [agents, dox, controllers]
+timestamp: '2026-06-13T21:00:01Z'
+---
+
 # Purpose
 
 HTTP request handlers. Thin — delegate to services, render Phlex views.

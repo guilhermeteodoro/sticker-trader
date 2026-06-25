@@ -1,3 +1,13 @@
+---
+type: Architecture Decision Record
+title: 'ADR-0003: Testing strategy: seeds + inline setup, Minitest, rendered Phlex
+  views'
+description: Why we use Minitest with seeds, inline setup via real parsers, and rendered
+  Phlex assertions instead of factories.
+tags: [adr, testing, accepted]
+timestamp: '2026-05-30T02:12:50Z'
+---
+
 # Testing strategy: seeds + inline setup, Minitest, rendered Phlex views
 
 We use Minitest (Rails default) with seeds loaded once for the sticker catalog (994 rows). Test users are created inline using the real DumpParser + CollectionImporter — no factories gem.

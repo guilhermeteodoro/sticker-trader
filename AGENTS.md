@@ -1,3 +1,12 @@
+---
+type: Agent Instructions
+title: Root agent instructions
+description: 'Project-wide DOX rail: required checks, conventions, and the child DOX
+  index for AI coding agents.'
+tags: [agents, dox, root]
+timestamp: '2026-06-13T13:04:06Z'
+---
+
 # Agent Instructions
 
 Instructions for AI coding agents working on this codebase.
@@ -108,10 +117,28 @@ If you notice a multi-step workflow being repeated across sessions (complex enou
 
 ## Documentation
 
+- [index.md](index.md) — OKF bundle index (progressive disclosure)
 - [CONTEXT.md](CONTEXT.md) — domain language glossary
 - [README.md](README.md) — project overview for humans
-- [docs/adr/](docs/adr/) — architecture decision records
+- [TASKS.md](TASKS.md) — implementation task plan
+- [RULES.md](RULES.md) — operational safety rules
+- [docs/adr/](docs/adr/index.md) — architecture decision records
+- [docs/groups/](docs/groups/index.md) — sticker catalog group listings
 - [.agents/skills/](.agents/skills/) — reusable workflow skills
+
+## OKF (Open Knowledge Format)
+
+The repository's markdown documentation conforms to [OKF v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md): every non-reserved `.md` file carries a YAML frontmatter block with at least a `type` field, plus optional `title`, `description`, `tags`, and `timestamp`. The bundle root and each documented subdirectory expose progressive disclosure via `index.md`.
+
+Conventions used in this repo:
+
+- Reserved filenames: `index.md` (directory listing), `log.md` (history). Do not create concept docs at these names.
+- Concept types in use: `Project Overview`, `Glossary`, `Task Plan`, `Operational Rules`, `Agent Instructions`, `Folder Contract`, `Architecture Decision Record`, `Sticker Group`. Pick the closest existing type when adding a new document; introduce a new type only when none fits.
+- Timestamps use ISO 8601 UTC (`YYYY-MM-DDTHH:MM:SSZ`). Update the timestamp when the concept's content meaningfully changes — not for incidental edits.
+- Cross-links use standard markdown links. Bundle-relative absolute paths (`/path/to/doc.md`) are preferred for stability; existing relative links may stay.
+- The bundle-root `index.md` declares `okf_version: "0.1"` in its frontmatter; no other `index.md` carries frontmatter.
+
+When you create a new `.md` document anywhere under the repo, add the frontmatter and link it from the nearest `index.md` (or the root `index.md` if at the top level).
 
 ## DOX
 

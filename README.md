@@ -1,3 +1,12 @@
+---
+type: Project Overview
+title: Sticker Trader
+description: Web app for World Cup 2026 sticker collectors to find and record trades
+  with friends.
+tags: [overview, rails, stickers]
+timestamp: '2026-06-03T16:52:39Z'
+---
+
 # ⚽ Sticker Trader
 
 Web app for World Cup 2026 sticker collectors to find and record trades with friends.

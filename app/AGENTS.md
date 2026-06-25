@@ -1,3 +1,11 @@
+---
+type: Folder Contract
+title: app/ contract
+description: Application source code conventions and the local DOX child index.
+tags: [agents, dox, app]
+timestamp: '2026-06-11T07:19:49Z'
+---
+
 # Purpose
 
 Application source code. Standard Rails layout with one deviation: UI components live in `app/ui/` (ADR-0006).

@@ -1,3 +1,11 @@
+---
+type: Sticker Group
+title: Group C
+description: Group C sticker listing.
+tags: [sticker-group, catalog]
+timestamp: '2026-06-05T03:44:08Z'
+---
+
 # Group C
 
 ## BRA - Brazil
