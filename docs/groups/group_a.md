@@ -1,11 +1,3 @@
----
-type: Sticker Group
-title: Group A
-description: 'Group A sticker listing: MEX, RSA, KOR, CZE.'
-tags: [catalog]
-timestamp: '2026-06-05T03:44:08Z'
----
-
 # Group A
 
 ## MEX - Mexico

@@ -1,11 +1,3 @@
----
-type: Sticker Group
-title: Coca-Cola (CC)
-description: 'Coca-Cola (CC) sticker listing: 14 stickers.'
-tags: [catalog, special]
-timestamp: '2026-06-05T03:44:08Z'
----
-
 # Coca-Cola
 
 ## CC - Coca-Cola

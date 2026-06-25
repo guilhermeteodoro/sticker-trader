@@ -1,11 +1,3 @@
----
-type: Sticker Group
-title: Group E
-description: Group E sticker listing.
-tags: [catalog]
-timestamp: '2026-06-05T03:44:08Z'
----
-
 # Group E
 
 ## GER - Germany

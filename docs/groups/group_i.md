@@ -1,11 +1,3 @@
----
-type: Sticker Group
-title: Group I
-description: Group I sticker listing.
-tags: [catalog]
-timestamp: '2026-06-05T03:44:08Z'
----
-
 # Group I
 
 ## FRA - France

@@ -10,10 +10,9 @@ This bundle is the Sticker Trader project's knowledge corpus — the docs an age
 * [Agent instructions](AGENTS.md) — project-wide conventions and safety rules for AI coding agents. Always read first.
 * [Domain glossary](CONTEXT.md) — terms and components defining the Sticker Trader domain language.
 
-# Planning & operations
+# Planning
 
 * [Implementation task plan](TASKS.md) — living phase checklist.
-* [Operational safety rules](RULES.md) — destructive-command rules.
 
 # Architecture decisions
 
@@ -35,6 +34,3 @@ Co-located `AGENTS.md` files describe the local rules of each source folder ([AD
 * [db/](db/AGENTS.md) — schema, migration, and seed conventions.
 * [test/](test/AGENTS.md) — Minitest suite conventions.
 
-# Reference data
-
-* [docs/groups/](docs/groups/) — sticker catalog group listings (per-team rosters used during seed maintenance).
