@@ -103,6 +103,7 @@ We treat the **whole repo as the bundle** (rather than a dedicated `docs/` subtr
 - **Concept types in use** — `Project Overview`, `Agent Instructions`, `Glossary`, `Task Plan`, `Operational Rules`, `Folder Contract`, `Architecture Decision Record`, `Sticker Group`. Pick the closest existing type; introduce a new one only when none fits.
 - **Timestamps** — ISO 8601 UTC. Update only when the concept's content meaningfully changes (not for incidental edits).
 - **Cross-links** — standard markdown. Bundle-relative absolute paths (`/path/to/doc.md`) are preferred for stability; relative paths are also fine.
+- **Discovery** — run `bin/okf` to list all OKF docs with type and description, without reading each file. Use `--type=adr` or `--grep=keyword` to narrow results. Prefer this over reading `index.md` or guessing filenames when you need to find relevant documentation for a cross-cutting change.
 
 ### Folder contracts (`AGENTS.md` files)
 

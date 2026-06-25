@@ -88,6 +88,15 @@ bin/rails test
 
 ## Documentation
 
-See [index.md](index.md) for the full knowledge bundle (OKF v0.1): domain glossary, ADRs, sticker group references, and folder-level conventions.
+Project knowledge follows [OKF v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md). See [index.md](index.md) for the full bundle: domain glossary, ADRs, sticker group references, and folder-level conventions.
+
+Use `bin/okf` to discover documentation files without reading them all:
+
+```bash
+bin/okf                  # list all docs grouped by type
+bin/okf --type=adr       # filter by type (supports abbreviations)
+bin/okf --grep=trade     # search title, description, and tags
+bin/okf --check          # validate frontmatter completeness (CI-friendly)
+```
 
 Source app: [Sticker Album 2026](https://apps.apple.com/br/app/sticker-album-2026/id6761956390?l=en-GB) (MoovTech).

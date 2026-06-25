@@ -1,0 +1,193 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# OKF documentation discovery tool.
+# Scans the repository for Markdown files with OKF-conformant YAML frontmatter
+# and outputs a grouped-by-type listing for quick discovery.
+#
+# Usage:
+#   bin/okf                  # list all OKF docs grouped by type
+#   bin/okf --type=adr       # filter by type (case-insensitive partial match)
+#   bin/okf --grep=trade     # search title, description, and tags
+#   bin/okf --check          # validate frontmatter completeness
+#   bin/okf --help           # show this help
+
+require "yaml"
+require "pathname"
+
+module Okf
+  EXCLUDES = %w[.git .agents vendor node_modules tmp log].freeze
+  RESERVED = %w[index.md log.md].freeze
+  RECOMMENDED_FIELDS = %w[type title description tags timestamp].freeze
+
+  module_function
+
+  def repo_root(from: Dir.pwd)
+    dir = Pathname.new(from)
+    dir = dir.parent until dir.join(".git").exist? || dir.root?
+    dir.root? ? nil : dir
+  end
+
+  def parse_frontmatter(path)
+    content = File.read(path, encoding: "utf-8")
+    return nil unless content.start_with?("---")
+
+    parts = content.split(/^---\s*$/, 3)
+    return nil if parts.length < 3
+
+    meta = YAML.safe_load(parts[1], permitted_classes: [ Date, Time ])
+    return nil unless meta.is_a?(Hash) && meta["type"]
+
+    meta
+  rescue Psych::SyntaxError
+    nil
+  end
+
+  def scan(root)
+    docs = []
+
+    Dir.glob(root.join("**/*.md")).each do |file|
+      rel = Pathname.new(file).relative_path_from(root).to_s
+
+      next if EXCLUDES.any? { |ex| rel.start_with?("#{ex}/") }
+      next if RESERVED.include?(File.basename(rel))
+
+      meta = parse_frontmatter(file)
+      next unless meta
+
+      meta["_path"] = rel
+      docs << meta
+    end
+
+    docs.sort_by { |d| d["_path"] }
+  end
+
+  def matches_type?(doc, filter)
+    type = doc["type"]
+    f = filter.downcase
+    initials = type.scan(/\b\w/).join.downcase
+    type.downcase.include?(f) || initials == f
+  end
+
+  def matches_grep?(doc, query)
+    q = query.downcase
+    searchable = [
+      doc["title"],
+      doc["description"],
+      *Array(doc["tags"])
+    ].compact.map(&:downcase).join(" ")
+    searchable.include?(q)
+  end
+
+  def description_for(doc)
+    doc["description"] || doc["title"] || ""
+  end
+
+  def format_grouped(docs)
+    grouped = docs.group_by { |d| d["type"] }
+    lines = []
+
+    grouped.each_with_index do |(type, entries), i|
+      lines << "" if i > 0
+      lines << "## #{type}"
+      entries.each do |doc|
+        desc = description_for(doc)
+        lines << (desc.empty? ? doc["_path"] : "#{doc["_path"]} — #{desc}")
+      end
+    end
+
+    lines.join("\n") + "\n"
+  end
+
+  def check(root)
+    issues = []
+
+    Dir.glob(root.join("**/*.md")).each do |file|
+      rel = Pathname.new(file).relative_path_from(root).to_s
+
+      next if EXCLUDES.any? { |ex| rel.start_with?("#{ex}/") }
+      next if RESERVED.include?(File.basename(rel))
+
+      content = File.read(file, encoding: "utf-8")
+      next unless content.start_with?("---")
+
+      parts = content.split(/^---\s*$/, 3)
+      next if parts.length < 3
+
+      meta = begin
+        YAML.safe_load(parts[1], permitted_classes: [ Date, Time ])
+      rescue Psych::SyntaxError => e
+        issues << { path: rel, missing: [], error: "invalid YAML: #{e.message}" }
+        next
+      end
+
+      next unless meta.is_a?(Hash)
+
+      missing = RECOMMENDED_FIELDS.reject { |f| meta.key?(f) }
+      issues << { path: rel, missing: missing } if missing.any?
+    end
+
+    issues.sort_by { |i| i[:path] }
+  end
+
+  def format_check(issues)
+    if issues.empty?
+      return { output: "All OKF documents pass validation.\n", status: 0 }
+    end
+
+    lines = issues.map do |issue|
+      if issue[:error]
+        "#{issue[:path]}: #{issue[:error]}"
+      else
+        "#{issue[:path]}: missing #{issue[:missing].join(", ")}"
+      end
+    end
+    lines << "\n#{issues.size} file(s) with issues."
+
+    { output: lines.join("\n") + "\n", status: 1 }
+  end
+
+  HELP = <<~HELP
+    Usage: bin/okf [options]
+
+    Scans the repository for OKF-conformant Markdown files (those with a `type:`
+    field in YAML frontmatter) and prints a grouped listing.
+
+    Options:
+      --type=TYPE   Filter by document type (case-insensitive partial match)
+      --grep=QUERY  Search title, description, and tags
+      --check       Validate frontmatter completeness; exits non-zero on issues
+      --help        Show this help
+  HELP
+end
+
+if $PROGRAM_NAME == __FILE__
+  if ARGV.include?("--help") || ARGV.include?("-h")
+    puts Okf::HELP
+    exit 0
+  end
+
+  root = Okf.repo_root
+  abort "fatal: not inside a git repository" unless root
+
+  if ARGV.include?("--check")
+    issues = Okf.check(root)
+    result = Okf.format_check(issues)
+    print result[:output]
+    exit result[:status]
+  end
+
+  type_filter = ARGV.find { |a| a.start_with?("--type=") }&.split("=", 2)&.last
+  grep_filter = ARGV.find { |a| a.start_with?("--grep=") }&.split("=", 2)&.last
+
+  docs = Okf.scan(root)
+  docs.select! { |d| Okf.matches_type?(d, type_filter) } if type_filter
+  docs.select! { |d| Okf.matches_grep?(d, grep_filter) } if grep_filter
+
+  if docs.empty?
+    puts "No OKF documents found."
+    exit 0
+  end
+
+  print Okf.format_grouped(docs)
+end
