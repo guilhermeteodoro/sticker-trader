@@ -1,9 +1,9 @@
 ---
 type: Folder Contract
-title: app/models/ contract
+title: app/models/ conventions
 description: 'Domain entity conventions: associations, soft delete, trade lifecycle
   invariants.'
-tags: [agents, dox, models]
+tags: [agents, models]
 timestamp: '2026-06-13T21:00:01Z'
 ---
 

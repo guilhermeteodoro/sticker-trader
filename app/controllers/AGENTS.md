@@ -1,9 +1,9 @@
 ---
 type: Folder Contract
-title: app/controllers/ contract
+title: app/controllers/ conventions
 description: 'HTTP request handler conventions: auth, Phlex rendering, trade and receipt
   lifecycle.'
-tags: [agents, dox, controllers]
+tags: [agents, controllers]
 timestamp: '2026-06-13T21:00:01Z'
 ---
 

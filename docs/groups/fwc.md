@@ -1,8 +1,8 @@
 ---
 type: Sticker Group
-title: FIFA World Cup
+title: FIFA World Cup (FWC)
 description: 'FIFA World Cup (FWC) sticker listing: 20 stickers.'
-tags: [sticker-group, catalog]
+tags: [catalog, special]
 timestamp: '2026-06-05T03:44:08Z'
 ---
 

@@ -1,8 +1,8 @@
 ---
 type: Folder Contract
-title: app/views/ contract
+title: app/views/ conventions
 description: Full-page Phlex view class conventions.
-tags: [agents, dox, views, phlex]
+tags: [agents, views, phlex]
 timestamp: '2026-06-11T07:19:49Z'
 ---
 

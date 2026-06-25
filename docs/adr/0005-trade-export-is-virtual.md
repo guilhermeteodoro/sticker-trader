@@ -1,6 +1,6 @@
 ---
 type: Architecture Decision Record
-title: 'ADR-0005: Trade export is virtual (superseded)'
+title: 'ADR-0005: Trade export is virtual'
 description: Original decision to keep collections unchanged on trade consolidation;
   superseded by ADR-0008.
 tags: [adr, trades, superseded]

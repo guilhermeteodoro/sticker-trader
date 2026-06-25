@@ -1,9 +1,8 @@
 ---
 type: Architecture Decision Record
-title: 'ADR-0003: Testing strategy: seeds + inline setup, Minitest, rendered Phlex
-  views'
-description: Why we use Minitest with seeds, inline setup via real parsers, and rendered
-  Phlex assertions instead of factories.
+title: 'ADR-0003: Testing strategy'
+description: Minitest with seeds, inline setup via real parsers, and rendered Phlex
+  assertions instead of factories.
 tags: [adr, testing, accepted]
 timestamp: '2026-05-30T02:12:50Z'
 ---

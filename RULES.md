@@ -1,9 +1,9 @@
 ---
 type: Operational Rules
-title: Operational rules for agents
+title: Operational safety rules
 description: Safety rules agents must follow when operating on this codebase (database,
   tests, destructive commands).
-tags: [rules, safety]
+tags: [safety]
 timestamp: '2026-06-01T21:38:01Z'
 ---
 

@@ -1,6 +1,6 @@
 ---
 type: Architecture Decision Record
-title: 'ADR-0001: Sticker catalog as a seeded table with a pivot for user collections'
+title: 'ADR-0001: Sticker catalog as a seeded table'
 description: Why the 994-sticker catalog is a seeded table with a user_stickers pivot
   rather than arrays on the user row.
 tags: [adr, data-model, accepted]

@@ -3,8 +3,8 @@ type: Project Overview
 title: Sticker Trader
 description: Web app for World Cup 2026 sticker collectors to find and record trades
   with friends.
-tags: [overview, rails, stickers]
-timestamp: '2026-06-03T16:52:39Z'
+tags: [overview, rails]
+timestamp: '2026-06-25T00:00:00Z'
 ---
 
 # ⚽ Sticker Trader
@@ -88,7 +88,6 @@ bin/rails test
 
 ## Documentation
 
-- [CONTEXT.md](CONTEXT.md) — domain language glossary
-- [TASKS.md](TASKS.md) — implementation task plan
-- [docs/adr/](docs/adr/) — architecture decision records
-- Source app: [Sticker Album 2026](https://apps.apple.com/br/app/sticker-album-2026/id6761956390?l=en-GB) (MoovTech)
+See [index.md](index.md) for the full knowledge bundle (OKF v0.1): domain glossary, ADRs, sticker group references, and folder-level conventions.
+
+Source app: [Sticker Album 2026](https://apps.apple.com/br/app/sticker-album-2026/id6761956390?l=en-GB) (MoovTech).

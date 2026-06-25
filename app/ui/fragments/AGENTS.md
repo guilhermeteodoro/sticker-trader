@@ -1,8 +1,8 @@
 ---
 type: Folder Contract
-title: app/ui/fragments/ contract
+title: app/ui/fragments/ conventions
 description: Domain-specific composable UI pieces (StickerList, AlbumGrid, CollectionImporter).
-tags: [agents, dox, ui, fragments]
+tags: [agents, ui, fragments]
 timestamp: '2026-06-13T13:04:06Z'
 ---
 

@@ -2,29 +2,39 @@
 okf_version: "0.1"
 ---
 
-# Project knowledge
+This bundle is the Sticker Trader project's knowledge corpus — the docs an agent or human reads to understand the app, its conventions, and its history. Format follows [OKF v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md).
 
-* [Sticker Trader](README.md) - Web app for World Cup 2026 sticker collectors to find and record trades with friends.
-* [Domain glossary](CONTEXT.md) - Domain language for the Sticker Trader project: terms, components, and example dialogue.
-* [Task plan](TASKS.md) - Living checklist of implementation phases with per-task completion status.
-* [Operational rules](RULES.md) - Safety rules agents must follow when operating on this codebase.
+# Start here
 
-# Agent instructions and folder contracts
+* [Sticker Trader](README.md) — what the app does, tech stack, how to run it.
+* [Agent instructions](AGENTS.md) — project-wide conventions and safety rules for AI coding agents. Always read first.
+* [Domain glossary](CONTEXT.md) — terms and components defining the Sticker Trader domain language.
 
-* [Root agent instructions](AGENTS.md) - Project-wide DOX rail and required checks.
-* [app/](app/AGENTS.md) - Application source code conventions and child DOX index.
-* [app/services/](app/services/AGENTS.md) - Service object conventions for multi-step operations.
-* [app/models/](app/models/AGENTS.md) - Domain entity conventions: associations, soft delete, trade lifecycle.
-* [app/controllers/](app/controllers/AGENTS.md) - HTTP request handler conventions.
-* [app/ui/](app/ui/AGENTS.md) - Phlex presentation layer conventions.
-* [app/ui/fragments/](app/ui/fragments/AGENTS.md) - Domain-specific composable UI pieces.
-* [app/ui/components/](app/ui/components/AGENTS.md) - Generic reusable UI atoms.
-* [app/views/](app/views/AGENTS.md) - Full-page Phlex view class conventions.
-* [test/](test/AGENTS.md) - Test suite conventions (Minitest).
-* [config/](config/AGENTS.md) - Rails configuration conventions.
-* [db/](db/AGENTS.md) - Database schema, migration, and seed conventions.
+# Planning & operations
 
-# Documentation
+* [Implementation task plan](TASKS.md) — living phase checklist.
+* [Operational safety rules](RULES.md) — destructive-command rules.
 
-* [docs/adr/](docs/adr/) - Architecture Decision Records.
-* [docs/groups/](docs/groups/) - Sticker catalog group listings.
+# Architecture decisions
+
+* [docs/adr/](docs/adr/) — every hard-to-reverse decision, grouped by area.
+
+# Folder contracts
+
+Co-located `AGENTS.md` files describe the local rules of each source folder ([ADR-0007](docs/adr/0007-adapted-dox-mirror-tree.md)).
+
+* [app/](app/AGENTS.md) — application source code (Rails layout with `app/ui/`).
+* [app/models/](app/models/AGENTS.md) — domain entities, soft delete, trade lifecycle invariants.
+* [app/services/](app/services/AGENTS.md) — service objects for multi-step operations.
+* [app/controllers/](app/controllers/AGENTS.md) — HTTP handlers, auth, trade and receipt lifecycle.
+* [app/views/](app/views/AGENTS.md) — full-page Phlex view classes.
+* [app/ui/](app/ui/AGENTS.md) — Phlex presentation layer (components, fragments, layouts).
+* [app/ui/components/](app/ui/components/AGENTS.md) — generic reusable UI atoms.
+* [app/ui/fragments/](app/ui/fragments/AGENTS.md) — domain-aware UI compositions.
+* [config/](config/AGENTS.md) — Rails configuration (routes, locales, production DB).
+* [db/](db/AGENTS.md) — schema, migration, and seed conventions.
+* [test/](test/AGENTS.md) — Minitest suite conventions.
+
+# Reference data
+
+* [docs/groups/](docs/groups/) — sticker catalog group listings (per-team rosters used during seed maintenance).

@@ -1,8 +1,8 @@
 ---
 type: Architecture Decision Record
 title: 'ADR-0004: i18n relative keys via Phlex translation_path'
-description: Why all Phlex views and components use class-relative translation keys
-  (`t(".key")`) instead of full paths.
+description: All Phlex views and components use class-relative translation keys (`t(".key")`)
+  instead of full paths.
 tags: [adr, i18n, phlex, accepted]
 timestamp: '2026-06-01T21:38:01Z'
 ---

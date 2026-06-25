@@ -2,7 +2,7 @@
 type: Sticker Group
 title: Group H
 description: Group H sticker listing.
-tags: [sticker-group, catalog]
+tags: [catalog]
 timestamp: '2026-06-05T03:44:08Z'
 ---
 

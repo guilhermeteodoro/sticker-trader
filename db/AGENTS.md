@@ -1,8 +1,8 @@
 ---
 type: Folder Contract
-title: db/ contract
+title: db/ conventions
 description: Database schema, migration, and seed conventions; models own defaults.
-tags: [agents, dox, db]
+tags: [agents, db]
 timestamp: '2026-06-13T21:00:01Z'
 ---
 

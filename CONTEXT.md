@@ -1,8 +1,8 @@
 ---
 type: Glossary
-title: Sticker Trader domain glossary
-description: 'Domain language for the Sticker Trader project: terms, components, and
-  example dialogue.'
+title: Domain glossary
+description: Terms, components, and example dialogue defining the Sticker Trader domain
+  language.
 tags: [glossary, domain]
 timestamp: '2026-06-13T21:00:01Z'
 ---
