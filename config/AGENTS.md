@@ -1,3 +1,11 @@
+---
+type: Folder Contract
+title: config/ conventions
+description: 'Rails configuration conventions: routes, locales, production DB.'
+tags: [agents, config]
+timestamp: '2026-06-11T07:19:49Z'
+---
+
 # Purpose
 
 Rails configuration.

@@ -1,8 +1,14 @@
-# Rails App — Task Plan
+---
+type: Task Plan
+title: Implementation task plan
+description: Living checklist of implementation phases with per-task completion status.
+tags: [planning]
+timestamp: '2026-06-25T00:00:00Z'
+---
 
-> **Note to agents/bots:** Update this file as you complete tasks (check them off) or
-> change the plan (add/remove/reorder tasks). This is the living source of truth for
-> implementation progress.
+# Implementation task plan
+
+Living checklist. Check items off as you complete them; add, remove, or reorder phases as the plan changes.
 
 ## Phase 1: Project setup
 - [x] Generate Rails 8 app (SQLite dev, PostgreSQL prod)

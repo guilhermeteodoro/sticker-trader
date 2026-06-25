@@ -1,3 +1,11 @@
+---
+type: Folder Contract
+title: app/services/ conventions
+description: Service object conventions for multi-step business operations.
+tags: [agents, services]
+timestamp: '2026-06-13T21:00:01Z'
+---
+
 # Purpose
 
 Service objects for multi-step business operations.

@@ -1,3 +1,12 @@
+---
+type: Architecture Decision Record
+title: 'ADR-0005: Trade export is virtual'
+description: Original decision to keep collections unchanged on trade consolidation;
+  superseded by ADR-0008.
+tags: [adr, trades, superseded]
+timestamp: '2026-06-11T07:19:49Z'
+---
+
 # Trade export is virtual — collections are not mutated on consolidation
 
 Status: superseded by [ADR-0008](0008-sticker-trader-as-source-of-truth.md)

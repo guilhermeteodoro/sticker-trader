@@ -1,3 +1,12 @@
+---
+type: Architecture Decision Record
+title: 'ADR-0008: Sticker Trader as source of truth'
+description: Sticker Trader owns collection state directly; trades mutate user_stickers;
+  the external app is onboarding only.
+tags: [adr, trades, data-model, accepted]
+timestamp: '2026-06-11T07:19:49Z'
+---
+
 # Sticker Trader is the source of truth for collections
 
 Status: accepted (supersedes ADR-0005)

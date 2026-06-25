@@ -1,3 +1,12 @@
+---
+type: Architecture Decision Record
+title: 'ADR-0006: Presentation layer organization'
+description: Split presentation into app/views/ for route-backed pages and app/ui/
+  for components, fragments, and layouts.
+tags: [adr, ui, phlex, accepted]
+timestamp: '2026-06-04T14:08:44Z'
+---
+
 # 6. Presentation Layer Organization
 
 Date: 2026-06-03

@@ -1,3 +1,11 @@
+---
+type: Folder Contract
+title: test/ conventions
+description: 'Test suite conventions (Minitest): integration, services, views.'
+tags: [agents, test]
+timestamp: '2026-06-11T07:19:49Z'
+---
+
 # Purpose
 
 Test suite (Minitest).

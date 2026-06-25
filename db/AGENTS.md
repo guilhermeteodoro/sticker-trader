@@ -1,3 +1,11 @@
+---
+type: Folder Contract
+title: db/ conventions
+description: Database schema, migration, and seed conventions; models own defaults.
+tags: [agents, db]
+timestamp: '2026-06-13T21:00:01Z'
+---
+
 # Purpose
 
 Database schema, migrations, and seed data.

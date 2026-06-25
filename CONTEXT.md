@@ -1,3 +1,12 @@
+---
+type: Glossary
+title: Domain glossary
+description: Terms, components, and example dialogue defining the Sticker Trader domain
+  language.
+tags: [glossary, domain]
+timestamp: '2026-06-13T21:00:01Z'
+---
+
 # Sticker Trader
 
 Web app for World Cup 2026 sticker collectors to find and record trades with friends.
@@ -121,20 +130,6 @@ _Avoid_: Trade entry, trade record
 **User**:
 Someone who has registered their name, email, and sticker collection. Identified by a session cookie (email login, no password). Has a public profile at `/u/<slug>`.
 _Avoid_: Collector, participant
-
-## Key components
-
-**StickerList**:
-Phlex fragment (`UI::Fragments::StickerList`) — the standard way to display stickers as text. Takes a stickers array, groups by country, renders as monospace text. Supports an optional copy-to-clipboard button via `copyable: true`.
-
-**AlbumGrid**:
-Phlex fragment (`UI::Fragments::AlbumGrid`) — interactive card grid for managing a collection. Displays stickers as colored cards grouped by country in collapsible sections. Cards can be tapped to glue/unglue, with +/- buttons for tracking copies.
-
-**CollectionImporter**:
-Phlex fragment (`UI::Fragments::CollectionImporter`) — the import method form fields shared between registration and collection edit. Contains a Combobox for method selection, a "How to export?" link that opens a video tutorial dialog, and the dump/manual textareas.
-
-**LocaleSwitcher**:
-Phlex component (`UI::Components::LocaleSwitcher`) — flag-based language toggle (🇧🇷/🇬🇧). Used on home page and user settings.
 
 ## Example dialogue
 

@@ -1,3 +1,11 @@
+---
+type: Folder Contract
+title: app/ui/components/ conventions
+description: Generic reusable UI atoms with no domain knowledge.
+tags: [agents, ui, components]
+timestamp: '2026-06-11T07:19:49Z'
+---
+
 # Purpose
 
 Generic reusable UI atoms. No domain knowledge.

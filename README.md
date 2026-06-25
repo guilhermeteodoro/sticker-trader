@@ -1,3 +1,12 @@
+---
+type: Project Overview
+title: Sticker Trader
+description: Web app for World Cup 2026 sticker collectors to find and record trades
+  with friends.
+tags: [overview, rails]
+timestamp: '2026-06-25T00:00:00Z'
+---
+
 # ⚽ Sticker Trader
 
 Web app for World Cup 2026 sticker collectors to find and record trades with friends.
@@ -79,7 +88,15 @@ bin/rails test
 
 ## Documentation
 
-- [CONTEXT.md](CONTEXT.md) — domain language glossary
-- [TASKS.md](TASKS.md) — implementation task plan
-- [docs/adr/](docs/adr/) — architecture decision records
-- Source app: [Sticker Album 2026](https://apps.apple.com/br/app/sticker-album-2026/id6761956390?l=en-GB) (MoovTech)
+Project knowledge follows [OKF v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md). See [index.md](index.md) for the full bundle: domain glossary, ADRs, sticker group references, and folder-level conventions.
+
+Use `bin/okf` to discover documentation files without reading them all:
+
+```bash
+bin/okf                  # list all docs grouped by type
+bin/okf --type=adr       # filter by type (supports abbreviations)
+bin/okf --grep=trade     # search title, description, and tags
+bin/okf --check          # validate frontmatter completeness (CI-friendly)
+```
+
+Source app: [Sticker Album 2026](https://apps.apple.com/br/app/sticker-album-2026/id6761956390?l=en-GB) (MoovTech).

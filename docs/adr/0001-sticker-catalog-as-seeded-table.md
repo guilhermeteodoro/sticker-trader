@@ -1,3 +1,12 @@
+---
+type: Architecture Decision Record
+title: 'ADR-0001: Sticker catalog as a seeded table'
+description: Why the 994-sticker catalog is a seeded table with a user_stickers pivot
+  rather than arrays on the user row.
+tags: [adr, data-model, accepted]
+timestamp: '2026-05-29T20:48:24Z'
+---
+
 # Sticker catalog as a seeded table with a pivot for user collections
 
 The album has a fixed set of 994 stickers that never changes. We seed a `stickers` table with all 994 rows (team, number, category, position) and use a `user_stickers` pivot table to track each user's collection. Row existence means "owned/glued," and a `copies` integer tracks tradeable extras.
