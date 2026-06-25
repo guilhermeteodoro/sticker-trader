@@ -96,6 +96,8 @@ When using a headless browser to verify UI:
 
 Project documentation conforms to [OKF v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md). Every `.md` file under the repo (except `.agents/`, which is agent-harness config) is an OKF concept: YAML frontmatter with `type` plus recommended `title`/`description`/`tags`/`timestamp`, followed by a markdown body.
 
+We treat the **whole repo as the bundle** (rather than a dedicated `docs/` subtree) so folder contracts stay co-located with the code they govern — agent harnesses pick up `AGENTS.md` from any directory listing without indirection. This stretches OKF's intent (it's primarily designed for curated knowledge corpora, not interleaved with source) but meets §9 conformance. See [ADR-0009](docs/adr/0009-okf-as-documentation-format.md) for the trade-off.
+
 - **Bundle root** — [index.md](index.md) lists every concept; declares `okf_version: "0.1"`.
 - **Reserved filenames** — `index.md` (directory listing per OKF §6), `log.md` (history per §7). Don't name concept docs these.
 - **Concept types in use** — `Project Overview`, `Agent Instructions`, `Glossary`, `Task Plan`, `Operational Rules`, `Folder Contract`, `Architecture Decision Record`, `Sticker Group`. Pick the closest existing type; introduce a new one only when none fits.
